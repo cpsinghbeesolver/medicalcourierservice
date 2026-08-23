@@ -1,0 +1,971 @@
+@extends('common.layout')
+
+@section('title', 'Create Job')
+@section('page-title', 'Job Creation Form')
+
+@section('styles')
+<style>
+    .form-container {
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        padding: 30px;
+        max-width: 1000px;
+    }
+
+    .form-section {
+        margin-bottom: 35px;
+    }
+
+    .form-section h3 {
+        font-size: 16px;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .form-section h3::before {
+        content: attr(data-number);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 26px;
+        height: 26px;
+        background: #2c3e50;
+        color: white;
+        border-radius: 50%;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .phi-warning {
+        background: #fff3cd;
+        border: 1px solid #ffc107;
+        border-radius: 8px;
+        padding: 12px 16px;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 13px;
+        color: #856404;
+    }
+
+    .phi-warning i {
+        font-size: 18px;
+        color: #ffc107;
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+
+    .form-row.two-cols {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group.full-width {
+        grid-column: 1 / -1;
+    }
+
+    .form-group label {
+        display: block;
+        font-size: 13px;
+        color: #2c3e50;
+        margin-bottom: 8px;
+        font-weight: 500;
+    }
+
+    .form-group label .required {
+        color: #e74c3c;
+        margin-left: 3px;
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="tel"],
+    .form-group input[type="number"],
+    .form-group input[type="datetime-local"],
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: 11px 14px;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 14px;
+        outline: none;
+        transition: border-color 0.3s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+        border-color: #a8b456;
+    }
+
+    .form-group textarea {
+        resize: vertical;
+        min-height: 80px;
+    }
+
+    .form-group small {
+        display: block;
+        font-size: 12px;
+        color: #7f8c8d;
+        margin-top: 5px;
+    }
+
+    /* Urgency Level Pills */
+    .urgency-pills {
+        display: flex;
+        gap: 12px;
+    }
+
+    .urgency-pill {
+        flex: 1;
+        position: relative;
+    }
+
+    .urgency-pill input[type="radio"] {
+        position: absolute;
+        opacity: 0;
+    }
+
+    .urgency-pill label {
+        display: block;
+        padding: 12px 16px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-size: 13px;
+        font-weight: 500;
+    }
+
+    .urgency-pill input[type="radio"]:checked + label {
+        border-color: #2c3e50;
+        background: #2c3e50;
+        color: white;
+    }
+
+    .urgency-pill.routine input[type="radio"]:checked + label {
+        border-color: #3498db;
+        background: #3498db;
+    }
+
+    .urgency-pill.stat input[type="radio"]:checked + label {
+        border-color: #f39c12;
+        background: #f39c12;
+    }
+
+    .urgency-pill.life-threatening input[type="radio"]:checked + label {
+        border-color: #e74c3c;
+        background: #e74c3c;
+    }
+
+    /* Driver Card */
+    .driver-card {
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 16px;
+        background: #f8f9fa;
+        cursor: pointer;
+        transition: all 0.3s;
+        position: relative;
+    }
+
+    .driver-card:hover {
+        border-color: #a8b456;
+        background: #fff;
+    }
+
+    .driver-card.selected {
+        border-color: #2c3e50;
+        background: #e8f4f8;
+    }
+
+    .driver-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+    }
+
+    .driver-name {
+        font-weight: 600;
+        color: #2c3e50;
+        font-size: 14px;
+    }
+
+    .driver-distance {
+        background: #2c3e50;
+        color: white;
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 11px;
+        font-weight: 600;
+    }
+
+    .driver-meta {
+        display: flex;
+        gap: 12px;
+        font-size: 12px;
+        color: #7f8c8d;
+    }
+
+    .driver-status {
+        display: inline-block;
+        padding: 3px 8px;
+        border-radius: 10px;
+        font-size: 11px;
+        font-weight: 600;
+    }
+
+    .driver-status.available {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .driver-status.on-urgent {
+        background: #fff3cd;
+        color: #856404;
+    }
+
+    /* Toggle Switch */
+    .toggle-switch {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .toggle-switch input[type="checkbox"] {
+        position: relative;
+        width: 50px;
+        height: 26px;
+        -webkit-appearance: none;
+        background: #e0e0e0;
+        outline: none;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .toggle-switch input[type="checkbox"]:checked {
+        background: #2c3e50;
+    }
+
+    .toggle-switch input[type="checkbox"]:before {
+        content: '';
+        position: absolute;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        top: 2px;
+        left: 2px;
+        background: white;
+        transition: 0.3s;
+    }
+
+    .toggle-switch input[type="checkbox"]:checked:before {
+        left: 26px;
+    }
+
+    .toggle-switch label {
+        margin: 0;
+        font-size: 14px;
+        color: #2c3e50;
+        font-weight: 500;
+    }
+
+    /* Items Section */
+    .items-container {
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        padding: 20px;
+        background: #f8f9fa;
+    }
+
+    .item-entry {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        border: 1px solid #e0e0e0;
+        position: relative;
+    }
+
+    .item-entry .remove-item {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: #e74c3c;
+        color: white;
+        border: none;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        transition: background 0.3s;
+    }
+
+    .item-entry .remove-item:hover {
+        background: #c0392b;
+    }
+
+    .btn-add-item {
+        padding: 10px 20px;
+        background: #a8b456;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: background 0.3s;
+    }
+
+    .btn-add-item:hover {
+        background: #96a048;
+    }
+
+    /* Action Buttons */
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 15px;
+        margin-top: 30px;
+        padding-top: 25px;
+        border-top: 1px solid #e9ecef;
+    }
+
+    .btn-cancel {
+        padding: 12px 30px;
+        background: #e0e0e0;
+        color: #2c3e50;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 600;
+        transition: background 0.3s;
+    }
+
+    .btn-cancel:hover {
+        background: #d0d0d0;
+    }
+
+    .btn-submit {
+        padding: 12px 30px;
+        background: #2c3e50;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 600;
+        transition: background 0.3s;
+    }
+
+    .btn-submit:hover {
+        background: #1a252f;
+    }
+
+    .btn-submit:disabled {
+        background: #95a5a6;
+        cursor: not-allowed;
+    }
+
+    .section-divider {
+        height: 1px;
+        background: #e9ecef;
+        margin: 30px 0;
+    }
+
+    .drivers-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        max-height: 400px;
+        overflow-y: auto;
+        padding: 10px;
+    }
+
+    .no-drivers {
+        text-align: center;
+        padding: 40px;
+        color: #7f8c8d;
+        font-size: 14px;
+    }
+
+    .loading-drivers {
+        text-align: center;
+        padding: 40px;
+        color: #7f8c8d;
+        font-size: 14px;
+    }
+</style>
+@endsection
+
+@section('content')
+<div class="form-container">
+    <form id="jobCreateForm">
+        <!-- 1. Patient/Specimen Info (PHI Group) -->
+        <div class="form-section">
+            <h3 data-number="1">Patient/Specimen Info (PHI)</h3>
+            <div class="phi-warning">
+                <i class="fas fa-shield-alt"></i>
+                <span>This section contains Protected Health Information. All data is encrypted and only visible to authorized users.</span>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Specimen ID / Accession Number <span class="required">*</span></label>
+                    <input type="text" name="specimen_id" id="specimenId" placeholder="e.g., ACC-12345" required>
+                    <small>Primary identifier for tracking</small>
+                </div>
+                <div class="form-group">
+                    <label>Patient Initials <span class="required">*</span></label>
+                    <input type="text" name="patient_initials" id="patientInitials" placeholder="e.g., JD" maxlength="10" required style="text-transform: uppercase;">
+                    <small>Standard practice to avoid full names</small>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Urgency Level <span class="required">*</span></label>
+                <div class="urgency-pills">
+                    <div class="urgency-pill routine">
+                        <input type="radio" id="urgency_routine" name="urgency_level" value="routine" checked>
+                        <label for="urgency_routine">Routine</label>
+                    </div>
+                    <div class="urgency-pill stat">
+                        <input type="radio" id="urgency_stat" name="urgency_level" value="stat">
+                        <label for="urgency_stat">STAT</label>
+                    </div>
+                    <div class="urgency-pill life-threatening">
+                        <input type="radio" id="urgency_life_threatening" name="urgency_level" value="life_threatening">
+                        <label for="urgency_life_threatening">Life-Threatening</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- 2. Logistics Details -->
+        <div class="form-section">
+            <h3 data-number="2">Logistics Details</h3>
+            <div class="form-row two-cols">
+                <div class="form-group">
+                    <label>Pickup Location <span class="required">*</span></label>
+                    <select name="pickup_location" id="pickupLocation" required>
+                        <option value="">Select pickup location</option>
+                    </select>
+                    <small>Searchable database of Labs/Clinics</small>
+                </div>
+                <div class="form-group">
+                    <label>Delivery Location <span class="required">*</span></label>
+                    <select name="delivery_location" id="deliveryLocation" required>
+                        <option value="">Select delivery location</option>
+                    </select>
+                    <small>Searchable database of Hospitals/Processing Centers</small>
+                </div>
+            </div>
+            <div class="form-row two-cols">
+                <div class="form-group">
+                    <label>Scheduled Time Window - Start <span class="required">*</span></label>
+                    <input type="datetime-local" name="scheduled_time_window_start" id="timeWindowStart" required>
+                </div>
+                <div class="form-group">
+                    <label>Scheduled Time Window - End <span class="required">*</span></label>
+                    <input type="datetime-local" name="scheduled_time_window_end" id="timeWindowEnd" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Temperature Requirement <span class="required">*</span></label>
+                <select name="temperature_requirement" id="temperatureRequirement" required>
+                    <option value="ambient">Ambient (Room Temperature)</option>
+                    <option value="refrigerated">Refrigerated (2-8°C)</option>
+                    <option value="frozen">Frozen (-20°C)</option>
+                    <option value="controlled">Controlled (Specific Temperature)</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- 3. Driver Assignment -->
+        <div class="form-section">
+            <h3 data-number="3">Driver Assignment</h3>
+            <div class="form-row two-cols">
+                <div class="form-group">
+                    <label>Vehicle Type (if specific equipment needed)</label>
+                    <select name="required_vehicle_type" id="vehicleType">
+                        <option value="">Any Vehicle</option>
+                        <option value="refrigerated_van">Refrigerated Van</option>
+                        <option value="standard_van">Standard Van</option>
+                        <option value="temperature_controlled">Temperature Controlled</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Assign Driver (Shows Active drivers only, sorted by proximity)</label>
+                <div id="driversContainer" class="drivers-grid">
+                    <div class="loading-drivers">
+                        <i class="fas fa-spinner fa-spin"></i> Loading available drivers...
+                    </div>
+                </div>
+                <input type="hidden" name="driver_id" id="selectedDriverId">
+            </div>
+
+            <div class="form-group">
+                <label>Special Instructions</label>
+                <textarea name="special_instructions" id="specialInstructions" placeholder="e.g., Enter through North Dock, Code for door is 1234"></textarea>
+            </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- 4. Specimen Items -->
+        <div class="form-section">
+            <h3 data-number="4">Specimen Items</h3>
+            <div class="items-container">
+                <div id="itemsList">
+                    <div class="item-entry" data-item-index="0">
+                        <div class="form-row two-cols">
+                            <div class="form-group">
+                                <label>Specimen Type <span class="required">*</span></label>
+                                <select name="items[0][specimen_type]" required>
+                                    <option value="blood">Blood</option>
+                                    <option value="urine">Urine</option>
+                                    <option value="tissue">Tissue</option>
+                                    <option value="saliva">Saliva</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Barcode / Item ID</label>
+                                <input type="text" name="items[0][barcode]" placeholder="Scan or enter barcode">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Quantity</label>
+                                <input type="number" name="items[0][quantity]" value="1" min="1">
+                            </div>
+                            <div class="form-group">
+                                <label>Description</label>
+                                <input type="text" name="items[0][description]" placeholder="Optional description">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn-add-item" onclick="addItem()">
+                    <i class="fas fa-plus-circle"></i> Add Another Item
+                </button>
+            </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- 5. Digital Chain of Custody -->
+        <div class="form-section">
+            <h3 data-number="5">Digital Chain of Custody</h3>
+            <p style="color: #7f8c8d; font-size: 13px; margin-bottom: 20px;">
+                When enabled, driver cannot mark the job as complete without required verification.
+            </p>
+            <div class="form-row two-cols">
+                <div class="form-group">
+                    <div class="toggle-switch">
+                        <input type="checkbox" id="requireBarcodeToggle" name="requires_barcode_scan" value="1">
+                        <label for="requireBarcodeToggle">Require Barcode Scan</label>
+                    </div>
+                    <small>Driver must scan specimen barcode before completing</small>
+                </div>
+                <div class="form-group">
+                    <div class="toggle-switch">
+                        <input type="checkbox" id="requireSignatureToggle" name="requires_signature_or_photo" value="1" checked>
+                        <label for="requireSignatureToggle">Require Signature or Photo</label>
+                    </div>
+                    <small>Driver must provide signature or photo of specimen bag</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="form-actions">
+            <button type="button" class="btn-cancel" onclick="window.location.href='/company/dashboard'">Cancel</button>
+            <button type="submit" class="btn-submit" id="submitBtn">Dispatch Job</button>
+        </div>
+    </form>
+</div>
+@endsection
+
+@section('scripts')
+<script>
+    const token = localStorage.getItem('api_token');
+    let itemIndex = 1;
+    let pickupLocations = [];
+    let deliveryLocations = [];
+    let selectedDriver = null;
+    let availableDrivers = [];
+
+    // Load locations for dropdowns
+    async function loadLocations() {
+        try {
+            const response = await fetch('/api/v1/locations', {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Accept': 'application/json'
+                }
+            });
+
+            const data = await response.json();
+
+            if (data.success && data.data) {
+                pickupLocations = data.data.pickup_locations || [];
+                deliveryLocations = data.data.delivery_locations || [];
+
+                // Populate pickup location dropdown
+                const pickupSelect = document.getElementById('pickupLocation');
+                pickupLocations.forEach(location => {
+                    const option = document.createElement('option');
+                    option.value = JSON.stringify(location);
+                    option.textContent = `${location.name} - ${location.full_address}`;
+                    option.dataset.latitude = location.latitude || '';
+                    option.dataset.longitude = location.longitude || '';
+                    pickupSelect.appendChild(option);
+                });
+
+                // Populate delivery location dropdown
+                const deliverySelect = document.getElementById('deliveryLocation');
+                deliveryLocations.forEach(location => {
+                    const option = document.createElement('option');
+                    option.value = JSON.stringify(location);
+                    option.textContent = `${location.name} - ${location.full_address}`;
+                    deliverySelect.appendChild(option);
+                });
+            }
+        } catch (error) {
+            console.error('Error loading locations:', error);
+        }
+    }
+
+    // Load available drivers with smart filtering
+    async function loadAvailableDrivers() {
+        const pickupSelect = document.getElementById('pickupLocation');
+        const selectedOption = pickupSelect.options[pickupSelect.selectedIndex];
+
+        let latitude = null;
+        let longitude = null;
+
+        if (selectedOption && selectedOption.value) {
+            try {
+                const locationData = JSON.parse(selectedOption.value);
+                // For now, use default NYC coordinates if location doesn't have them
+                latitude = locationData.latitude || 40.7128;
+                longitude = locationData.longitude || -74.0060;
+            } catch (e) {
+                latitude = 40.7128;
+                longitude = -74.0060;
+            }
+        }
+
+        const urgencyLevel = document.querySelector('input[name="urgency_level"]:checked')?.value;
+        const vehicleType = document.getElementById('vehicleType').value;
+
+        let url = `/api/v1/drivers/available?`;
+        if (latitude && longitude) {
+            url += `latitude=${latitude}&longitude=${longitude}&`;
+        }
+        if (urgencyLevel) {
+            url += `urgency_level=${urgencyLevel}&`;
+        }
+        if (vehicleType) {
+            url += `vehicle_type=${vehicleType}`;
+        }
+
+        try {
+            const response = await fetch(url, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Accept': 'application/json'
+                }
+            });
+
+            const data = await response.json();
+
+            if (data.success && data.data && data.data.drivers) {
+                availableDrivers = data.data.drivers;
+                renderDrivers();
+            } else {
+                renderNoDrivers();
+            }
+        } catch (error) {
+            console.error('Error loading drivers:', error);
+            renderNoDrivers();
+        }
+    }
+
+    // Render available drivers
+    function renderDrivers() {
+        const container = document.getElementById('driversContainer');
+
+        if (availableDrivers.length === 0) {
+            renderNoDrivers();
+            return;
+        }
+
+        container.innerHTML = '';
+
+        availableDrivers.forEach(driver => {
+            const card = document.createElement('div');
+            card.className = 'driver-card';
+            if (selectedDriver && selectedDriver.id === driver.id) {
+                card.classList.add('selected');
+            }
+
+            card.innerHTML = `
+                <div class="driver-info">
+                    <span class="driver-name">${driver.name}</span>
+                    <span class="driver-distance">${driver.distance_km} km away</span>
+                </div>
+                <div class="driver-meta">
+                    <span>${driver.vehicle_type || 'Standard'}</span>
+                    <span class="driver-status ${driver.on_urgent_run ? 'on-urgent' : 'available'}">
+                        ${driver.on_urgent_run ? 'On Urgent Run' : 'Available'}
+                    </span>
+                </div>
+            `;
+
+            card.onclick = () => selectDriver(driver, card);
+            container.appendChild(card);
+        });
+    }
+
+    // Render no drivers message
+    function renderNoDrivers() {
+        const container = document.getElementById('driversContainer');
+        container.innerHTML = '<div class="no-drivers"><i class="fas fa-exclamation-circle"></i> No drivers available matching criteria</div>';
+    }
+
+    // Select a driver
+    function selectDriver(driver, cardElement) {
+        // Remove selected class from all cards
+        document.querySelectorAll('.driver-card').forEach(c => c.classList.remove('selected'));
+
+        // Add selected class to clicked card
+        cardElement.classList.add('selected');
+
+        selectedDriver = driver;
+        document.getElementById('selectedDriverId').value = driver.id;
+    }
+
+    // Add new item entry
+    function addItem() {
+        const itemsList = document.getElementById('itemsList');
+        const itemEntry = document.createElement('div');
+        itemEntry.className = 'item-entry';
+        itemEntry.setAttribute('data-item-index', itemIndex);
+        itemEntry.innerHTML = `
+            <button type="button" class="remove-item" onclick="removeItem(this)">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="form-row two-cols">
+                <div class="form-group">
+                    <label>Specimen Type <span class="required">*</span></label>
+                    <select name="items[${itemIndex}][specimen_type]" required>
+                        <option value="blood">Blood</option>
+                        <option value="urine">Urine</option>
+                        <option value="tissue">Tissue</option>
+                        <option value="saliva">Saliva</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Barcode / Item ID</label>
+                    <input type="text" name="items[${itemIndex}][barcode]" placeholder="Scan or enter barcode">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Quantity</label>
+                    <input type="number" name="items[${itemIndex}][quantity]" value="1" min="1">
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <input type="text" name="items[${itemIndex}][description]" placeholder="Optional description">
+                </div>
+            </div>
+        `;
+        itemsList.appendChild(itemEntry);
+        itemIndex++;
+    }
+
+    // Remove item entry
+    function removeItem(button) {
+        const itemEntry = button.closest('.item-entry');
+        const itemsList = document.getElementById('itemsList');
+
+        if (itemsList.children.length > 1) {
+            itemEntry.remove();
+        } else {
+            showDialog('At least one item is required', 'warning');
+        }
+    }
+
+    // Handle form submission
+    document.getElementById('jobCreateForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Dispatching...';
+
+        const formData = new FormData(e.target);
+
+        // Parse pickup location
+        let pickupLocationData = {};
+        const pickupLocationValue = formData.get('pickup_location');
+        if (pickupLocationValue) {
+            try {
+                pickupLocationData = JSON.parse(pickupLocationValue);
+            } catch (e) {
+                console.error('Error parsing pickup location:', e);
+            }
+        }
+
+        // Parse delivery location
+        let deliveryLocationData = {};
+        const deliveryLocationValue = formData.get('delivery_location');
+        if (deliveryLocationValue) {
+            try {
+                deliveryLocationData = JSON.parse(deliveryLocationValue);
+            } catch (e) {
+                console.error('Error parsing delivery location:', e);
+            }
+        }
+
+        // Collect items
+        const items = [];
+        const itemEntries = document.querySelectorAll('.item-entry');
+        itemEntries.forEach((entry, idx) => {
+            items.push({
+                item_type: 'specimen',
+                specimen_type: formData.get(`items[${idx}][specimen_type]`),
+                barcode: formData.get(`items[${idx}][barcode]`),
+                quantity: parseInt(formData.get(`items[${idx}][quantity]`) || 1),
+                description: formData.get(`items[${idx}][description]`),
+                temperature_requirement: formData.get('temperature_requirement'),
+            });
+        });
+
+        const jobData = {
+            // PHI Data
+            specimen_id: formData.get('specimen_id'),
+            patient_initials: formData.get('patient_initials').toUpperCase(),
+            urgency_level: formData.get('urgency_level'),
+
+            // Pickup Information
+            pickup_name: pickupLocationData.name || '',
+            pickup_address: pickupLocationData.address || '',
+            pickup_city: pickupLocationData.city || '',
+            pickup_state: pickupLocationData.state || '',
+            pickup_zip: pickupLocationData.zip || '',
+            pickup_phone: '+1234567890', // You can add phone field if needed
+            pickup_latitude: pickupLocationData.latitude || null,
+            pickup_longitude: pickupLocationData.longitude || null,
+
+            // Time Window
+            scheduled_time_window_start: formData.get('scheduled_time_window_start'),
+            scheduled_time_window_end: formData.get('scheduled_time_window_end'),
+
+            // Delivery Information
+            delivery_name: deliveryLocationData.name || '',
+            delivery_address: deliveryLocationData.address || '',
+            delivery_city: deliveryLocationData.city || '',
+            delivery_state: deliveryLocationData.state || '',
+            delivery_zip: deliveryLocationData.zip || '',
+            delivery_phone: '+1234567890',
+            delivery_latitude: deliveryLocationData.latitude || null,
+            delivery_longitude: deliveryLocationData.longitude || null,
+
+            // Priority (map urgency to priority)
+            priority: formData.get('urgency_level') === 'routine' ? 'normal' :
+                     formData.get('urgency_level') === 'stat' ? 'high' : 'urgent',
+
+            // Driver and Vehicle
+            driver_id: formData.get('driver_id') || null,
+            required_vehicle_type: formData.get('required_vehicle_type') || null,
+
+            // Special Instructions
+            special_instructions: formData.get('special_instructions'),
+
+            // Digital Chain of Custody
+            requires_barcode_scan: formData.get('requires_barcode_scan') ? true : false,
+            requires_signature_or_photo: formData.get('requires_signature_or_photo') ? true : false,
+
+            // Items
+            items: items
+        };
+
+        console.log('Job Data:', jobData);
+
+        try {
+            const response = await fetch('/api/v1/deliveries', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(jobData)
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                showDialog('Job dispatched successfully!', 'success', 'Success', function() {
+                    window.location.href = '/company/dashboard/deliveries';
+                });
+            } else {
+                showDialog('Failed to create job: ' + (result.message || JSON.stringify(result.errors || 'Unknown error')), 'error');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Dispatch Job';
+            }
+        } catch (error) {
+            showDialog('Error creating job: ' + error.message, 'error');
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Dispatch Job';
+            console.error(error);
+        }
+    });
+
+    // Listen to urgency level and vehicle type changes to reload drivers
+    document.querySelectorAll('input[name="urgency_level"]').forEach(radio => {
+        radio.addEventListener('change', loadAvailableDrivers);
+    });
+
+    document.getElementById('vehicleType').addEventListener('change', loadAvailableDrivers);
+    document.getElementById('pickupLocation').addEventListener('change', loadAvailableDrivers);
+
+    // Load data on page load
+    loadLocations();
+    loadAvailableDrivers();
+</script>
+@endsection

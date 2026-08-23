@@ -1,0 +1,477 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,100..900;1,100..900&display=swap');
+
+body {
+	font-family: "Inter Tight", sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	margin-bottom: 0;
+}
+
+p {
+	color: var(--dark-txt);
+	margin-bottom: 0;
+	font-size: 18px;
+}
+
+:root {
+	--primary: #222F4E;
+	--white: #ffffff;
+	--border-light: #C8C8C8;
+	--secondary: #AEBD52;
+	--dark-txt: #5D5D5D;
+}
+
+
+/* header{
+    height: 110px;
+} */
+
+.container {
+	max-width: 1264px;
+	width: 100%;
+	margin: 0 auto;
+	padding: 0;
+}
+
+.logo {
+	max-width: 195px;
+	width: 100%;
+}
+
+.primary-btn {
+	background-color: var(--primary);
+	height: 59px;
+	width: 162px;
+	border-radius: 12px;
+	color: var(--white);
+	border: none;
+}
+
+/* .banner-text{
+    max-width: 565px;
+    width: 100%;
+} */
+
+.banner-text p {
+	font-size: 18px;
+}
+
+.banner-text h2 {
+	font-size: 48px;
+}
+
+.multi-title {
+	color: var(--secondary);
+}
+
+.banner-media .caption-sec {
+	position: absolute;
+	bottom: 30px;
+	left: 30px;
+}
+
+.caption-inner {
+	background: rgba(255, 255, 255, 0.7);
+	/* transparent white */
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+	padding: 10px 20px;
+	border-radius: 25px;
+	border: 1px solid var(--white);
+}
+
+.chain-custody .chain-inner {
+	background-color: var(--primary);
+	border-radius: 28px;
+	padding: 60px;
+}
+
+.sec-title {
+	width: 100%;
+	max-width: 654px;
+}
+
+.sec-title h2 {
+	font-size: 40px;
+}
+
+.feature-list ul {
+	list-style: none;
+	padding-left: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 10px
+}
+
+.feature-main {
+	margin-top: 60px;
+}
+
+.feature-main .media {
+	padding: 20px 10px;
+	background-image: linear-gradient(#ffffff93 10%, #ffffff00 100%);
+	border-radius: 20px;
+
+	display: flex;
+	justify-content: center;
+}
+
+.feature-list {
+
+	max-width: 376px;
+	justify-content: center;
+}
+
+.launch-sec {
+	background-image: linear-gradient(#ECF2CD, #ecf2cd00);
+	border-radius: 28px;
+	padding: 60px;
+}
+
+.inner-launch {
+	max-width: 677px;
+}
+
+.inner-launch p {
+	font-size: 18px;
+}
+
+.trans-btn {
+	background-color: transparent;
+	border: 1px solid var(--primary);
+	color: var(--primary);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.medical-chain {
+	max-width: 750px;
+	width: 100%;
+}
+
+.medical-sec .medical-box {
+	width: 175px;
+	border-right: 1px solid #CDDA7F;
+}
+
+.medical-sec .medical-box:last-child {
+	border: none;
+}
+
+.serv-cards {
+	max-width: 948px;
+	width: 100%;
+}
+
+.price-cards {
+	background-color: #F7F9FE;
+	padding: 20px;
+	width: 100%;
+	max-width: 400px;
+	border: 1px solid #E8E8E8;
+	border-radius: 28px;
+}
+
+.price-cards h2 {
+	font-size: 32px;
+}
+
+.price-cards h4 span {
+	font-size: 48px;
+
+	padding-right: 10px;
+}
+
+.price-cards h4 {
+	color: var(--secondary);
+}
+
+.price-cards .tag {
+	background-color: #AEBD524A;
+	border: 1px solid #AEBD52;
+	text-decoration: none;
+	color: #000;
+	border-radius: 30px;
+	padding: 10px 20px;
+	display: inline-block;
+	max-width: 290px;
+}
+
+.price-cards .btn {
+	background-color: #AEBD52;
+	padding: 10px 20px;
+}
+
+.price-cards-blue {
+	background-color: var(--primary);
+
+}
+
+.delivery-inner {
+	max-width: 845px;
+	width: 100%;
+}
+
+.delivery-box {
+	width: 340px;
+}
+
+.delivery-box span {
+	font-size: 63px;
+	margin-top: -20px;
+	color: var(--secondary);
+	margin-bottom: -48px;
+}
+
+.app-inner .btn {
+	background-color: #AEBD52;
+	max-width: 160px;
+	width: 100%;
+}
+
+.get-in-inner {
+	background-color: #616E0F;
+	border-radius: 28px;
+	padding: 60px;
+}
+
+.get-in-touch .form-control {
+	background-color: transparent;
+	border-bottom: 1px solid var(--white);
+	border-top: 0;
+	border-left: 0;
+	border-right: 0;
+	border-radius: 0;
+}
+
+.get-in-touch .form-control::placeholder {
+	color: var(--white);
+}
+
+footer {
+	background-color: #F8F8F8;
+	padding: 40px 0;
+	margin-top: 80px;
+}
+
+.footer-menu h4 {
+	font-size: 18px;
+}
+
+.footer-menu li {
+	color: var(--dark-txt);
+}
+
+.social-links .icon {
+	width: 50px;
+	height: 50px;
+}
+
+.bootom-footer p,
+.bootom-footer ul {
+	font-size: 14px;
+}
+
+.bootom-footer {
+	border-top: 1px solid #B2B2B29C;
+	padding-top: 15px;
+}
+
+.bootom-footer ul li {
+	position: relative;
+}
+
+.bootom-footer ul li:after {
+	content: "";
+	width: 1px;
+	height: 10px;
+	position: absolute;
+	top: 7px;
+	right: -10px;
+	background-color: #ABABAB;
+}
+
+.bootom-footer ul li:last-child:after {
+	display: none;
+}
+
+.wishlist-pop .modal-header .btn-close {
+	top: 20px;
+	position: absolute;
+	right: 20px;
+}
+
+.wishlist-pop .form-control {
+	border-top: 0;
+	border-right: 0;
+	border-left: 0;
+	border-radius: 0;
+}
+
+.wishlist-pop .primary-btn {
+	background-color: var(--secondary);
+	height: 60px;
+	width: 100%;
+	max-width: 230px;
+}
+
+.form-control:focus-visible {
+	outline: none;
+	box-shadow: none;
+}
+
+/* Responsive */
+
+@media screen and (max-width:1024px) {
+	section {
+		padding-right: 20px;
+		padding-left: 20px;
+	}
+
+	footer {
+		padding: 40px 20px 0 20px;
+	}
+
+	header {
+		padding: 0 20px;
+	}
+}
+
+@media screen and (min-width: 993px) {
+	.medical-sec .medical-box {
+		width: 245px;
+	}
+}
+
+@media screen and (max-width:992px) {
+	p {
+		font-size: 16px;
+	}
+
+	.banner-text h2,
+	.sec-title h2 {
+		font-size: 30px;
+	}
+
+	.price-cards h2 {
+		font-size: 25px;
+	}
+
+	.price-cards .tag {
+		font-size: 14px;
+	}
+
+	.price-cards li {
+		font-size: 12px;
+	}
+
+	.price-cards .btn {
+		font-size: 14px;
+	}
+
+	.app-inner h2 {
+		font-size: 28px;
+	}
+
+	.price-cards li svg {
+		width: 15px;
+	}
+
+	.price-cards h4 span {
+		font-size: 40px;
+	}
+
+	.price-cards h4 {
+		font-size: 16px !important;
+	}
+
+	.medical-sec .medical-box {
+		width: 245px;
+	}
+}
+
+@media screen and (max-width: 768px) {
+	.banner-media .caption-sec {
+		bottom: 75px;
+	}
+}
+
+@media screen and (max-width: 767px) {
+	.chain-custody .chain-inner {
+		padding: 20px;
+	}
+
+	/* .feature-main .media{
+        width: 100%;
+    } */
+	.primary-btn {
+		width: 150px;
+		height: 50px;
+	}
+
+	.logo {
+		width: 150px;
+	}
+
+	.banner-text {
+		margin-bottom: 20px;
+	}
+
+	.get-in-inner {
+		padding: 20px;
+	}
+
+	.price-cards {
+		margin-bottom: 20px !important;
+	}
+
+	.banner-media .caption-sec {
+		bottom: 20px;
+	}
+
+	.caption-inner {
+		font-size: 12px;
+	}
+
+	.banner-text h2,
+	.sec-title h2 {
+		font-size: 24px;
+	}
+
+	.platform .banner-text {
+		margin-top: 20px;
+	}
+
+	.chain-custody {
+		margin-top: 40px;
+	}
+
+	.platform {
+		margin-top: 40px;
+	}
+
+	.price-sec {
+		margin-top: 0;
+	}
+
+	.app-inner .sec-title {
+		margin-bottom: 20px;
+	}
+
+	.feature-main:last-child {
+		margin-top: 20px;
+	}
+}
+
+@media screen and (max-width: 430px) {
+	.medical-sec .medical-box {
+		width: 160px;
+	}
+}

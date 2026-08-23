@@ -1,0 +1,1315 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Medical Courier Services API",
+    "description": "Complete API documentation for Medical Courier Services - Web Dashboard & Mobile Applications\n\n**Two Separate API Systems:**\n\n1. **Web/Admin API** (`/api/v1/`) - For dashboard and management\n2. **Mobile API** (`/api/mobile/v1/`) - For driver mobile application\n\n**New Features:**\n- Pre-Duty Safety Checklist (4 categories: Vehicle, Etiquette, HIPAA Compliance, Medical Equipment)\n- Job Request Management (Accept/Decline with reasons)\n- Real-time GPS Tracking\n- Digital Signature & Photo Capture\n- Medical Item Type Support (Blood, Urine, Specimens, Equipment)\n- Comprehensive Driver Statistics\n\n**Features:**\n- Dynamic pagination (configurable, max 100 per page)\n- Role-based access control (admin, coordinator, driver)\n- Laravel Sanctum token authentication\n- HIPAA compliance verification\n- Activity logging and audit trails",
+    "contact": {
+      "name": "Medical Courier Support",
+      "email": "support@medicalcourier.com"
+    },
+    "license": {
+      "name": "Proprietary",
+      "url": "https://medicalcourier.com/license"
+    },
+    "version": "2.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://172.16.123.113:8001",
+      "description": "API Server"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Mobile - Authentication",
+      "description": "Mobile app authentication endpoints for drivers (5 endpoints)"
+    },
+    {
+      "name": "Mobile - Safety Checklist",
+      "description": "Pre-duty safety checklist with HIPAA compliance (4 endpoints)"
+    },
+    {
+      "name": "Mobile - Job Requests",
+      "description": "Job request management - accept/decline deliveries (4 endpoints)"
+    },
+    {
+      "name": "Mobile - Deliveries",
+      "description": "Mobile API delivery management with pagination (7 endpoints)"
+    },
+    {
+      "name": "Mobile - Driver",
+      "description": "Mobile API driver operations and statistics (5 endpoints)"
+    },
+    {
+      "name": "Mobile - Firebase Notification",
+      "description": "Mobile API driver notifications"
+    }
+  ],
+  "paths": {
+    "/api/mobile/v1/login": {
+      "post": {
+        "tags": ["Mobile - Authentication"],
+        "summary": "Mobile user login",
+        "description": "Authenticate driver and receive access token",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["email", "password"],
+                "properties": {
+                  "email": { "type": "string", "format": "email", "example": "gourav@yopmail.com" },
+                  "password": { "type": "string", "format": "password", "example": "Gourav@1234" },
+                  "device_type": { "type": "string", "example": "iPhone 14 Pro" },
+                  "fcm_token": { "type": "string", "example": "eKGn-lzwTPuxz49i8R5Vvf:APA91bFDPV9ctcjZuhIUwl25a8Vk63UAeKAnYtUWDyLofnCwlorvgqrt7JstlEsH4RbusjAp84Z7alIiqYdDUDMC2tOmh3C1OFVmySRAE0rTzTo80b-yRZw" },
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful login",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "message": { "type": "string", "example": "Login successful" },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "token": { "type": "string", "example": "1|abc123..." },
+                        "user": {
+                          "type": "object",
+                          "properties": {
+                            "id": { "type": "integer", "example": 1 },
+                            "name": { "type": "string", "example": "John Driver" },
+                            "email": { "type": "string", "example": "driver@test.com" },
+                            "role": { "type": "string", "example": "driver" },
+                            "phone": { "type": "string", "example": "+1234567890" }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "description": "Invalid credentials" },
+          "422": { "description": "Validation error" }
+        }
+      }
+    },
+    "/api/mobile/v1/refresh": {
+      "post": {
+        "tags": ["Mobile - Authentication"],
+        "summary": "Refresh access token",
+        "description": "Authenticate driver and receive access token",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["refresh_token"],
+                "properties": {
+                  "refresh_token": { "type": "string", "example": "refresh_token_here" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Token refreshed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "message": { "type": "string", "example": "Token refreshed successfully" },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "token": { "type": "string", "example": "1|abc123..." },
+                        "refresh_token": { "type": "string", "example": "new_refresh_token_here"}
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "description": "Invalid credentials" },
+          "422": { "description": "Validation error" }
+        }
+      }
+    },
+    "/api/mobile/v1/refresh-expiry": {
+      "post": {
+        "tags": ["Mobile - Authentication"],
+        "summary": "Refresh access token expiry",
+        "description": "Check if refresh token is expired or not",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["refresh_token"],
+                "properties": {
+                  "refresh_token": { "type": "string", "example": "refresh_token_here" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Token expiry checked successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "message": { "type": "string", "example": "Refreshed token not expired" },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "token": { "type": "string", "example": "1|abc123..." },
+                        "refresh_token": { "type": "string", "example": "new_refresh_token_here"}
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "description": "Invalid credentials" },
+          "422": { "description": "Validation error" }
+        }
+      }
+    },
+    "/api/mobile/v1/logout": {
+      "post": {
+        "tags": ["Mobile - Authentication"],
+        "summary": "Mobile user logout",
+        "security": [{ "sanctum": [] }],
+        "responses": {
+          "200": { "description": "Successfully logged out" }
+        }
+      }
+    },
+    "/api/mobile/v1/profile": {
+      "get": {
+        "tags": ["Mobile - Authentication"],
+        "summary": "Get current user profile",
+        "security": [{ "sanctum": [] }],
+        "responses": {
+          "200": { "description": "User profile data" }
+        }
+      },
+      "put": {
+        "tags": ["Mobile - Authentication"],
+        "summary": "Update user profile",
+        "security": [{ "sanctum": [] }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "phone": { "type": "string" },
+                  "profile_photo": { "type": "string", "description": "Base64 encoded image" },
+                  "country_code": { "type": "string" },
+                  "country_flag": { "type": "string" },
+                  "iso_code": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Profile updated successfully" }
+        }
+      }
+    },
+    "/api/mobile/v1/change-password": {
+      "post": {
+        "tags": ["Mobile - Authentication"],
+        "summary": "Change password",
+        "security": [{ "sanctum": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["current_password", "new_password", "new_password_confirmation"],
+                "properties": {
+                  "current_password": { "type": "string", "format": "password" },
+                  "new_password": { "type": "string", "format": "password", "minLength": 8 },
+                  "new_password_confirmation": { "type": "string", "format": "password" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Password changed successfully" },
+          "400": { "description": "Current password incorrect" }
+        }
+      }
+    },
+    "/api/mobile/v1/safety-checklist/today": {
+      "get": {
+        "tags": ["Mobile - Safety Checklist"],
+        "summary": "Get today's safety checklist",
+        "description": "Returns the pre-duty safety checklist for the current driver for today",
+        "security": [{ "sanctum": [] }],
+        "responses": {
+          "200": {
+            "description": "Today's safety checklist",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true,
+                  "data": {
+                    "id": 1,
+                    "checklist_date": "2026-03-17",
+                    "checklist_type": "pre_duty",
+                    "vehicle_checks": {
+                      "vehicle_exterior_check": true,
+                      "vehicle_interior_clean": true,
+                      "fuel_level_adequate": true,
+                      "tire_pressure_checked": true,
+                      "lights_functional": true,
+                      "brakes_functional": true,
+                      "emergency_kit_present": true,
+                      "fire_extinguisher_present": true
+                    },
+                    "etiquette_checks": {
+                      "uniform_proper": true,
+                      "id_badge_visible": true,
+                      "personal_hygiene": true,
+                      "professional_appearance": true
+                    },
+                    "compliance_checks": {
+                      "hipaa_trained": true,
+                      "patient_privacy_understood": true,
+                      "secure_transport_containers": true,
+                      "phone_lock_enabled": true,
+                      "no_unauthorized_access": true
+                    },
+                    "equipment_checks": {
+                      "cooler_temperature_checked": true,
+                      "biohazard_bags_available": true,
+                      "specimen_containers_secure": true,
+                      "ppe_equipment_available": true,
+                      "hand_sanitizer_available": true,
+                      "gloves_available": true
+                    },
+                    "all_checks_passed": true,
+                    "completed_at": "2026-03-17T08:30:00Z"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/mobile/v1/safety-checklist": {
+      "post": {
+        "tags": ["Mobile - Safety Checklist"],
+        "summary": "Submit safety checklist",
+        "description": "Submit or update the pre-duty safety checklist for today",
+        "security": [{ "sanctum": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["checklist_type", "signature_image"],
+                "properties": {
+                  "checklist_type": { "type": "string", "enum": ["pre_duty", "post_duty"] },
+                  "vehicle_exterior_check": { "type": "boolean" },
+                  "vehicle_interior_clean": { "type": "boolean" },
+                  "fuel_level_adequate": { "type": "boolean" },
+                  "tire_pressure_checked": { "type": "boolean" },
+                  "lights_functional": { "type": "boolean" },
+                  "brakes_functional": { "type": "boolean" },
+                  "emergency_kit_present": { "type": "boolean" },
+                  "fire_extinguisher_present": { "type": "boolean" },
+                  "uniform_proper": { "type": "boolean" },
+                  "id_badge_visible": { "type": "boolean" },
+                  "personal_hygiene": { "type": "boolean" },
+                  "professional_appearance": { "type": "boolean" },
+                  "hipaa_trained": { "type": "boolean" },
+                  "patient_privacy_understood": { "type": "boolean" },
+                  "secure_transport_containers": { "type": "boolean" },
+                  "phone_lock_enabled": { "type": "boolean" },
+                  "no_unauthorized_access": { "type": "boolean" },
+                  "cooler_temperature_checked": { "type": "boolean" },
+                  "biohazard_bags_available": { "type": "boolean" },
+                  "specimen_containers_secure": { "type": "boolean" },
+                  "ppe_equipment_available": { "type": "boolean" },
+                  "hand_sanitizer_available": { "type": "boolean" },
+                  "gloves_available": { "type": "boolean" },
+                  "signature_image": { "type": "string", "description": "Base64 encoded signature" },
+                  "latitude": { "type": "number", "format": "float" },
+                  "longitude": { "type": "number", "format": "float" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Safety checklist submitted successfully" },
+          "422": { "description": "Validation error" }
+        }
+      }
+    },
+    "/api/mobile/v1/safety-checklist/history": {
+      "get": {
+        "tags": ["Mobile - Safety Checklist"],
+        "summary": "Get safety checklist history",
+        "description": "Returns paginated history of safety checklists",
+        "security": [{ "sanctum": [] }],
+        "parameters": [
+          { "name": "page", "in": "query", "schema": { "type": "integer", "default": 1 } },
+          { "name": "per_page", "in": "query", "schema": { "type": "integer", "default": 15, "maximum": 50 } }
+        ],
+        "responses": {
+          "200": { "description": "Safety checklist history" }
+        }
+      }
+    },
+    "/api/mobile/v1/safety-checklist/{id}": {
+      "get": {
+        "tags": ["Mobile - Safety Checklist"],
+        "summary": "Get specific safety checklist",
+        "security": [{ "sanctum": [] }],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": {
+          "200": { "description": "Safety checklist details" },
+          "404": { "description": "Checklist not found" }
+        }
+      }
+    },
+    "/api/mobile/v1/job-requests": {
+      "get": {
+        "tags": ["Mobile - Job Requests"],
+        "summary": "Get pending job requests",
+        "description": "Returns all pending delivery requests for the current driver",
+        "security": [{ "sanctum": [] }],
+        "parameters": [
+          { "name": "page", "in": "query", "schema": { "type": "integer", "default": 1 } },
+          { "name": "per_page", "in": "query", "schema": { "type": "integer", "default": 15, "maximum": 50 } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pending job requests",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true,
+                  "data": {
+                    "requests": [
+                      {
+                        "id": 1,
+                        "status": "pending",
+                        "requested_at": "2026-03-17T09:00:00Z",
+                        "delivery": {
+                          "id": 123,
+                          "delivery_number": "DLV-ABC123",
+                          "priority": "high",
+                          "urgency_level": "urgent",
+                          "distance_km": 5.2,
+                          "estimated_duration_minutes": 25
+                        }
+                      }
+                    ],
+                    "pagination": {
+                      "total": 5,
+                      "per_page": 15,
+                      "current_page": 1
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/mobile/v1/job-requests/{id}/accept": {
+      "post": {
+        "tags": ["Mobile - Job Requests"],
+        "summary": "Accept a job request",
+        "description": "Accept a pending delivery request and assign delivery to driver",
+        "security": [{ "sanctum": [] }],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "latitude": { "type": "number", "format": "float" },
+                  "longitude": { "type": "number", "format": "float" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Job request accepted successfully" },
+          "400": { "description": "Job request already processed" },
+          "404": { "description": "Job request not found" }
+        }
+      }
+    },
+    "/api/mobile/v1/job-requests/{id}/decline": {
+      "post": {
+        "tags": ["Mobile - Job Requests"],
+        "summary": "Decline a job request",
+        "description": "Decline a pending delivery request with reason",
+        "security": [{ "sanctum": [] }],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["decline_reason_category"],
+                "properties": {
+                  "decline_reason_category": {
+                    "type": "string",
+                    "enum": ["too_far", "time_conflict", "vehicle_issue", "personal", "other"],
+                    "example": "time_conflict"
+                  },
+                  "decline_reason": { "type": "string", "example": "Already have another delivery scheduled" },
+                  "latitude": { "type": "number", "format": "float" },
+                  "longitude": { "type": "number", "format": "float" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Job request declined successfully" },
+          "422": { "description": "Validation error" }
+        }
+      }
+    },
+    "/api/mobile/v1/job-requests/history": {
+      "get": {
+        "tags": ["Mobile - Job Requests"],
+        "summary": "Get job request history",
+        "description": "Returns paginated history of all job requests (accepted and declined)",
+        "security": [{ "sanctum": [] }],
+        "parameters": [
+          { "name": "page", "in": "query", "schema": { "type": "integer", "default": 1 } },
+          { "name": "per_page", "in": "query", "schema": { "type": "integer", "default": 20 } },
+          { "name": "status", "in": "query", "schema": { "type": "string", "enum": ["accepted", "declined", "expired"] } }
+        ],
+        "responses": {
+          "200": { "description": "Job request history" }
+        }
+      }
+    },
+    "/api/mobile/v1/deliveries": {
+      "get": {
+        "tags": ["Mobile - Deliveries"],
+        "summary": "Get paginated list of deliveries",
+        "description": "Returns a paginated list of deliveries with advanced filtering",
+        "security": [{ "sanctum": [] }],
+        "parameters": [
+          { "name": "page", "in": "query", "schema": { "type": "integer", "default": 1 } },
+          { "name": "per_page", "in": "query", "schema": { "type": "integer", "default": 15, "maximum": 100 } },
+          { "name": "status", "in": "query", "schema": { "type": "string", "enum": ["pending", "assigned", "in_transit", "picked_up", "delivered", "failed", "cancelled"] } },
+          { "name": "priority", "in": "query", "schema": { "type": "string", "enum": ["low", "normal", "high", "urgent"] } },
+          { "name": "search", "in": "query", "schema": { "type": "string" } },
+          { "name": "sort_by", "in": "query", "schema": { "type": "string", "enum": ["created_at", "pickup_scheduled_time", "priority", "delivery_number"], "default": "created_at" } },
+          { "name": "sort_order", "in": "query", "schema": { "type": "string", "enum": ["asc", "desc"], "default": "desc" } }
+        ],
+        "responses": {
+          "200": { "description": "Paginated deliveries list" }
+        }
+      }
+    },
+    "/api/mobile/v1/deliveries/my-active": {
+      "get": {
+        "tags": ["Mobile - Deliveries"],
+        "summary": "Get driver's active deliveries",
+        "description": "Returns all active deliveries (assigned, in_transit, picked_up) for the current driver",
+        "security": [{ "sanctum": [] }],
+        "responses": {
+          "200": { "description": "Active deliveries" }
+        }
+      }
+    },
+    "/api/mobile/v1/deliveries/history": {
+      "get": {
+        "tags": ["Mobile - Deliveries"],
+        "summary": "Get delivery history with pagination",
+        "description": "Returns paginated history of completed and cancelled deliveries",
+        "security": [{ "sanctum": [] }],
+        "parameters": [
+          { "name": "page", "in": "query", "schema": { "type": "integer", "default": 1 } },
+          { "name": "per_page", "in": "query", "schema": { "type": "integer", "default": 20 } }
+        ],
+        "responses": {
+          "200": { "description": "Delivery history" }
+        }
+      }
+    },
+    "/api/mobile/v1/deliveries/{id}": {
+      "get": {
+        "tags": ["Mobile - Deliveries"],
+        "summary": "Get delivery details",
+        "description": "Returns complete delivery information including items with barcode, dropoff locations, temperature requirements, vehicle requirements, and container count",
+        "security": [{ "sanctum": [] }],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" }, "description": "Delivery ID" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Delivery details with all required fields",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": { "type": "integer", "example": 6 },
+                        "delivery_number": { "type": "string", "example": "DEL-2026-0006" },
+                        "status": { "type": "string", "example": "assigned" },
+                        "priority": { "type": "string", "example": "high" },
+                        "temperature_requirement": { "type": "string", "example": "refrigerated", "description": "Temperature requirement for entire delivery" },
+                        "vehicle_requirements": { "type": "string", "example": "refrigerated_van", "description": "Required vehicle type" },
+                        "container_count": { "type": "integer", "example": 3, "description": "Number of containers or bags" },
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": { "type": "integer", "example": 1 },
+                              "item_type": { "type": "string", "example": "specimen" },
+                              "specimen_type": { "type": "string", "example": "blood" },
+                              "barcode": { "type": "string", "example": "BAR123456", "description": "Item barcode for scanning" },
+                              "quantity": { "type": "integer", "example": 2 },
+                              "temperature_requirement": { "type": "string", "example": "refrigerated" },
+                              "dropoff": {
+                                "type": "object",
+                                "description": "Dropoff location for this specific item",
+                                "properties": {
+                                  "name": { "type": "string", "example": "Lab Station B" },
+                                  "address": { "type": "string", "example": "456 Medical Plaza" },
+                                  "city": { "type": "string", "example": "New York" },
+                                  "state": { "type": "string", "example": "NY" },
+                                  "zip": { "type": "string", "example": "10002" },
+                                  "phone": { "type": "string", "example": "+1-555-0199" },
+                                  "contact_person": { "type": "string", "example": "Dr. Smith" },
+                                  "location": {
+                                    "type": "object",
+                                    "properties": {
+                                      "latitude": { "type": "number", "example": 40.7128 },
+                                      "longitude": { "type": "number", "example": -74.0060 }
+                                    }
+                                  }
+                                }
+                              },
+                              "status": { "type": "string", "example": "pending" }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "Delivery not found" },
+          "403": { "description": "Access denied" }
+        }
+      }
+    },
+    "/api/mobile/v1/deliveries/{id}/temperature/update": {
+      "post": {
+        "tags": ["Mobile - Deliveries"],
+        "summary": "Update Temperature",
+        "description": "",
+        "security": [{ "sanctum": [] }],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" }, "description": "Delivery ID" }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "reading": { "type": "number", "format": "integer", "example": 30 },
+                  "notes": { "type": "string","example": "" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Temperature updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "message": { "type": "string", "example": "Temperature updated successfully" },
+                    
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Invalid status transition" },
+          "404": { "description": "Delivery not found" }
+        }
+      }
+    },
+    "/api/mobile/v1/deliveries/{id}/accept": {
+      "post": {
+        "tags": ["Mobile - Deliveries"],
+        "summary": "Accept delivery (driver accepts assignment)",
+        "description": "Changes delivery status to 'accepted'. Returns full delivery details including items with barcodes, dropoff locations, temperature requirements, vehicle requirements, and container count",
+        "security": [{ "sanctum": [] }],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" }, "description": "Delivery ID" }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "latitude": { "type": "number", "format": "float", "example": 40.7580 },
+                  "longitude": { "type": "number", "format": "float", "example": -73.9855 }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Delivery accepted successfully with complete details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "message": { "type": "string", "example": "Delivery accepted successfully" },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": { "type": "integer", "example": 6 },
+                        "status": { "type": "string", "example": "accepted" },
+                        "delivery_number": { "type": "string", "example": "DEL-2026-0006" },
+                        "temperature_requirement": { "type": "string", "example": "refrigerated" },
+                        "vehicle_requirements": { "type": "string", "example": "refrigerated_van" },
+                        "container_count": { "type": "integer", "example": 3 },
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": { "type": "integer" },
+                              "barcode": { "type": "string", "example": "BAR123456" },
+                              "item_type": { "type": "string" },
+                              "temperature_requirement": { "type": "string" },
+                              "dropoff": {
+                                "type": "object",
+                                "properties": {
+                                  "name": { "type": "string" },
+                                  "address": { "type": "string" },
+                                  "city": { "type": "string" },
+                                  "phone": { "type": "string" },
+                                  "location": {
+                                    "type": "object",
+                                    "properties": {
+                                      "latitude": { "type": "number" },
+                                      "longitude": { "type": "number" }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Invalid status transition" },
+          "404": { "description": "Delivery not found" }
+        }
+      }
+    },
+    "/api/mobile/v1/deliveries/{id}/start": {
+      "post": {
+        "tags": ["Mobile - Deliveries"],
+        "summary": "Start delivery (driver en route to pickup)",
+        "description": "Changes delivery status from 'assigned' to 'in_transit'. Returns full delivery details including items with barcodes, dropoff locations, temperature requirements, vehicle requirements, and container count",
+        "security": [{ "sanctum": [] }],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" }, "description": "Delivery ID" }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "latitude": { "type": "number", "format": "float", "example": 40.7580 },
+                  "longitude": { "type": "number", "format": "float", "example": -73.9855 },
+                  "temperature_reading": { "type": "string", "example": "10002" },
+                  "notes": { "type": "string","example": "Special handling required" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Delivery started successfully with complete details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "message": { "type": "string", "example": "Delivery started successfully" },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": { "type": "integer", "example": 6 },
+                        "status": { "type": "string", "example": "in_transit" },
+                        "delivery_number": { "type": "string", "example": "DEL-2026-0006" },
+                        "temperature_requirement": { "type": "string", "example": "refrigerated" },
+                        "vehicle_requirements": { "type": "string", "example": "refrigerated_van" },
+                        "container_count": { "type": "integer", "example": 3 },
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": { "type": "integer" },
+                              "barcode": { "type": "string", "example": "BAR123456" },
+                              "item_type": { "type": "string" },
+                              "temperature_requirement": { "type": "string" },
+                              "dropoff": {
+                                "type": "object",
+                                "properties": {
+                                  "name": { "type": "string" },
+                                  "address": { "type": "string" },
+                                  "city": { "type": "string" },
+                                  "phone": { "type": "string" },
+                                  "location": {
+                                    "type": "object",
+                                    "properties": {
+                                      "latitude": { "type": "number" },
+                                      "longitude": { "type": "number" }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Invalid status transition" },
+          "404": { "description": "Delivery not found" }
+        }
+      }
+    },
+    "/api/mobile/v1/deliveries/{id}/pickup": {
+      "post": {
+        "tags": ["Mobile - Deliveries"],
+        "summary": "Confirm pickup with signature and item barcodes",
+        "description": "Confirms package pickup with recipient signature, optional photo proof, and barcode scanning for multiple items",
+        "security": [{ "sanctum": [] }],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" }, "description": "Delivery ID" }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["recipient_name", "signature_image"],
+                "properties": {
+                  "recipient_name": { "type": "string", "example": "John Doe" },
+                  "latitude": { "type": "number", "format": "float", "example": 40.7580 },
+                  "longitude": { "type": "number", "format": "float", "example": -73.9855 },              
+                  "items": {
+                    "type": "array",
+                    "description": "Array of items with barcodes for scanning",
+                    "items": {
+                      "type": "object",
+                      "required": ["item_id", "barcode"],
+                      "properties": {
+                        "item_id": { "type": "integer", "example": 3 },
+                        "barcode": { "type": "string", "example": "BAR123456" },
+                        "photo_proof": { "type": "string", "description": "Base64 encoded photo" },
+                        "signature_image": { "type": "string", "description": "Base64 encoded signature image" },
+                        "scanned_at": { "type": "string", "format": "date-time", "example": "2026-03-30T10:30:00Z" },
+                        "notes": { "type": "string", "example": "Package in good condition" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Pickup confirmed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "message": { "type": "string" },
+                    "data": { "type": "object" }
+                  }
+                }
+              }
+            }
+          },
+          "422": { "description": "Validation error" }
+        }
+      }
+    },
+    "/api/mobile/v1/deliveries/{id}/complete": {
+      "post": {
+        "tags": ["Mobile - Deliveries"],
+        "summary": "Complete delivery with signature",
+        "description": "Completes delivery with recipient signature and optional photo proof",
+        "security": [{ "sanctum": [] }],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["recipient_name", "signature_image"],
+                "properties": {
+                  "recipient_name": { "type": "string", "example": "John Doe" },
+                  "latitude": { "type": "number", "format": "float", "example": 40.7580 },
+                  "longitude": { "type": "number", "format": "float", "example": -73.9855 },              
+                  "items": {
+                    "type": "array",
+                    "description": "Array of items with barcodes for scanning",
+                    "items": {
+                      "type": "object",
+                      "required": ["item_id", "barcode"],
+                      "properties": {
+                        "item_id": { "type": "integer", "example": 3 },
+                        "barcode": { "type": "string", "example": "BAR123456" },
+                        "photo_proof": { "type": "string", "description": "Base64 encoded photo" },
+                        "signature_image": { "type": "string", "description": "Base64 encoded signature image" },
+                        "scanned_at": { "type": "string", "format": "date-time", "example": "2026-03-30T10:30:00Z" },
+                        "notes": { "type": "string", "example": "Package in good condition" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Delivery completed successfully" }
+        }
+      }
+    },
+    "/api/mobile/v1/deliveries/{id}/failed": {
+      "post": {
+        "tags": ["Mobile - Deliveries"],
+        "summary": "Failed delivery with notes",
+        "description": "Failed delivery with driver notes",
+        "security": [{ "sanctum": [] }],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["type"],
+                "properties": {
+                  "type": { "type": "string", "example":"item", "description": "delivery or item" },
+                  "item_id": { "type": "integer", "example":"1", "description": "Add item id if item delivery is failed" },
+                  "notes": { "type": "string", "example":"Lab was closed"}
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Delivery failed successfully" }
+        }
+      }
+    },
+    "/api/mobile/v1/driver/location": {
+      "post": {
+        "tags": ["Mobile - Driver"],
+        "summary": "Update driver GPS location",
+        "description": "Updates the driver's current GPS location for real-time tracking",
+        "security": [{ "sanctum": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["latitude", "longitude"],
+                "properties": {
+                  "latitude": { "type": "number", "format": "float", "minimum": -90, "maximum": 90 },
+                  "longitude": { "type": "number", "format": "float", "minimum": -180, "maximum": 180 },
+                  "speed": { "type": "number", "format": "float", "description": "Speed in km/h" },
+                  "heading": { "type": "number", "format": "float", "minimum": 0, "maximum": 360 },
+                  "accuracy": { "type": "number", "format": "float", "description": "Accuracy in meters" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Location updated successfully" },
+          "422": { "description": "Validation error" }
+        }
+      }
+    },
+    "/api/mobile/v1/driver/availability": {
+      "post": {
+        "tags": ["Mobile - Driver"],
+        "summary": "Update driver availability status",
+        "description": "Updates the driver's availability status for assignment",
+        "security": [{ "sanctum": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["availability_status"],
+                "properties": {
+                  "availability_status": {
+                    "type": "string",
+                    "enum": ["available", "busy", "off_duty"],
+                    "example": "available"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Availability updated successfully" }
+        }
+      }
+    },
+    "/api/mobile/v1/driver/statistics": {
+      "get": {
+        "tags": ["Mobile - Driver"],
+        "summary": "Get driver statistics",
+        "description": "Returns comprehensive statistics for the driver with optional pagination for recent deliveries",
+        "security": [{ "sanctum": [] }],
+        "parameters": [
+          { "name": "period", "in": "query", "schema": { "type": "string", "enum": ["today", "week", "month", "year", "all"], "default": "month" } },
+          { "name": "page", "in": "query", "schema": { "type": "integer", "default": 1 } },
+          { "name": "per_page", "in": "query", "schema": { "type": "integer", "default": 10, "maximum": 50 } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Driver statistics",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true,
+                  "data": {
+                    "period": "month",
+                    "summary": {
+                      "total_deliveries": 145,
+                      "completed_deliveries": 140,
+                      "cancelled_deliveries": 3,
+                      "failed_deliveries": 2,
+                      "total_distance_km": 1250.5,
+                      "completion_rate": 96.55
+                    },
+                    "status_breakdown": [],
+                    "daily_performance": [],
+                    "recent_deliveries": {}
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/mobile/v1/driver/profile": {
+      "get": {
+        "tags": ["Mobile - Driver"],
+        "summary": "Get driver profile details",
+        "description": "Returns complete driver profile information including vehicle and license details",
+        "security": [{ "sanctum": [] }],
+        "responses": {
+          "200": { "description": "Driver profile" },
+          "404": { "description": "Profile not found" }
+        }
+      },
+      "put": {
+        "tags": ["Mobile - Driver"],
+        "summary": "Update driver profile",
+        "description": "Updates driver profile information",
+        "security": [{ "sanctum": [] }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "vehicle_type": { "type": "string" },
+                  "vehicle_plate_number": { "type": "string" },
+                  "address": { "type": "string" },
+                  "city": { "type": "string" },
+                  "state": { "type": "string" },
+                  "zip_code": { "type": "string" },
+                  "emergency_contact_name": { "type": "string" },
+                  "emergency_contact_phone": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Profile updated successfully" },
+          "422": { "description": "Validation error" }
+        }
+      }
+    },
+    "/api/mobile/v1/driver/availability-status": {
+      "get": {
+        "tags": ["Mobile - Driver"],
+        "summary": "Get driver Availability Status",
+        "description": "Returns driver's avalabilty information",
+        "security": [{ "sanctum": [] }],
+        "responses": {
+          "200": { "description": "Driver profile" },
+          "404": { "description": "Profile not found" }
+        }
+      }
+    },
+    "/api/mobile/v1/send-notification": {
+      "post": {
+        "tags": ["Mobile - Firebase Notification"],
+        "summary": "Send Firebase Notification",
+        "description": "",
+        "security": [{ "sanctum": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["user_id","title","body"],
+                "properties": {
+                  "user_id": {
+                    "type": "string",
+                    "example": ""
+                  },
+                  "title": {
+                    "type": "string",
+                    "example": "New Job"
+                  },
+                  "body": {
+                    "type": "string",
+                    "example": "New Job received"
+                  },
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Notification sent successfully" }
+        }
+      }
+    },
+    "/api/mobile/v1/get-notification": {
+      "get": {
+        "tags": ["Mobile - Firebase Notification"],
+        "summary": "Get Notifications",
+        "parameters": [
+          { "name": "page", "in": "query", "schema": { "type": "integer", "default": 1 } },
+          { "name": "type", "in": "query", "schema": { "type": "string", "default": "mobile" } },
+          { "name": "per_page", "in": "query", "schema": { "type": "integer", "default": 15, "maximum": 50 } }
+        ],
+        "description": "",
+        "security": [{ "sanctum": [] }],
+        "responses": {
+          "200": { "description": "Fetched Notification Sucessfully" },
+          "404": { "description": "Notification not found" }
+        }
+      }
+    },
+    "/api/mobile/v1/notification/has-unread": {
+      "get": {
+        "tags": ["Mobile - Firebase Notification"],
+        "summary": "Check if there are unread notifications",
+        "description": "",
+        "security": [{ "sanctum": [] }],
+        "responses": {
+          "200": { "description": "Fetched Notification Sucessfully" },
+          "404": { "description": "Notification not found" }
+        }
+      }
+    },
+    "/api/mobile/v1/notifications/{id}/read": {
+      "put": {
+        "tags": ["Mobile - Firebase Notification"],
+        "summary": "Mark Notification as Read",
+        "description": "",
+        "security": [{ "sanctum": [] }],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": {
+          "200": { "description": "Notification marked as read" },
+          "404": { "description": "Notification not found" }
+        }
+      }
+    },
+    "/api/mobile/v1/notifications/read-all": {
+      "get": {
+        "tags": ["Mobile - Firebase Notification"],
+        "summary": "Mark Notification as Read All",
+        "description": "",
+        "security": [{ "sanctum": [] }],
+        "responses": {
+          "200": { "description": "Notification marked as read all" },
+          "404": { "description": "Notification not found" }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "sanctum": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Laravel Sanctum Token Authentication\n\n**How to use:**\n1. Login via `/api/mobile/v1/login`\n2. Copy the token from the response\n3. Click 'Authorize' button above\n4. Paste token (without 'Bearer' prefix)\n5. Click 'Authorize' to apply\n\n**Test Credentials:**\n- Driver: driver@test.com / password123"
+      }
+    },
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "example": 1 },
+          "name": { "type": "string", "example": "John Driver" },
+          "email": { "type": "string", "format": "email", "example": "driver@test.com" },
+          "role": { "type": "string", "enum": ["admin", "coordinator", "driver"], "example": "driver" },
+          "phone": { "type": "string", "example": "+1234567890" },
+          "status": { "type": "string", "enum": ["active", "inactive", "suspended"], "example": "active" }
+        }
+      },
+      "Delivery": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "delivery_number": { "type": "string", "example": "DLV-ABC123" },
+          "status": { "type": "string", "enum": ["pending", "assigned", "in_transit", "picked_up", "delivered", "cancelled", "failed"] },
+          "priority": { "type": "string", "enum": ["low", "normal", "high", "urgent"] },
+          "distance_km": { "type": "number", "format": "float", "example": 25.5 },
+          "estimated_duration_minutes": { "type": "integer", "example": 45 }
+        }
+      },
+      "SafetyChecklist": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "checklist_date": { "type": "string", "format": "date" },
+          "checklist_type": { "type": "string", "enum": ["pre_duty", "post_duty"] },
+          "all_checks_passed": { "type": "boolean" },
+          "completed_at": { "type": "string", "format": "date-time" }
+        }
+      },
+      "JobRequest": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "delivery_id": { "type": "integer" },
+          "driver_id": { "type": "integer" },
+          "status": { "type": "string", "enum": ["pending", "accepted", "declined", "expired"] },
+          "requested_at": { "type": "string", "format": "date-time" },
+          "responded_at": { "type": "string", "format": "date-time", "nullable": true }
+        }
+      },
+      "Pagination": {
+        "type": "object",
+        "properties": {
+          "total": { "type": "integer", "example": 145 },
+          "per_page": { "type": "integer", "example": 20 },
+          "current_page": { "type": "integer", "example": 1 },
+          "last_page": { "type": "integer", "example": 8 },
+          "from": { "type": "integer", "example": 1 },
+          "to": { "type": "integer", "example": 20 }
+        }
+      }
+    }
+  }
+}

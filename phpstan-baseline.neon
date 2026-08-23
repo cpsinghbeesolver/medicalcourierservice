@@ -1,0 +1,1459 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/DashboardController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/DashboardController.php
+
+		-
+			message: '#^Cannot call method toDateTimeString\(\) on string\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: app/Http/Controllers/Api/Admin/AuthController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$availability_status\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Admin/UserController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$clocked_in_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Admin/UserController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$current_latitude\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Admin/UserController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$current_longitude\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Admin/UserController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$is_clocked_in\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Admin/UserController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$vehicle_plate_number\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Admin/UserController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$vehicle_type\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Api/Admin/UserController.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:incrementUsage\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Admin/UserController.php
+
+		-
+			message: '#^Called ''env'' outside of the config directory which returns null when the config is cached, use ''config''\.$#'
+			identifier: larastan.noEnvCallsOutsideOfConfig
+			count: 1
+			path: app/Http/Controllers/Api/Admin/WaitlistController.php
+
+		-
+			message: '#^Called ''env'' outside of the config directory which returns null when the config is cached, use ''config''\.$#'
+			identifier: larastan.noEnvCallsOutsideOfConfig
+			count: 1
+			path: app/Http/Controllers/Api/Common/ContactController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$billing_cycle\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Common/ProfileController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$cancelled_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Common/ProfileController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$current_period_end\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Api/Common/ProfileController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$current_period_start\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Api/Common/ProfileController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$data_retention_days\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Common/ProfileController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$email\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Common/ProfileController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$features\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Common/ProfileController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Api/Common/ProfileController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$is_available\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Common/ProfileController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$license_number\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Common/ProfileController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$max_deliveries\.$#'
+			identifier: property.notFound
+			count: 6
+			path: app/Http/Controllers/Api/Common/ProfileController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$max_locations\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Common/ProfileController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$max_users\.$#'
+			identifier: property.notFound
+			count: 6
+			path: app/Http/Controllers/Api/Common/ProfileController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$plan_display_name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Common/ProfileController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$plan_name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Common/ProfileController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$plan_price\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Common/ProfileController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$status\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Common/ProfileController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$trial_ends_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Common/ProfileController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$vehicle_plate\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Common/ProfileController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$vehicle_type\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Common/ProfileController.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:getCurrentUsage\(\)\.$#'
+			identifier: method.notFound
+			count: 10
+			path: app/Http/Controllers/Api/Common/ProfileController.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:hasFeature\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Common/ProfileController.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:isActive\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Common/ProfileController.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:onTrial\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Common/ProfileController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Delivery\:\:\$month\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Company/DeliveryController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$driverProfile\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Company/DeliveryController.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:incrementUsage\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Company/DeliveryController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$availability_status\.$#'
+			identifier: property.notFound
+			count: 4
+			path: app/Http/Controllers/Api/Company/DriverController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$clocked_in_at\.$#'
+			identifier: property.notFound
+			count: 4
+			path: app/Http/Controllers/Api/Company/DriverController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$current_latitude\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Http/Controllers/Api/Company/DriverController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$current_longitude\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Http/Controllers/Api/Company/DriverController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Http/Controllers/Api/Company/DriverController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$is_clocked_in\.$#'
+			identifier: property.notFound
+			count: 6
+			path: app/Http/Controllers/Api/Company/DriverController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$updated_at\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Api/Company/DriverController.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:clockIn\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Company/DriverController.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:clockOut\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Company/DriverController.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:updateLocation\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: app/Http/Controllers/Api/Company/DriverController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\RefreshToken\:\:\$user\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Mobile/MobileAuthController.php
+
+		-
+			message: '#^Cannot call method format\(\) on string\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: app/Http/Controllers/Api/Mobile/MobileAuthController.php
+
+		-
+			message: '#^Relation ''user'' is not found in App\\Models\\RefreshToken model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/Api/Mobile/MobileAuthController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\DeliveryItem\:\:\$photo_proof\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Api/Mobile/MobileDeliveryController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\DeliveryItem\:\:\$signature_image\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Api/Mobile/MobileDeliveryController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$barcode\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Http/Controllers/Api/Mobile/MobileDeliveryController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$dropoff_address\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Http/Controllers/Api/Mobile/MobileDeliveryController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$dropoff_city\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Http/Controllers/Api/Mobile/MobileDeliveryController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$dropoff_contact_person\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Http/Controllers/Api/Mobile/MobileDeliveryController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$dropoff_latitude\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Http/Controllers/Api/Mobile/MobileDeliveryController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$dropoff_longitude\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Http/Controllers/Api/Mobile/MobileDeliveryController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$dropoff_name\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Http/Controllers/Api/Mobile/MobileDeliveryController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$dropoff_phone\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Http/Controllers/Api/Mobile/MobileDeliveryController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$dropoff_state\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Http/Controllers/Api/Mobile/MobileDeliveryController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$dropoff_zip\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Http/Controllers/Api/Mobile/MobileDeliveryController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$email\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Http/Controllers/Api/Mobile/MobileDeliveryController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$handling_instructions\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Http/Controllers/Api/Mobile/MobileDeliveryController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 13
+			path: app/Http/Controllers/Api/Mobile/MobileDeliveryController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$item_name\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Http/Controllers/Api/Mobile/MobileDeliveryController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$item_type\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Http/Controllers/Api/Mobile/MobileDeliveryController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$latitude\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Http/Controllers/Api/Mobile/MobileDeliveryController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$longitude\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Http/Controllers/Api/Mobile/MobileDeliveryController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 10
+			path: app/Http/Controllers/Api/Mobile/MobileDeliveryController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$phone\.$#'
+			identifier: property.notFound
+			count: 4
+			path: app/Http/Controllers/Api/Mobile/MobileDeliveryController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$quantity\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Http/Controllers/Api/Mobile/MobileDeliveryController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$recipient_name\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Http/Controllers/Api/Mobile/MobileDeliveryController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$requires_special_handling\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Http/Controllers/Api/Mobile/MobileDeliveryController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$status\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Http/Controllers/Api/Mobile/MobileDeliveryController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$verification_type\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Http/Controllers/Api/Mobile/MobileDeliveryController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$verified_at\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Http/Controllers/Api/Mobile/MobileDeliveryController.php
+
+		-
+			message: '#^Access to protected property App\\Models\\Delivery\|Illuminate\\Database\\Eloquent\\Collection\<int, App\\Models\\Delivery\>\:\:\$items\.$#'
+			identifier: property.protected
+			count: 2
+			path: app/Http/Controllers/Api/Mobile/MobileDeliveryController.php
+
+		-
+			message: '#^Property App\\Models\\Delivery\:\:\$status \(''assigned''\|''cancelled''\|''delivered''\|''failed''\|''in_transit''\|''pending''\|''picked_up''\) does not accept ''accepted''\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Api/Mobile/MobileDeliveryController.php
+
+		-
+			message: '#^Property App\\Models\\DeliveryItem\:\:\$status \(''collected''\|''damaged''\|''delivered''\|''in_transit''\|''pending''\) does not accept ''failed''\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Api/Mobile/MobileDeliveryController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$availability_status\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Mobile/MobileDriverController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$accepted_by_driver_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Mobile/MobileJobRequestController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$delivery_address\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Mobile/MobileJobRequestController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$delivery_city\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Api/Mobile/MobileJobRequestController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$delivery_latitude\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Mobile/MobileJobRequestController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$delivery_longitude\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Mobile/MobileJobRequestController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$delivery_name\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Api/Mobile/MobileJobRequestController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$delivery_number\.$#'
+			identifier: property.notFound
+			count: 5
+			path: app/Http/Controllers/Api/Mobile/MobileJobRequestController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$delivery_phone\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Mobile/MobileJobRequestController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$delivery_scheduled_time\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Mobile/MobileJobRequestController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$distance_km\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Mobile/MobileJobRequestController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$driver_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Mobile/MobileJobRequestController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$estimated_duration_minutes\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Mobile/MobileJobRequestController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Http/Controllers/Api/Mobile/MobileJobRequestController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$items\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Mobile/MobileJobRequestController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$pickup_address\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Mobile/MobileJobRequestController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$pickup_city\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Api/Mobile/MobileJobRequestController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$pickup_latitude\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Mobile/MobileJobRequestController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$pickup_longitude\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Mobile/MobileJobRequestController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$pickup_name\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Api/Mobile/MobileJobRequestController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$pickup_phone\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Mobile/MobileJobRequestController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$pickup_scheduled_time\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Mobile/MobileJobRequestController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$priority\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Api/Mobile/MobileJobRequestController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$special_instructions\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Mobile/MobileJobRequestController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$status\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Http/Controllers/Api/Mobile/MobileJobRequestController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$urgency_level\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Mobile/MobileJobRequestController.php
+
+		-
+			message: '#^Property App\\Models\\DeliveryRequest\:\:\$response_time_seconds \(int\|null\) does not accept float\.$#'
+			identifier: assign.propertyType
+			count: 2
+			path: app/Http/Controllers/Api/Mobile/MobileJobRequestController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$availability_status\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Mobile/MobileSafetyChecklistController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$current_latitude\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Mobile/MobileSafetyChecklistController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$current_longitude\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Mobile/MobileSafetyChecklistController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$plan_display_name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Middleware/CheckSubscriptionFeature.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:hasFeature\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Middleware/CheckSubscriptionFeature.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:isActive\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Middleware/CheckSubscriptionFeature.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$max_deliveries\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Middleware/CheckSubscriptionLimit.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$max_users\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Middleware/CheckSubscriptionLimit.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:deliveryLimitReached\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Middleware/CheckSubscriptionLimit.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:getCurrentUsage\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Middleware/CheckSubscriptionLimit.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:isActive\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Middleware/CheckSubscriptionLimit.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\ActivityLogResource\:\:\$action\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/ActivityLogResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\ActivityLogResource\:\:\$created_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/ActivityLogResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\ActivityLogResource\:\:\$description\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/ActivityLogResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\ActivityLogResource\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/ActivityLogResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\ActivityLogResource\:\:\$ip_address\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/ActivityLogResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\ActivityLogResource\:\:\$model_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/ActivityLogResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\ActivityLogResource\:\:\$model_type\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/ActivityLogResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\ActivityLogResource\:\:\$properties\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/ActivityLogResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\ActivityLogResource\:\:\$user\.$#'
+			identifier: property.notFound
+			count: 4
+			path: app/Http/Resources/ActivityLogResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\ActivityLogResource\:\:\$user_agent\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/ActivityLogResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DeliveryItemResource\:\:\$barcode\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DeliveryItemResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DeliveryItemResource\:\:\$description\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DeliveryItemResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DeliveryItemResource\:\:\$handling_instructions\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DeliveryItemResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DeliveryItemResource\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DeliveryItemResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DeliveryItemResource\:\:\$item_code\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DeliveryItemResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DeliveryItemResource\:\:\$item_type\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DeliveryItemResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DeliveryItemResource\:\:\$quantity\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DeliveryItemResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DeliveryItemResource\:\:\$requires_special_handling\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DeliveryItemResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DeliveryItemResource\:\:\$specimenType\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DeliveryItemResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DeliveryItemResource\:\:\$specimen_type\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DeliveryItemResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DeliveryItemResource\:\:\$status\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DeliveryItemResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DeliveryItemResource\:\:\$temperature_requirement\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DeliveryItemResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DeliveryResource\:\:\$created_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DeliveryResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DeliveryResource\:\:\$delivery_actual_time\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DeliveryResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DeliveryResource\:\:\$delivery_address\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DeliveryResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DeliveryResource\:\:\$delivery_city\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DeliveryResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DeliveryResource\:\:\$delivery_contact_person\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DeliveryResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DeliveryResource\:\:\$delivery_latitude\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DeliveryResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DeliveryResource\:\:\$delivery_longitude\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DeliveryResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DeliveryResource\:\:\$delivery_name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DeliveryResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DeliveryResource\:\:\$delivery_number\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DeliveryResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DeliveryResource\:\:\$delivery_phone\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DeliveryResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DeliveryResource\:\:\$delivery_scheduled_time\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DeliveryResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DeliveryResource\:\:\$delivery_state\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DeliveryResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DeliveryResource\:\:\$delivery_zip\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DeliveryResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DeliveryResource\:\:\$distance_km\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DeliveryResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DeliveryResource\:\:\$driver\.$#'
+			identifier: property.notFound
+			count: 4
+			path: app/Http/Resources/DeliveryResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DeliveryResource\:\:\$estimated_duration_minutes\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DeliveryResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DeliveryResource\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DeliveryResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DeliveryResource\:\:\$notes\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DeliveryResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DeliveryResource\:\:\$pickup_actual_time\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DeliveryResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DeliveryResource\:\:\$pickup_address\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DeliveryResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DeliveryResource\:\:\$pickup_city\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DeliveryResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DeliveryResource\:\:\$pickup_contact_person\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DeliveryResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DeliveryResource\:\:\$pickup_latitude\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DeliveryResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DeliveryResource\:\:\$pickup_longitude\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DeliveryResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DeliveryResource\:\:\$pickup_name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DeliveryResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DeliveryResource\:\:\$pickup_phone\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DeliveryResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DeliveryResource\:\:\$pickup_scheduled_time\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DeliveryResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DeliveryResource\:\:\$pickup_state\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DeliveryResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DeliveryResource\:\:\$pickup_zip\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DeliveryResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DeliveryResource\:\:\$priority\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DeliveryResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DeliveryResource\:\:\$special_instructions\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DeliveryResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DeliveryResource\:\:\$status\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DeliveryResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DeliveryResource\:\:\$updated_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DeliveryResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DeliveryVerificationResource\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DeliveryVerificationResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DeliveryVerificationResource\:\:\$latitude\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DeliveryVerificationResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DeliveryVerificationResource\:\:\$longitude\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DeliveryVerificationResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DeliveryVerificationResource\:\:\$notes\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DeliveryVerificationResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DeliveryVerificationResource\:\:\$photo_proof\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DeliveryVerificationResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DeliveryVerificationResource\:\:\$recipient_name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DeliveryVerificationResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DeliveryVerificationResource\:\:\$signature_image\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DeliveryVerificationResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DeliveryVerificationResource\:\:\$verification_type\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DeliveryVerificationResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DeliveryVerificationResource\:\:\$verified_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DeliveryVerificationResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DriverProfileResource\:\:\$address\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DriverProfileResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DriverProfileResource\:\:\$availability_status\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DriverProfileResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DriverProfileResource\:\:\$background_check_status\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DriverProfileResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DriverProfileResource\:\:\$bloodborne_pathogen_file\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DriverProfileResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DriverProfileResource\:\:\$bloodborne_pathogen_training_date\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DriverProfileResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DriverProfileResource\:\:\$city\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DriverProfileResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DriverProfileResource\:\:\$current_latitude\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DriverProfileResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DriverProfileResource\:\:\$current_longitude\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DriverProfileResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DriverProfileResource\:\:\$date_of_birth\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DriverProfileResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DriverProfileResource\:\:\$drug_screen_expiry\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DriverProfileResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DriverProfileResource\:\:\$emergency_contact_name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DriverProfileResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DriverProfileResource\:\:\$emergency_contact_phone\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DriverProfileResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DriverProfileResource\:\:\$hipaa_certification_date\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DriverProfileResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DriverProfileResource\:\:\$hipaa_certification_file\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DriverProfileResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DriverProfileResource\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DriverProfileResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DriverProfileResource\:\:\$insurance_policy_number\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DriverProfileResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DriverProfileResource\:\:\$license_expiry_date\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Resources/DriverProfileResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DriverProfileResource\:\:\$license_number\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DriverProfileResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DriverProfileResource\:\:\$specimen_handling_certification_date\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DriverProfileResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DriverProfileResource\:\:\$specimen_handling_confirmed\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DriverProfileResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DriverProfileResource\:\:\$state\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DriverProfileResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DriverProfileResource\:\:\$user\.$#'
+			identifier: property.notFound
+			count: 6
+			path: app/Http/Resources/DriverProfileResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DriverProfileResource\:\:\$vehicle_plate_number\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DriverProfileResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DriverProfileResource\:\:\$vehicle_type\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DriverProfileResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\DriverProfileResource\:\:\$zip_code\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/DriverProfileResource.php
+
+		-
+			message: '#^Call to an undefined method App\\Http\\Resources\\DriverProfileResource\:\:isLicenseExpired\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Resources/DriverProfileResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\UserResource\:\:\$address\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/UserResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\UserResource\:\:\$created_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/UserResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\UserResource\:\:\$dob\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/UserResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\UserResource\:\:\$driverProfile\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/UserResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\UserResource\:\:\$email\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/UserResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\UserResource\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/UserResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\UserResource\:\:\$last_login_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/UserResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\UserResource\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/UserResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\UserResource\:\:\$phone\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/UserResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\UserResource\:\:\$profile_photo\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/UserResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\UserResource\:\:\$role\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/UserResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\UserResource\:\:\$status\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/UserResource.php
+
+		-
+			message: '#^Called ''env'' outside of the config directory which returns null when the config is cached, use ''config''\.$#'
+			identifier: larastan.noEnvCallsOutsideOfConfig
+			count: 1
+			path: app/Mail/CompanySignupMail.php
+
+		-
+			message: '#^Called ''env'' outside of the config directory which returns null when the config is cached, use ''config''\.$#'
+			identifier: larastan.noEnvCallsOutsideOfConfig
+			count: 1
+			path: app/Mail/ContactAutoResponder.php
+
+		-
+			message: '#^Called ''env'' outside of the config directory which returns null when the config is cached, use ''config''\.$#'
+			identifier: larastan.noEnvCallsOutsideOfConfig
+			count: 1
+			path: app/Mail/DriverCreated.php
+
+		-
+			message: '#^Called ''env'' outside of the config directory which returns null when the config is cached, use ''config''\.$#'
+			identifier: larastan.noEnvCallsOutsideOfConfig
+			count: 1
+			path: app/Mail/WaitlistAutoResponder.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\SafetyChecklist\:\:\$brakes_functional\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/SafetyChecklist.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\SafetyChecklist\:\:\$cooler_temperature_checked\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/SafetyChecklist.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\SafetyChecklist\:\:\$emergency_kit_present\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/SafetyChecklist.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\SafetyChecklist\:\:\$fuel_level_adequate\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/SafetyChecklist.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\SafetyChecklist\:\:\$hipaa_trained\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/SafetyChecklist.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\SafetyChecklist\:\:\$patient_privacy_understood\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/SafetyChecklist.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\SafetyChecklist\:\:\$ppe_equipment_available\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/SafetyChecklist.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\SafetyChecklist\:\:\$specimen_containers_secure\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/SafetyChecklist.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\SafetyChecklist\:\:\$uniform_proper\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/SafetyChecklist.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\SafetyChecklist\:\:\$vehicle_exterior_check\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/SafetyChecklist.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\SafetyChecklist\:\:\$vehicle_interior_clean\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/SafetyChecklist.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\User\:\:\$roleRelation\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: '#^Property ''role'' is not a computed property, remove from \$appends\.$#'
+			identifier: rules.modelAppends
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: '#^Array has 2 duplicate keys with value ''refrigerated_van'' \(''refrigerated_van'', ''refrigerated_van''\)\.$#'
+			identifier: array.duplicateKey
+			count: 1
+			path: database/seeders/DriverProfileSeeder.php
+
+		-
+			message: '#^Array has 2 duplicate keys with value ''standard_van'' \(''standard_van'', ''standard_van''\)\.$#'
+			identifier: array.duplicateKey
+			count: 1
+			path: database/seeders/DriverProfileSeeder.php
+
+		-
+			message: '#^Class App\\Mail\\DriverCreated constructor invoked with 1 parameter, 4 required\.$#'
+			identifier: arguments.count
+			count: 1
+			path: routes/web.php
