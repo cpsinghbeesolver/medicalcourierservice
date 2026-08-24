@@ -40,6 +40,18 @@ function validateForm() {
                 },
             ])
         }
+        const current_password = document.querySelector('#current_password');
+        if (current_password) {
+            validator.addField(document.querySelector('#current_password'), [
+                {
+                    rule: 'required',
+                    errorMessage: 'Password is required',
+                },
+                {
+                rule: 'password',
+                },
+            ])
+        }
         const licenseNumber = document.querySelector('#license_number');
         if (licenseNumber) {
             validator.addField(licenseNumber, [
