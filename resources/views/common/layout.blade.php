@@ -889,7 +889,6 @@
         function validatePhone() {
 
             const phone = document.getElementById('phone').value.trim();
-
             const country = document
                 .getElementById('country_code')
                 .selectedOptions[0]
@@ -899,7 +898,6 @@
                 // error.textContent = 'Phone number is required.';
                 return false;
             }
-
             try {
                 const phoneNumber = libphonenumber.parsePhoneNumberFromString(
                     phone,
