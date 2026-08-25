@@ -275,6 +275,47 @@ class DeliveryController extends Controller
             'items.*.item_name.required' => 'Item name is required.',
         ]);
 
+        //Check if Proof of Pickup is selected
+        $validator->after(function ($validator) use ($request) {
+
+            $fields = [
+                'requires_pickup_barcode_scan',
+                'requires_pickup_photo',
+                'requires_pickup_signature'
+            ];
+
+            $atLeastOneSelected = collect($fields)
+                ->contains(fn ($field) => $request->boolean($field));
+
+            if (! $atLeastOneSelected) {
+                $validator->errors()->add(
+                    'chain_of_custody',
+                    'At least one Proof of Pickup must be selected.'
+                );
+            }
+        });
+
+        //Check if Proof of Delivery is selected
+        $validator->after(function ($validator) use ($request) {
+
+            $fields = [
+                'requires_recepient_id_scan',
+                'requires_dropoff_signature',
+                'requires_dropoff_barcode_scan',
+                'requires_dropoff_photo',
+            ];
+
+            $atLeastOneSelected = collect($fields)
+                ->contains(fn ($field) => $request->boolean($field));
+
+            if (! $atLeastOneSelected) {
+                $validator->errors()->add(
+                    'chain_of_custody',
+                    'At least one Proof of Delivery must be selected.'
+                );
+            }
+        });
+
         if ($validator->fails()) {
             return $this->errorResponse('Validation error', 422, $validator->errors()->all());
         }
@@ -497,6 +538,48 @@ class DeliveryController extends Controller
         ], [
             'items.*.item_name.required' => 'Item name is required.',
         ]);
+
+        //Check if Proof of Pickup is selected
+        $validator->after(function ($validator) use ($request) {
+
+            $fields = [
+                'requires_pickup_barcode_scan',
+                'requires_pickup_photo',
+                'requires_pickup_signature'
+            ];
+
+            $atLeastOneSelected = collect($fields)
+                ->contains(fn ($field) => $request->boolean($field));
+
+            if (! $atLeastOneSelected) {
+                $validator->errors()->add(
+                    'chain_of_custody',
+                    'At least one Proof of Pickup must be selected.'
+                );
+            }
+        });
+
+        //Check if Proof of Delivery is selected
+        $validator->after(function ($validator) use ($request) {
+
+            $fields = [
+                'requires_recepient_id_scan',
+                'requires_dropoff_signature',
+                'requires_dropoff_barcode_scan',
+                'requires_dropoff_photo',
+            ];
+
+            $atLeastOneSelected = collect($fields)
+                ->contains(fn ($field) => $request->boolean($field));
+
+            if (! $atLeastOneSelected) {
+                $validator->errors()->add(
+                    'chain_of_custody',
+                    'At least one Proof of Delivery must be selected.'
+                );
+            }
+        });
+
 
         if ($validator->fails()) {
             return $this->errorResponse('Validation error', 422, $validator->errors()->all());

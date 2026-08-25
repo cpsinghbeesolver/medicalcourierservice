@@ -121,6 +121,9 @@
 @endsection
 
 @section('content')
+<a href="/company/dashboard/drivers" class="back-button">
+    <i class="fas fa-arrow-left"></i> Back to Driver Details
+</a>
 <div class="profile-container" id="driverCard">
     <div class="loading-state">
         <i class="fas fa-spinner fa-spin" style="font-size: 32px; color: #a8b456;"></i>
@@ -336,7 +339,6 @@
             </div>
 
             <div class="profile-actions">
-                <button class="btn-cancel" onclick="window.location.href='/company/dashboard/drivers'">Back</button>
                 <button class="btn-edit" onclick="window.location.href='/company/dashboard/drivers/${driverId}/edit'">Edit</button>
             </div>
         `;

@@ -186,6 +186,7 @@
         }
         .fa-xmark{
             cursor: pointer;
+            display: none;
         }
     </style>
     <style>
@@ -450,7 +451,10 @@
             var token = "{{ session('web_token') }}";
             if(query.length === 0) {
                 $('#searchResults').hide();
+                $('.fa-xmark').hide();
                 return;
+            }else{
+                $('.fa-xmark').show();
             }
             $.ajax({
                 url: '/api/v1/search-names',
@@ -952,6 +956,7 @@
             $('#searchInputHeader').val('');
             $('#searchInputHeader').focus();
             $('#searchResults').hide();
+            $(this).hide();
         });
         
     </script>
