@@ -395,7 +395,7 @@
                 <td><strong>${driver.user ? driver.user.name : 'N/A'}</strong></td>
                 <td>${driver.user ? driver.user.email : 'N/A'}</td>
                 <td>${driver.user ? driver.user.phone : 'N/A'}</td>
-                <td><span class="badge ${driver.availability_status || 'offline'}">${driver.availability_status || 'offline'}</span></td>
+                <td><span class="badge ${driver.availability_status || 'offline'}">${driver.availability_status ? driver.availability_status.replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase()): 'OFFLINE'}</span></td>
                 <td onclick="event.stopPropagation()">
                     <button class="btn-action" onclick="viewDriver(${driver.id})">
                         <i class="fas fa-eye"></i> View

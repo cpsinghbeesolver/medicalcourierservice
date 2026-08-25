@@ -1136,7 +1136,7 @@ color: #000000;
 
     /* Pagination Container */
     nav[role="navigation"] > div:first-child {
-        display: flex;
+        display: none;
         align-items: center;
         gap: 8px;
         flex-wrap: wrap;
@@ -1157,6 +1157,9 @@ color: #000000;
         gap: 5px;
         color: #4b5563;
         transition: all 0.2s ease;
+    }
+    nav[role="navigation"] p{
+        display: none;
     }
     nav[role="navigation"] p span{
         height: 0px;

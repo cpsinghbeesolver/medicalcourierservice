@@ -14,6 +14,7 @@ use App\Models\ActivityLog;
 use Illuminate\Support\Facades\Storage;
 use App\Mail\DriverCreated;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Crypt;
 
 class DriverController extends Controller
 {
@@ -61,6 +62,18 @@ class DriverController extends Controller
         if ($validator->fails()) {
             return back()->withErrors($validator->errors()->all())->withInput();
             // return $this->errorResponse('Validation error', 422, $validator->errors());
+        }
+        
+        $phoneExists = User::whereNotNull('phone')
+            ->get(['id', 'phone'])
+            ->contains(function ($user) use ($request) {
+                return $user->phone === $request->phone;
+            });
+
+        if ($phoneExists) {
+            return back()
+                ->withErrors(['phone' => 'The phone number has already been taken.'])
+                ->withInput();
         }
 
         $user = User::create([
@@ -209,6 +222,18 @@ class DriverController extends Controller
 
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
+        }
+
+        $phoneExists = User::whereNotNull('phone')
+            ->where('id', '!=', $profile->user_id)
+            ->get(['id', 'phone'])
+            ->contains(function ($user) use ($request) {
+                return $user->phone === $request->phone;
+            });
+        if ($phoneExists) {
+            return back()
+                ->withErrors(['phone' => 'The phone number has already been taken.'])
+                ->withInput();
         }
 
         // Update User

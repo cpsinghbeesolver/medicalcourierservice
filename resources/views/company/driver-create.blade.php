@@ -262,11 +262,11 @@
             <h3 data-number="1">Personal & Contact Info</h3>
             <div class="form-row">
                 <div class="form-group">
-                    <label>Full Name *</label>
+                    <label>Full Name  <span class="astrik">*</span></label>
                     <input type="text" class="letters-only" id="name" name="name" maxlength="100" required placeholder="Enter full name" value="{{ old('name') }}" autocomplete="off">
                 </div>
                 <div class="form-group">
-                    <label>Country Code *</label>
+                    <label>Country Code  <span class="astrik">*</span></label>
                     <select name="country_code" id="country_code" required>
                         <option value="+1" data-country="US">🇺🇸 United States (+1)</option>
                         <option value="+91" data-country="IN">🇮🇳 India (+91)</option>
@@ -275,11 +275,11 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Contact Number *</label>
+                    <label>Contact Number  <span class="astrik">*</span></label>
                     <input type="tel" maxlength="15" id="phone" class="numbers-only" name="phone" required placeholder="Enter contact number" maxlength="15" value="{{ old('phone') }}">
                 </div>
                 <div class="form-group">
-                    <label>Email Address *</label>
+                    <label>Email Address  <span class="astrik">*</span></label>
                     <input type="email" maxlength="254" id="email" name="email" class="email-only" required placeholder="Enter email address" maxlength="80" value="{{ old('email') }}" autocomplete="new-email">
                 </div>
             </div>
@@ -298,7 +298,7 @@
             </div>
             <div class="form-row two-cols">
                 <div class="form-group">
-                    <label for="password">Password *</label>        
+                    <label for="password">Password  <span class="astrik">*</span></label>        
                     <div class="password-wrapper">
                         <input type="password" maxlength="128" id="password" name="password" required placeholder="Enter password" value="{{ old('password') }}" autocomplete="new-password"> 
                         <svg class="eye-icon" id="togglePassword" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -308,7 +308,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>Confirm Password *</label>
+                    <label>Confirm Password  <span class="astrik">*</span></label>
                     <div class="password-wrapper">
                         <input type="password" maxlength="128" id="password_confirmation" name="password_confirmation" required placeholder="Confirm password" value="{{ old('password_confirmation') }}" autocomplete="new-password">
                         <svg class="eye-icon" id="togglePasswordConfirm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -327,7 +327,7 @@
             <h3 data-number="2">Licensing & Documentation</h3>
             <div class="form-row">
                 <div class="form-group">
-                    <label>License Number *</label>
+                    <label>License Number  <span class="astrik">*</span></label>
                     <input type="text" id="license_number" name="license_number" required placeholder="Enter license number" maxlength="30" value="{{ old('license_number') }}">
                 </div>
                 <div class="form-group">
@@ -388,7 +388,7 @@
                 </div>
                
                     <div class="form-group">
-                  <label>License Expiry Date *</label>
+                  <label>License Expiry Date  <span class="astrik">*</span></label>
                     <div class="calendar-input-wrapper">
                        <i class="fas fa-calendar-alt calendar-icon"></i>
                     <input type="text" id="license_expiry_date" name="license_expiry_date" placeholder="Enter Date" required>
@@ -454,7 +454,7 @@
                         <input type="text" id="drug_screen_expiry" name="drug_screen_expiry" placeholder="Enter Date " value="{{old('drug_screen_expiry')}}"></div>
                 </div>
                 <div class="form-group">
-                    <label>Specimen Handling Certification <span class="astrik">*</span></label>
+                    <label>Specimen Handling Certification <span class="astrik"> <span class="astrik">*</span></span></label>
                      <div class="calendar-input-wrapper">
                        <i class="fas fa-calendar-alt calendar-icon"></i>
                     <input type="text" id="specimen_handling_cert" name="specimen_handling_cert" placeholder="Enter Date" value="{{old('specimen_handling_cert')}}"></div>

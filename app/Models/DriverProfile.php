@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Traits\BelongsToTenant;
 use App\Traits\EncryptsPhiData;
 use App\Events\DriverStatusUpdated;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class DriverProfile extends Model
 {
@@ -81,6 +82,8 @@ class DriverProfile extends Model
         'last_location_update' => 'datetime',
     ];
 
+    protected $appends = ['availability_status'];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -138,4 +141,12 @@ class DriverProfile extends Model
             }
         });
     }
+
+    // protected function getAvailabilityStatusAttribute($value)
+    // {
+
+    //     return $value
+    //     ? strtoupper(str_replace('_', ' ', $value))
+    //     : $value;
+    // }
 }

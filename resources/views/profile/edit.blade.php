@@ -407,7 +407,7 @@
             <form id="profileForm">
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label for="name" class="form-label">Full Name *</label>
+                        <label for="name" class="form-label">Full Name <span class="astrik">*</span></label>
                         <input type="text" class="form-control" id="name" name="name" placeholder="Enter full name" required>
                         <div class="invalid-feedback" id="name-error"></div>
                     </div>

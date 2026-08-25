@@ -44,7 +44,7 @@ class DriverProfileResource extends JsonResource
                 'longitude' => $this->current_longitude,
             ],
             'insurance_policy_number' => $this->insurance_policy_number,
-            'insurance_expiry_date' => $this->license_expiry_date?->format('Y-m-d'),
+            'insurance_expiry_date' => $this->insurance_expiry_date?->format('Y-m-d'),
             'hipaa_certification_date' => $this->hipaa_certification_date?->format('Y-m-d'),
             'hipaa_certification_file' => $this->hipaa_certification_file,
             'background_check_status' => $this->background_check_status,

@@ -125,27 +125,87 @@
         gap: 10px;
         align-items: flex-end;
         margin-bottom: 20px;
+        min-width: 0;
     }
 
     .file-upload-group .form-group {
         flex: 1;
         margin-bottom: 0;
+        min-width: 0;
+    }
+
+    .file-upload-group input[type="text"] {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        background: #fff;
+    }
+
+    .file-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding-bottom: 0;
     }
 
     .btn-browse {
         padding: 11px 20px;
-        background: #e0e0e0;
-        color: #2c3e50;
-        border: none;
+        background: #2c3e50;
+        color: #fff;
+        border: 1px solid #2c3e50;
         border-radius: 8px;
         cursor: pointer;
         font-size: 14px;
         font-weight: 600;
         white-space: nowrap;
+        transition: background 0.3s, border-color 0.3s;
     }
 
     .btn-browse:hover {
-        background: #d0d0d0;
+        background: #1f2d3a;
+        border-color: #1f2d3a;
+    }
+
+    .existing-file {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        min-height: 42px;
+        padding: 0 12px;
+        border: 1px solid #dce5b0;
+        border-radius: 8px;
+        color: #68752c;
+        background: #f8faed;
+        font-size: 13px;
+        font-weight: 600;
+        text-decoration: none;
+        white-space: nowrap;
+        transition: background 0.3s, border-color 0.3s;
+    }
+
+    .existing-file:hover {
+        background: #eef3d7;
+        border-color: #a8b456;
+    }
+
+    .existing-file i {
+        font-size: 14px;
+    }
+
+    @media (max-width: 768px) {
+        .file-upload-group {
+            align-items: stretch;
+            flex-wrap: wrap;
+        }
+
+        .file-upload-group .form-group {
+            flex-basis: 100%;
+        }
+
+        .file-actions {
+            width: 100%;
+            flex-wrap: wrap;
+        }
     }
 
     .form-actions {
@@ -264,11 +324,11 @@
             <h3 data-number="1">Personal & Contact Info</h3>
             <div class="form-row">
                 <div class="form-group">
-                    <label>Full Name *</label>
+                    <label>Full Name  <span class="astrik">*</span></label>
                     <input type="text" class="letters-only" id="name" name="name" required placeholder="Enter full name" value="{{ old('name', $user->name) }}" autocomplete="off">
                 </div>
                 <div class="form-group">
-                    <label>Country Code *</label>
+                    <label>Country Code  <span class="astrik">*</span></label>
                     <select name="country_code" id="country_code">
                         <option value="+1" data-country="US" {{ old('country_code', $profile->country_code) == '+1' ? 'selected' : '' }}>🇺🇸 United States (+1)</option>
                         <option value="+91" data-country="IN" {{ old('country_code', $profile->country_code) == '+91' ? 'selected' : '' }}>🇮🇳 India (+91)</option>
@@ -277,7 +337,7 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Contact Number *</label>
+                    <label>Contact Number  <span class="astrik">*</span></label>
                     <input type="tel" maxlength="15" id="phone" class="numbers-only" name="phone" required placeholder="Enter contact number" value="{{ old('phone', $user->phone) }}">
                 </div>
                 <div class="form-group">
@@ -313,7 +373,7 @@
             <h3 data-number="2">Licensing & Documentation</h3>
             <div class="form-row">
                 <div class="form-group">
-                    <label>License Number *</label>
+                    <label>License Number  <span class="astrik">*</span></label>
                     <input type="text" id="license_number" name="license_number" required placeholder="Enter license number" value="{{ old('license_number', $profile->license_number) }}">
                 </div>
                 <div class="form-group">
@@ -373,7 +433,7 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>License Expiry Date *</label>
+                    <label>License Expiry Date  <span class="astrik">*</span></label>
                     <div class="calendar-input-wrapper">
                        <i class="fas fa-calendar-alt calendar-icon"></i>
                         <input type="text" id="license_expiry_date" name="license_expiry_date" placeholder="Enter Date" required value="{{ old('license_expiry_date', $profile->license_expiry_date) }}">
@@ -415,7 +475,21 @@
                             <input type="file" id="hipaa_file" name="hipaa_file" accept=".pdf,.jpg,.jpeg,.png" style="display:none;">
                             <input type="text" id="hipaa_file_name" readonly placeholder="No file chosen">
                         </div>
-                        <button type="button" class="btn-browse" onclick="document.getElementById('hipaa_file').click()">Browse</button>
+                        <div class="file-actions">
+                            <button type="button" class="btn-browse" onclick="document.getElementById('hipaa_file').click()">Browse</button>
+                            @if($profile->hipaa_certification_file)
+                                <a
+                                    class="existing-file"
+                                    href="{{ $profile->hipaa_certification_file }}"
+                                    target="_blank"
+                                    rel="noopener"
+                                    title="View current HIPAA certification file"
+                                >
+                                    <i class="fas fa-external-link-alt" aria-hidden="true"></i>
+                                    <span>View</span>
+                                </a>
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>
@@ -467,7 +541,24 @@
                             <input type="file" id="bloodborne_file" name="bloodborne_file" accept=".pdf,.jpg,.jpeg,.png" style="display:none;">
                             <input type="text" id="bloodborne_file_name" readonly placeholder="No file chosen">
                         </div>
-                        <button type="button" class="btn-browse" onclick="document.getElementById('bloodborne_file').click()">Browse</button>
+                        <div class="file-actions">
+                            <button type="button" class="btn-browse" onclick="document.getElementById('bloodborne_file').click()">Browse</button>
+                        </div>
+
+                        <div class="file-actions">
+                            @if($profile->bloodborne_pathogen_file)
+                                <a
+                                    class="existing-file"
+                                    href="{{ $profile->bloodborne_pathogen_file }}"
+                                    target="_blank"
+                                    rel="noopener"
+                                    title="View Bloodborne Pathogen file"
+                                >
+                                    <i class="fas fa-external-link-alt" aria-hidden="true"></i>
+                                    <span>View</span>
+                                </a>
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>
@@ -483,5 +574,14 @@
 
 @section('scripts')
 <script>
+    document.querySelectorAll('input[type="file"]').forEach(function (fileInput) {
+        fileInput.addEventListener('change', function () {
+            const fileNameInput = document.getElementById(this.id + '_name');
+
+            if (fileNameInput) {
+                fileNameInput.value = this.files.length ? this.files[0].name : '';
+            }
+        });
+    });
 </script>
 @endsection
