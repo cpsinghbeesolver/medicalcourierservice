@@ -53,9 +53,9 @@
                <p>Copyright © 2026 {{env('APP_NAME')}}</p>
                <div class="d-flex justify-content-end terms-footer">
                   <ul class="list-unstyled d-flex gap-4 mb-0">
-                     <!-- <li>Term of use</li> -->
-                     <li><a id="privacy_policy" href="{{ route('privacy-policy') }}">Privacy Policy</a></li>
-                     <!-- <li>Cookie Policy</li> -->
+                        <!-- <li><a id="terms_of_use" href="{{ route('terms-of-use') }}">Terms of Use</a></li> -->
+                        <li><a id="privacy_policy" href="{{ route('privacy-policy') }}">Privacy Policy</a></li>
+                        <!-- <li><a id="cookie_policy" href="{{ route('cookie-policy') }}">Cookie Policy</a></li> -->
                   </ul>
                </div>
             </div>

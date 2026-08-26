@@ -36,6 +36,14 @@ Route::get('/privacy-policy', function () {
     return view('privacy-policy');
 })->name('privacy-policy');
 
+Route::get('/terms-of-use', function () {
+    return view('terms-of-use');
+})->name('terms-of-use');
+
+Route::get('/cookie-policy', function () {
+    return view('cookie-policy');
+})->name('cookie-policy');
+
 // Login page
 Route::get('/admin', function () {
     if (Auth::check()) {
