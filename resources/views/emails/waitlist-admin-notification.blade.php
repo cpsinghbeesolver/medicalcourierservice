@@ -121,7 +121,7 @@
             <h1>NEW WAITLIST SUBMISSION</h1>
             <div class="badge">ACTION REQUIRED</div>
         </div-->
-
+        <h2>Hi Admin! 👋</h2>
         <div class="content">
             <p style="font-size: 16px; color: #495057; margin-bottom: 25px;">
                 A new person has joined the waitlist. Here are the details:
@@ -185,13 +185,13 @@
                 </a>
             </div-->
 
-            <div class="metadata">
+            <!-- <div class="metadata">
                 <strong>Additional Information:</strong><br>
                 <strong>ID:</strong> #{{ $submission->id }}<br>
                 <strong>IP Address:</strong> {{ $submission->ip_address }}<br>
                 <strong>User Agent:</strong> {{ Str::limit($submission->user_agent, 60) }}<br>
                 <strong>Submission Time:</strong> {{ $submission->created_at->format('Y-m-d H:i:s T') }}
-            </div>
+            </div> -->
 
             <!--div style="margin-top: 30px; padding: 15px; background-color: #e7f3ff; border-radius: 5px;">
                 <p style="margin: 0; font-size: 14px; color: #004085;">

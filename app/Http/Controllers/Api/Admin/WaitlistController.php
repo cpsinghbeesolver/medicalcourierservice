@@ -78,7 +78,6 @@ class WaitlistController extends Controller
         // Send notification email to admin
         try {
             // $adminEmail = config('mail.admin_email', config('mail.from.address'));
-            $adminEmail = env('MAIL_ADMIN_EMAIL');
             Mail::to($adminEmail)->send(new WaitlistAdminNotification($submission));
         } catch (\Exception $e) {
             \Log::error('Failed to send waitlist admin notification: ' . $e->getMessage());
