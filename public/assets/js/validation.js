@@ -40,6 +40,18 @@ function validateForm() {
                 },
             ])
         }
+        const new_password = document.querySelector('#new_password');
+        if (new_password) {
+            validator.addField(document.querySelector('#new_password'), [
+                {
+                    rule: 'required',
+                    errorMessage: 'Password is required',
+                },
+                {
+                rule: 'password',
+                },
+            ])
+        }
         const current_password = document.querySelector('#current_password');
         if (current_password) {
             validator.addField(document.querySelector('#current_password'), [

@@ -15,8 +15,12 @@
   },
   "servers": [
     {
-      "url": "http://172.16.123.113:8001",
-      "description": "API Server"
+        "url": "https://reliastattech.com/",
+        "description": "Production API Server"
+    },
+    {
+        "url": "http://127.0.0.1:8001",
+        "description": "Local API Server"
     }
   ],
   "tags": [

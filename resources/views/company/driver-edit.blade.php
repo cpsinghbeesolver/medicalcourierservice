@@ -480,7 +480,7 @@
                             @if($profile->hipaa_certification_file)
                                 <a
                                     class="existing-file"
-                                    href="{{ $profile->hipaa_certification_file }}"
+                                    href="{{ asset($profile->hipaa_certification_file) }}"
                                     target="_blank"
                                     rel="noopener"
                                     title="View current HIPAA certification file"

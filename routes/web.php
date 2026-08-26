@@ -32,6 +32,9 @@ Route::get('/test-mail', function () {
 Route::get('/', function () {
     return view('landing');
 });
+Route::get('/privacy-policy', function () {
+    return view('privacy-policy');
+})->name('privacy-policy');
 
 // Login page
 Route::get('/admin', function () {
