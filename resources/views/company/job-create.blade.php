@@ -4,6 +4,33 @@
 @section('page-title', 'Job Creation Form')
 
 @section('styles')
+<style>
+    .hospital-autocomplete-results {
+        position: absolute;
+        z-index: 10;
+        display: none;
+        max-height: 220px;
+        overflow-y: auto;
+        background: #fff;
+        border: 1px solid #d9d9d9;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+    }
+
+    .hospital-autocomplete-option {
+        display: block;
+        width: 100%;
+        padding: 8px 10px;
+        border: 0;
+        background: #fff;
+        text-align: left;
+        cursor: pointer;
+    }
+
+    .hospital-autocomplete-option:hover,
+    .hospital-autocomplete-option:focus {
+        background: #f2f2f2;
+    }
+</style>
 @endsection
 
 @section('content')
@@ -153,6 +180,31 @@
                         </div>
                         <div class="form-row two-cols">
                             <div class="form-group">
+                                <label>Drop Off Type <span class="astrik">*</span></label>
+                                <div class="location-input-wrapper">
+                                    <select name="items[0][dropoff_type]" class="dropoff_type">
+                                        <option value="hospital">Hospital</option>
+                                        <option value="address">Address</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group type_hospital">
+                                <div class="add-more-container">
+                                    <label>Hospital <span class="astrik">*</span></label>
+                                    <button type="button" class="btn-add-type" onclick="addHospital(this)" title="Add Hospital">
+                                            <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                                <div class="">
+                                    <input type="text" name="items[0][search_hospital]" class="search-hospital" placeholder="Search Hospital" autocomplete="off">
+                                    <input type="hidden" name="items[0][hospital_id]" class="hospital-id">
+                                    <div class="hospital-autocomplete-results"></div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div class="form-row three-cols type_address" style="display: none;">
+                            <div class="form-group">
                                 <label>Drop Off Address <span class="astrik">*</span></label>
                                 <div class="location-input-wrapper">
                                     <i class="fas fa-map-marker-alt location-icon"></i>
@@ -171,39 +223,6 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label>Near By Landmark <span class="astrik">*</span></label>
-                                <input type="text"
-                                    name="items[0][dropoff_location]"
-                                    placeholder="Please enter nearby landmark"
-                                    maxlength="100"
-                                    required>
-                            </div>
-                        </div>
-                        <div class="form-row two-cols">
-                            <div class="form-group">
-                                <div class="add-more-container">
-                                    <label>Specimen Type <span class="astrik">*</span></label>
-                                    <button type="button" class="btn-add-type" onclick="addSpecimenType(this)" title="Add More Type">
-                                        <i class="fas fa-plus"></i>
-                                    </button>
-                                </div>
-                                <select name="items[0][specimen_type]" required>
-                                    <option value="">Select</option>
-
-                                    @foreach($specimenTypes as $specimenType)
-                                        <option value="{{ $specimenType->id }}">
-                                            {{ $specimenType->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Specimen Id <span class="astrik">*</span></label>
-                                <input type="text" name="items[0][specimen_id]" placeholder="Please enter specimen ID" maxlength="30">
-                            </div>
-                        </div>
-                        <div class="form-row two-cols">
-                            <div class="form-group">
                                 <label>Drop Off Phone <span class="astrik">*</span></label>
                                 <input type="text"
                                     name="items[0][dropoff_phone]"
@@ -221,6 +240,39 @@
                             </div>
                         </div>
                         <div class="form-row two-cols">
+                            
+                            <div class="form-group">
+                                <label>Near By Landmark <span class="astrik">*</span></label>
+                                <input type="text"
+                                    name="items[0][dropoff_location]"
+                                    placeholder="Please enter nearby landmark"
+                                    maxlength="100"
+                                    required>
+                            </div>
+                            <div class="form-group">
+                                <div class="add-more-container">
+                                    <label>Specimen Type <span class="astrik">*</span></label>
+                                    <button type="button" class="btn-add-type" onclick="addSpecimenType(this)" title="Add More Type">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                                <select name="items[0][specimen_type]" required>
+                                    <option value="">Select</option>
+
+                                    @foreach($specimenTypes as $specimenType)
+                                        <option value="{{ $specimenType->id }}">
+                                            {{ $specimenType->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row two-cols">
+                            
+                            <div class="form-group">
+                                <label>Specimen Id <span class="astrik">*</span></label>
+                                <input type="text" name="items[0][specimen_id]" placeholder="Please enter specimen ID" maxlength="30">
+                            </div>
                             <div class="form-group">
                                 <div class="add-more-container">
                                     <label>Temperature <span class="astrik">*</span></label>
@@ -239,6 +291,10 @@
                                     </select>
                                 </div>
                             </div>
+                            
+                        </div>
+                        <div class="form-row two-cols">
+                            
                             <div class="form-group">
                                 <label>Description</label>
                                 <textarea name="items[0][description]" placeholder="Please enter description"></textarea>
@@ -341,6 +397,70 @@
         </div>
     </div>
 </div>
+
+<!-- Assign Hopital Modal -->
+<div class="specimen_type_modal" id="addHospitalModal">
+    <div class="specimen_type_modal-content">
+            <div class="specimen_type_modal-header">
+                <h3>Add Hopital</h3>
+            </div>
+            <form method="POST" id="add_hospital" action="" style="display: contents;">
+            <div class="specimen_type_modal-body">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input type="text" id="hospital_name" maxlength="200" name="hospital_name" placeholder="Please add name" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="hospital_email" name="hospital_email" maxlength="254" placeholder="Please add email" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Registration Number</label>
+                            <input type="text" id="hospital_registration" name="hospital_registration" maxlength="254" placeholder="Please add registration number" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Address</label>
+                            <div class="location-input-wrapper">
+                                <i class="fas fa-map-marker-alt location-icon"></i>
+                                <input type="text" id="hospital_address" class="hospital-location" name="hospital_address" placeholder="Please add address" autocomplete="off">
+                                <input type="hidden" id="hospital_lat" name="hospital_lat">
+                                <input type="hidden" id="hospital_long" name="hospital_long">
+                                <input type="hidden" id="hospital_city" name="hospital_city">
+                                <input type="hidden" id="hospital_state" name="hospital_state">
+                                <input type="hidden" id="hospital_country" name="hospital_country">
+                                <input type="hidden" id="hospital_zip" name="hospital_zip">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Contact Person</label>
+                            <input type="text" id="hospital_contact_person" name="hospital_contact_person" placeholder="Please add contact Person" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Phone</label>
+                            <input type="text" maxlength="15" class="numbers-only" id="hospital_phone" name="hospital_phone" placeholder="Please add phone no." autocomplete="off">
+                        </div>
+                    </div>
+                    <div id="driversList"></div>
+                
+            </div>
+            <div class="specimen_type_modal-footer">
+                <button class="btn-modal btn-modal-cancel" onclick="closeModalHospital()">Cancel</button>
+                <button class="btn-modal btn-modal-assign" id="btnAddHospital" onclick="confirmAddHospital(0)" type="submit">Add Hospital</button>
+            </div>
+            </form>
+    </div>
+</div>
 <div class="specimen_type_modal" id="addVehicleRequirementModal">
     <div class="specimen_type_modal-content">
         <div class="specimen_type_modal-header">
@@ -426,6 +546,46 @@
 
         // Initialize delivery location autocomplete for existing inputs
         initDeliveryAutocomplete();
+        initHospitalAutocomplete();
+        initHospitalSearch();
+    }
+
+
+    // Initialize autocomplete for delivery locations
+    function initHospitalAutocomplete() { 
+        const deliveryInputs = document.querySelectorAll('.hospital-location');
+        deliveryInputs.forEach(input => {
+            // Skip if already initialized
+            if (input.dataset.autocompleteInitialized) return;
+
+            const autocomplete = new google.maps.places.Autocomplete(input, {
+                types: ['address'],
+                componentRestrictions: { country: ['us', 'in'] } // Change to your country code
+            });
+
+            autocomplete.addListener('place_changed', function() {
+                const place = autocomplete.getPlace();
+                if (place.geometry) {
+                    const wrapper = input.closest('#add_hospital');
+                    wrapper.querySelector('#hospital_lat').value = place.geometry.location.lat();
+                    wrapper.querySelector('#hospital_long').value = place.geometry.location.lng();
+                    
+                    const country = getAddressComponent(place, 'country');
+                    const city = getAddressComponent(place, 'locality');
+                    const state = getAddressComponent(place, 'administrative_area_level_1');
+                    const stateCode = getAddressComponent(place, 'administrative_area_level_1', true);
+                    const zipCode = getAddressComponent(place, 'postal_code');
+                    wrapper.querySelector('#hospital_city').value = city;
+                    wrapper.querySelector('#hospital_state').value = state;
+                    wrapper.querySelector('#hospital_zip').value = zipCode;
+                    wrapper.querySelector('#hospital_country').value = country;
+                    
+                }
+            });
+
+            input.dataset.autocompleteInitialized = 'true';
+            autocompleteInstances.push(autocomplete);
+        });
     }
 
     // Initialize autocomplete for delivery locations
@@ -549,9 +709,21 @@
         $('#btnAddTemperatureRequirement').attr('onclick', 'confirmAddTemperatureRequirement(' + index + ')');
         document.getElementById('addTemperatureRequirementModal').classList.add('show');  
     }
+
+    //Add Hospital
+    function addHospital(thisButton){
+        var index = $(thisButton).parents('.item-card').attr('data-item-index');
+        $('#btnAddHospital').attr('onclick', 'confirmAddHospital(' + index + ')');
+        document.getElementById('addHospitalModal').classList.add('show');  
+    }
+
     function closeModalTemperatureRequirement(){
         document.getElementById('addTemperatureRequirementModal').classList.remove('show');
     }
+    function closeModalHospital(){
+        document.getElementById('addHospitalModal').classList.remove('show');
+    }
+    
     async function confirmAddTemperatureRequirement(item_no){
         var temperatureRequirementText = document.getElementById('temperatureRequirementText').value;
         
@@ -591,6 +763,26 @@
             $('select[name="items[' + item_no + '][temperature_requirement]"]').append('<option value="' + result.data.id + '" selected>' + result.data.name + '</option>');
             closeModalTemperatureRequirement();
         } 
+    }
+
+    function confirmAddHospital(item_no){
+        // alert('dfd');
+        // $('#add_hospital').submit();
+        // return false;
+        // const response = await fetch('/api/v1/add-temperature-requirement', {
+        //         method: 'POST',
+        //         headers: {
+        //             'Authorization': `Bearer ${token}`,
+        //             'Content-Type': 'application/json',
+        //             'Accept': 'application/json'
+        //         },
+        //         body: JSON.stringify(jobData)
+        //     });
+        // const result = await response.json();
+        // if (result.success) {
+        //     $('select[name="items[' + item_no + '][temperature_requirement]"]').append('<option value="' + result.data.id + '" selected>' + result.data.name + '</option>');
+        //     closeModalTemperatureRequirement();
+        // } 
     }
 
 
@@ -668,24 +860,57 @@
                 </div>
             </div>
             <div class="form-row two-cols">
-            <div class="form-group">
-                <label>Drop Off Address</label>
-                <div class="location-input-wrapper">
-                    <i class="fas fa-map-marker-alt location-icon"></i>
-                    <input type="text" name="items[${itemIndex}][dropoff_address]" class="location-search delivery-location pac-target-input" placeholder="Search dropoff address..." autocomplete="off" data-item-index="${itemIndex}" required="">
-                    <input type="hidden" name="items[${itemIndex}][dropoff_latitude]" value="" class="delivery-lat">
-                    <input type="hidden" name="items[${itemIndex}][dropoff_longitude]" value="" class="delivery-lng">
-                    <input type="hidden" name="items[${itemIndex}][dropoff_zipcode]" value="" class="delivery-zipcode">
-                    <input type="hidden" name="items[${itemIndex}][dropoff_city]" value="" class="delivery-city">
-                    <input type="hidden" name="items[${itemIndex}][dropoff_state]" value="" class="delivery-state">
+                <div class="form-group">
+                    <label>Drop Off Type <span class="astrik">*</span></label>
+                    <div class="location-input-wrapper">
+                        <select name="items[${itemIndex}][dropoff_type]" class="dropoff_type">
+                            <option value="hospital">Hospital</option>
+                            <option value="address">Address</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group type_hospital">
+                    <div class="add-more-container">
+                        <label>Hospital <span class="astrik">*</span></label>
+                        <button type="button" class="btn-add-type" onclick="addHospital(this)" title="Add Hospital">
+                                <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <div class="">
+                        <input type="text" name="items[${itemIndex}][search_hospital]" class="search-hospital" placeholder="Search Hospital" autocomplete="off">
+                        <input type="hidden" name="items[${itemIndex}][hospital_id]" class="hospital-id">
+                        <div class="hospital-autocomplete-results"></div>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="form-row three-cols type_address" style="display: none;">
+                <div class="form-group" >
+                    <label>Drop Off Address</label>
+                    <div class="location-input-wrapper">
+                        <i class="fas fa-map-marker-alt location-icon"></i>
+                        <input type="text" name="items[${itemIndex}][dropoff_address]" class="location-search delivery-location pac-target-input" placeholder="Search dropoff address..." autocomplete="off" data-item-index="${itemIndex}" required="">
+                        <input type="hidden" name="items[${itemIndex}][dropoff_latitude]" value="" class="delivery-lat">
+                        <input type="hidden" name="items[${itemIndex}][dropoff_longitude]" value="" class="delivery-lng">
+                        <input type="hidden" name="items[${itemIndex}][dropoff_zipcode]" value="" class="delivery-zipcode">
+                        <input type="hidden" name="items[${itemIndex}][dropoff_city]" value="" class="delivery-city">
+                        <input type="hidden" name="items[${itemIndex}][dropoff_state]" value="" class="delivery-state">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Drop Off Phone</label>
+                    <input type="text" maxlength="15" name="items[${itemIndex}][dropoff_phone]" class="validatePhone numbers-only" placeholder="Please enter dropoff phone" maxlength="15" required="">
+                </div>
+                <div class="form-group">
+                    <label>Drop Off Contact Person</label>
+                    <input type="text" name="items[${itemIndex}][dropoff_contact_person]" placeholder="Please enter contact person" maxlength="15" required="">
                 </div>
             </div>
+            <div class="form-row two-cols">
                 <div class="form-group">
                     <label>Near By Landmark <span class="astrik">*</span></label>
                     <input type="text" name="items[${itemIndex}][dropoff_location]" placeholder="Please enter dropoff location" maxlength="100" required="">
                 </div>
-            </div>
-            <div class="form-row two-cols">
                 <div class="form-group">
                     <div class="add-more-container">
                         <label>Specimen Type <span class="astrik">*</span></label>
@@ -698,22 +923,12 @@
                         ${getSpecimenTypeOptions()}
                     </select>
                 </div>
+            </div>
+            <div class="form-row two-cols">
                 <div class="form-group">
-                    <label>Specimen Id</label>
+                    <label>Specimen Id <span class="astrik">*</span></label>
                     <input type="text" name="items[${itemIndex}][specimen_id]" placeholder="Please enter specimen ID" maxlength="30">
                 </div>
-            </div>
-            <div class="form-row two-cols">
-                <div class="form-group">
-                    <label>Drop Off Phone</label>
-                    <input type="text" maxlength="15" name="items[${itemIndex}][dropoff_phone]" class="validatePhone numbers-only" placeholder="Please enter dropoff phone" maxlength="15" required="">
-                </div>
-                <div class="form-group">
-                    <label>Drop Off Contact Person</label>
-                    <input type="text" name="items[${itemIndex}][dropoff_contact_person]" placeholder="Please enter contact person" maxlength="15" required="">
-                </div>
-            </div>
-            <div class="form-row two-cols">
                 <div class="form-group">
                     <div class="add-more-container">
                         <label>Temperature <span class="astrik">*</span></label>
@@ -726,6 +941,9 @@
                             ${getTemperatureRequirementOptions()}
                         </select>
                 </div>
+            </div>
+            <div class="form-row two-cols">
+                
                 <div class="form-group">
                     <label>Description</label>
                     <textarea name="items[${itemIndex}][description]" placeholder="Please enter description"></textarea>
@@ -734,6 +952,7 @@
         `;
         itemsList.appendChild(itemCard);
         itemIndex++;
+        initHospitalSearch();
         // Initialize autocomplete for the new delivery location input
         if (typeof google !== 'undefined') {
             initDeliveryAutocomplete();
@@ -754,6 +973,7 @@
         }
     }
 
+    
     // Handle form submission
     document.getElementById('jobCreateForm').addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -819,11 +1039,14 @@
                     item_name: formData.get(`items[${idx}][item_name]`),
                     handling_instructions: formData.get(`items[${idx}][handling_instructions]`),
                     item_code: specimenId,
+                    hospital_id: formData.get(`items[${idx}][hospital_id]`) || null,
                     dropoff_phone: formData.get(`items[${idx}][dropoff_phone]`),
                     description: formData.get(`items[${idx}][description]`),
                     dropoff_contact_person: formData.get(`items[${idx}][dropoff_contact_person]`),
                     dropoff_name: formData.get(`items[${idx}][dropoff_location]`),
                     dropoff_address: formData.get(`items[${idx}][dropoff_address]`),
+                    dropoff_type: formData.get(`items[${idx}][dropoff_type]`),
+                    dropoff_search: formData.get(`items[${idx}][dropoff_search]`),
                     dropoff_city: formData.get(`items[${idx}][dropoff_city]`),
                     dropoff_state: formData.get(`items[${idx}][dropoff_state]`),
                     dropoff_zip: formData.get(`items[${idx}][dropoff_zipcode]`),
@@ -949,6 +1172,8 @@
     // Google Maps API will call initAutocomplete() when ready
     loadDrivers();
 
+
+    
 </script>
 
 <!-- Google Maps API -->

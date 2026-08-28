@@ -34,7 +34,7 @@ class CompanyAuthController extends Controller
         if(!$user){
             return redirect()->back()->with('error', 'Invalid email or password');
         }
-        if ($user->role_id != '3') {
+        if ($user->role_id != '2') {
             return redirect()->back()->with('error', 'User not allowed to login here');
         }
 
@@ -101,7 +101,7 @@ class CompanyAuthController extends Controller
             'phone' => $request->mobile_no,
             'email' => $request->email,
             'email_verified_at' => now(), // Set email as verified immediately for company users
-            'role_id' => 3, // Set role_id to 3 for company users
+            'role_id' => 2, // Set role_id to 2 for company users
             'password' => Hash::make($request->password),
         ]);
         if($user){

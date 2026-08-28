@@ -1297,6 +1297,10 @@ color: #000000;
     border-bottom: 1px solid #e8e8e8;
 }
 
+#addHospitalModal .form-row {
+    display: block !important;
+}
+
 .form-row {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
@@ -1658,7 +1662,10 @@ color: #000000;
         font-size: 13px;
         font-weight: bold;
     }
-
+    .search-hospital:disabled {
+        background: #dedbdb !important;
+        opacity: 1; /* Overrides iOS Safari default transparency */
+    }
     /* Specimen Type Modal */
     .specimen_type_modal {
         display: none;
@@ -1668,7 +1675,7 @@ color: #000000;
         right: 0;
         bottom: 0;
         background: rgba(0, 0, 0, 0.5);
-        z-index: 10000;
+        z-index: 999;
         align-items: center;
         justify-content: center;
     }

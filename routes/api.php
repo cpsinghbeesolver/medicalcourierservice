@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\Common\ActivityLogController;
 use App\Http\Controllers\Api\Common\ProfileController;
 use App\Http\Controllers\Api\Admin\WaitlistController;
 use App\Http\Controllers\Api\Common\ContactController;
+use App\Http\Controllers\Hospital\HospitalController;
 use App\Http\Controllers\Company\SpecimenTypeController;
 use App\Http\Controllers\StripeWebhookController;
 use App\Http\Controllers\DashboardController;
@@ -124,5 +125,9 @@ Route::prefix('v1')->middleware('auth:sanctum')->group(function () {
     Route::get('/search-names', [ProfileController::class, 'searchNames']);
 
     Route::post('/save-fcm-token', [MobileNotificationController::class, 'saveToken']);
+    
+    //Hopital
+    Route::post('/add-hospital', [HospitalController::class, 'store']);
+    Route::get('/search-hospitals', [HospitalController::class, 'show']);
     
 });

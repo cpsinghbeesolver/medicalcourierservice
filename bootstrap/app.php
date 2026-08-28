@@ -27,6 +27,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'log.phi' => \App\Http\Middleware\LogPhiAccess::class,
             'custom.auth' => \App\Http\Middleware\AuthMiddleware::class,
             'admin.auth' => \App\Http\Middleware\AdminAuthMiddleware::class,
+            'hospital.auth' => \App\Http\Middleware\HospitalMiddleware::class,
         ]);
 
         // Apply HIPAA audit logging middleware to API routes

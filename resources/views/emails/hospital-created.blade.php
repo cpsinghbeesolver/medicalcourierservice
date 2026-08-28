@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Driver Created</title>
+    <title>Hospital Created</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -133,16 +133,12 @@
 </head>
 <body>
     <div class="email-container">
-        <div class="header">
-            <div class="icon">🔒</div>
-            <h1>Driver Created</h1>
-        </div>
 
         <div class="content">
-            <h2 style="color: #333;">Hi {{ $name }}! 👋</h2>
+            <h2 style="color: #333;">Welcome to {{ env('APP_NAME') }}. Your Hospital Account Has Been Created 👋</h2>
 
             <div class="security-notice">
-                <p style="margin: 0;"><strong>✅ Your account has been created with company {{ $company_name }}.</strong></p>
+                <p style="margin: 0;"><strong>✅ Hello {{ $name }} Team</strong></p>
             </div>
 
             <div class="info-box">

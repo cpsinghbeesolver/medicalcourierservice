@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class AuthMiddleware
+class HospitalMiddleware
 {
     /**
      * Handle an incoming request.
@@ -16,7 +16,7 @@ class AuthMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         //dd($request->user());
-        if(auth()->check() && $request->user()->isHospital()){
+        if(auth()->check() && $request->user()->isDispatcher()){
             // API response
             if ($request->expectsJson()) {
                 return response()->json([
@@ -26,7 +26,7 @@ class AuthMiddleware
             }
 
             // Web response
-            return redirect()->route('hospital-login');
+            return redirect()->route('company-login');
         }
         if (!auth()->check()) {
             
@@ -39,7 +39,7 @@ class AuthMiddleware
             }
 
             // Web response
-            return redirect()->route('company-login');
+            return redirect()->route('hospital-login');
         }
         return $next($request);
     }

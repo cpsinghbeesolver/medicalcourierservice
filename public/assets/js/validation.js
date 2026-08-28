@@ -2,7 +2,7 @@ const validators = new Map();
 
 function validateForm() {
 
-    document.querySelectorAll('form').forEach((form) => {
+    document.querySelectorAll('form#jobCreateForm, #jobEditForm, #loginForm, #createDriverForm, #profileForm, #changePasswordForm').forEach((form) => {
 
         // Destroy existing validator for this form
         if (validators.has(form)) {
@@ -28,6 +28,7 @@ function validateForm() {
                 },
             ])
         }
+
         const password = document.querySelector('#password');
         if (password) {
             validator.addField(document.querySelector('#password'), [
@@ -136,6 +137,22 @@ function validateForm() {
                 {
                     validator: (value, fields) => {
                         return value === document.querySelector('#password').value;
+                    },
+                    errorMessage: 'Passwords do not match',
+                },
+            ])
+        }
+        
+        const new_password_confirmation = document.querySelector('#new_password_confirmation');
+        if (new_password_confirmation) {
+            validator.addField(document.querySelector('#new_password_confirmation'), [
+                {
+                    rule: 'required',
+                    errorMessage: 'Please confirm your password',
+                },
+                {
+                    validator: (value, fields) => {
+                        return value === document.querySelector('#new_password').value;
                     },
                     errorMessage: 'Passwords do not match',
                 },
@@ -281,15 +298,25 @@ function validateForm() {
                 ]);
         });
 
-        document.querySelectorAll('[name^="items["][name$="[dropoff_address]"]')
-            .forEach((field) => {
-                validator.addField(field, [
-                    {
-                        rule: 'required',
-                        errorMessage: 'Dropoff Address is required',
-                    }
-                ]);
-        });
+        // document.querySelectorAll('[name^="items["][name$="[hospital_id]"]')
+        //     .forEach((field) => {
+        //         validator.addField(field, [
+        //             {
+        //                 rule: 'required',
+        //                 errorMessage: 'Hospital is required',
+        //             }
+        //         ]);
+        // });
+
+        // document.querySelectorAll('[name^="items["][name$="[dropoff_address]"]')
+        //     .forEach((field) => {
+        //         validator.addField(field, [
+        //             {
+        //                 rule: 'required',
+        //                 errorMessage: 'Dropoff Address is required',
+        //             }
+        //         ]);
+        // });
         document.querySelectorAll('[name^="items["][name$="[dropoff_location]"]')
             .forEach((field) => {
                 validator.addField(field, [
@@ -330,24 +357,24 @@ function validateForm() {
         });
         
         
-        document.querySelectorAll('[name^="items["][name$="[dropoff_phone]"]')
-            .forEach((field) => {
-                validator.addField(field, [
-                    {
-                        rule: 'required',
-                        errorMessage: 'Drop Off Phone is required',
-                    },
-                    {
-                        validator: (value) => {
-                            const phoneRegex = /^\+?[0-9\s\-()]{7,20}$/;
-                            return phoneRegex.test(value.trim());
-                        },
-                        errorMessage: 'Please enter a valid Phone number',
-                    },
-                ]);
+        // document.querySelectorAll('[name^="items["][name$="[dropoff_phone]"]')
+        //     .forEach((field) => {
+        //         validator.addField(field, [
+        //             {
+        //                 rule: 'required',
+        //                 errorMessage: 'Drop Off Phone is required',
+        //             },
+        //             {
+        //                 validator: (value) => {
+        //                     const phoneRegex = /^\+?[0-9\s\-()]{7,20}$/;
+        //                     return phoneRegex.test(value.trim());
+        //                 },
+        //                 errorMessage: 'Please enter a valid Phone number',
+        //             },
+        //         ]);
 
                 
-        });
+        // });
 
         validator
         .onSuccess((event) => {
@@ -365,3 +392,95 @@ function validateForm() {
     });
 }
 validateForm();
+
+
+    const hospitalValidator = new JustValidate('#add_hospital');
+
+    hospitalValidator.addField('#hospital_email', [
+        {
+            rule: 'required',
+            errorMessage: 'Hospital email is required',
+        },
+        {
+            rule: 'email',
+            errorMessage: 'Enter a valid email address',
+        }
+    ]);
+
+    const hospital_name = document.querySelector('#hospital_name');
+        if (hospital_name) {
+            hospitalValidator.addField(document.querySelector('#hospital_name'), [
+                {
+                    rule: 'required',
+                    errorMessage: 'Hospital name is required',
+                },
+                {
+                    rule: 'minLength',
+                    value: 2,
+                    errorMessage: 'Item Name must be at least 2 characters',
+                },
+                {
+                    rule: 'maxLength',
+                    value: 100,
+                    errorMessage: 'Item Name cannot exceed 100 characters',
+                }
+            ])
+        }
+
+        const hospital_registration = document.querySelector('#hospital_registration');
+        if (hospital_registration) {
+            hospitalValidator.addField(document.querySelector('#hospital_registration'), [
+                {
+                    rule: 'required',
+                    errorMessage: 'Registration Number is required',
+                },
+                {
+                    rule: 'minLength',
+                    value: 2,
+                    errorMessage: 'Registration Number must be at least 2 characters',
+                },
+                {
+                    rule: 'maxLength',
+                    value: 100,
+                    errorMessage: 'Registration Number cannot exceed 100 characters',
+                }
+            ])
+        }
+        
+
+        const hospital_address = document.querySelector('#hospital_address');
+        if (hospital_address) {
+            hospitalValidator.addField(document.querySelector('#hospital_address'), [
+                {
+                    rule: 'required',
+                    errorMessage: 'Address is required',
+                }
+            ])
+        }
+
+        const hospital_contact_person = document.querySelector('#hospital_contact_person');
+        if (hospital_contact_person) {
+            hospitalValidator.addField(document.querySelector('#hospital_contact_person'), [
+                {
+                    rule: 'required',
+                    errorMessage: 'Contact person is required',
+                }
+            ])
+        }
+
+        const hospital_phone = document.querySelector('#hospital_phone');
+        if (hospital_phone) {
+            hospitalValidator.addField(document.querySelector('#hospital_phone'), [
+                {
+                    rule: 'required',
+                    errorMessage: 'Phone is required',
+                },
+                {
+                    validator: (value) => {
+                        const phoneRegex = /^\+?[0-9\s\-()]{7,20}$/;
+                        return phoneRegex.test(value.trim());
+                    },
+                    errorMessage: 'Please enter a valid Phone number',
+                }
+            ])
+        }

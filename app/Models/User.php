@@ -153,6 +153,14 @@ class User extends Authenticatable
      */
     public function isDispatcher(): bool
     {
+        return $this->role_id == '2';
+    }
+
+    /**
+     * Check if user is a dispatcher.
+     */
+    public function isHospital(): bool
+    {
         return $this->role_id == '3';
     }
 

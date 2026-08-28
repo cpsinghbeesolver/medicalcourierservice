@@ -287,7 +287,7 @@ class MobileDeliveryController extends Controller
     {
         $user = $request->user();
         $driverProfile = $user->driverProfile;
-        $query = Delivery::with(['driver', 'creator', 'items.specimenType','items.tempratureRequirement', 'verifications','vehicleRequirement']);
+        $query = Delivery::with(['driver', 'creator', 'items.specimenType','items.tempratureRequirement','items.hospital', 'verifications','vehicleRequirement']);
         
         // Filter by user role
         if ($user->role === 'driver') {
@@ -381,6 +381,7 @@ class MobileDeliveryController extends Controller
                                 'longitude' => $item->dropoff_longitude
                             ]
                         ],
+                        'hospital' => $item->hospital,
                         'status' => $item->status
                     ];
                 }),

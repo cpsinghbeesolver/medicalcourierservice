@@ -29,7 +29,8 @@ class DeliveryItem extends Model
         'dropoff_phone',
         'dropoff_contact_person',
         'item_name',
-        'item_code'
+        'item_code',
+        
         // 'dropoff_latitude',
         // 'dropoff_longitude',
     ];
@@ -58,7 +59,8 @@ class DeliveryItem extends Model
         'status',
         'photo_proof',
         'signature_image',
-        'notes'
+        'notes',
+        'hospital_id'
     ];
 
     protected $casts = [
@@ -77,5 +79,10 @@ class DeliveryItem extends Model
     public function tempratureRequirement(): BelongsTo
     {
         return $this->belongsTo(TemperatureRequirement::class, 'temperature_requirement');
+    }
+
+    public function hospital()
+    {
+        return $this->belongsTo(Hospital::class, 'hospital_id');
     }
 }

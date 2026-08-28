@@ -250,6 +250,7 @@
                     </li>
                     
                 @endif
+                
                 @if(auth()->user()->isDispatcher())
                     <li><a href="/company/dashboard" class="{{ (request()->is('company/dashboard') && !request()->is('company/dashboard/*')) ? 'active' : '' }}">
                         <i class="fas fa-th-large"></i> Dashboard
@@ -311,7 +312,7 @@
             <header class="top-header">
                 <div class="header-search">
                     <i class="fas fa-search"></i>
-                    <input type="text" id="searchInputHeader" placeholder="Search">
+                    <input type="text" id="searchInputHeader" placeholder="Search" autocomplete="off">
                     <i class="fas fa-xmark"></i>
                     <div id="searchResults" class="search-results">
                         <div class="search-item">
@@ -957,6 +958,106 @@
             $('#searchInputHeader').focus();
             $('#searchResults').hide();
             $(this).hide();
+        });
+        
+        //add hospital
+        $('#addHospitalModal').on('submit', function(e) {
+            e.preventDefault();
+            if (document.querySelector('#add_hospital .just-validate-error-label')) {
+                hide_load_spinner();
+                return false;
+            }
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+            
+            $.ajax({
+                url: '/api/v1/add-hospital',
+                type: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Accept': 'application/json'
+                },
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+
+                success: function (result) {
+                    hide_load_spinner();
+                    if (result.success) {
+                        showDialog('Hospital added successfully!', 'success');
+                        $('#add_hospital')[0].reset();
+                    } 
+                    
+                },
+                error: function (result) {
+                    hide_load_spinner();
+                    showDialog(result.responseJSON.message, 'error');
+                }
+            });
+        });
+
+        function initHospitalSearch(){
+            $('.search-hospital').each(function () {
+                const input = $(this);
+                if (input.data('hospitalAutocompleteInitialized')) return;
+
+                input.data('hospitalAutocompleteInitialized', true);
+                const results = input.siblings('.hospital-autocomplete-results');
+
+                input.on('input', function () {
+                    const search = input.val().trim();
+                    input.siblings('.hospital-id').val('');
+                    results.empty().hide();
+
+                    if (search.length < 2) return;
+
+                    $.ajax({
+                        url: '/api/v1/search-hospitals',
+                        type: 'GET',
+                        dataType: 'json',
+                        data: { search: search },
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Accept': 'application/json'
+                        },
+                        success: function (response) {
+                            if (!input.is(':focus') || input.val().trim() !== search) return;
+
+                            response.data.forEach(function (hospital) {
+                                $('<button>', {
+                                    type: 'button',
+                                    class: 'hospital-autocomplete-option',
+                                    text: hospital.name
+                                }).data('hospital', hospital).appendTo(results);
+                            });
+
+                            results.toggle(response.data.length > 0);
+                        }
+                    });
+                });
+
+                results.on('click', '.hospital-autocomplete-option', function () {
+                    const hospital = $(this).data('hospital');
+                    input.val(hospital.name);
+                    input.siblings('.hospital-id').val(hospital.id);
+                    results.empty().hide();
+                });
+
+                input.on('blur', function () {
+                    setTimeout(function () { results.hide(); }, 150);
+                });
+            });
+        }
+
+         
+        $('body').on('click', '.dropoff_type', function() {
+            var value = $(this).val();
+            if(value == 'hospital'){
+                $(this).parents('.item-card').find('.search-hospital').prop('disabled',false);
+                $(this).parents('.item-card').find('.type_address').hide();
+            }else{
+                $(this).parents('.item-card').find('.search-hospital').prop('disabled',true);
+                $(this).parents('.item-card').find('.type_address').show();
+            }
         });
         
     </script>

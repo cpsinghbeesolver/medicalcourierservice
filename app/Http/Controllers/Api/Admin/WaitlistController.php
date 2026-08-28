@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Mail;
 use App\Models\SubscriptionPlansReference;
+use Illuminate\Support\Facades\Log;
 
 class WaitlistController extends Controller
 {
@@ -72,7 +73,7 @@ class WaitlistController extends Controller
             // print_r($submission);die;
             Mail::to($submission->email)->send(new WaitlistAutoResponder($submission));
         } catch (\Exception $e) {
-            \Log::error('Failed to send waitlist auto-responder: ' . $e->getMessage());
+            Log::error('Failed to send waitlist auto-responder: ' . $e->getMessage());
         }
 
         // Send notification email to admin
@@ -80,7 +81,7 @@ class WaitlistController extends Controller
             // $adminEmail = config('mail.admin_email', config('mail.from.address'));
             Mail::to($adminEmail)->send(new WaitlistAdminNotification($submission));
         } catch (\Exception $e) {
-            \Log::error('Failed to send waitlist admin notification: ' . $e->getMessage());
+            Log::error('Failed to send waitlist admin notification: ' . $e->getMessage());
         }
 
         return response()->json([

@@ -18,6 +18,7 @@ use App\Models\VehicleRequirement;
 use App\Http\Requests\StoreSpecimenTempVehicleRequest;
 use App\Services\FirebaseService;
 use App\Models\User;
+use App\Models\CompanyHospital;
 use App\Jobs\SendFirebaseNotificationJob;
 
 class DeliveryController extends Controller
@@ -263,18 +264,30 @@ class DeliveryController extends Controller
             'items.*.dropoff_longitude' => 'nullable|numeric|between:-180,180',
             'items.*.description' => 'nullable|string',
             'items.*.dropoff_contact_person' => 'nullable|string|max:255',
-            'items.*.dropoff_address' => 'required|nullable|string',
+            // 'items.*.dropoff_address' => 'required|nullable|string',
             'items.*.item_type' => 'required|string',
             'items.*.item_code' => 'required|nullable|string',
             'items.*.specimen_type' => 'nullable|string',
+            'items.*.dropoff_address' => [
+                'nullable',
+                'string',
+                'required_if:items.*.dropoff_type,address',
+            ],
+
+            'items.*.hospital_id' => [
+                'nullable',
+                'required_if:items.*.dropoff_type,hospital',
+            ],
             
             // 'items.*.quantity' => 'nullable|integer|min:1',
             // 'items.*.temperature_requirement' => 'nullable|in:ambient,refrigerated,frozen,dry_ice,controlled',
             // 'items.*.requires_special_handling' => 'nullable|boolean',
         ], [
             'items.*.item_name.required' => 'Item name is required.',
+            'items.*.dropoff_address.required_if' => 'Dropoff Address is required when Dropoff type is Address.',
+            'items.*.hospital_id.required_if' => 'Please select a Hospital when Dropoff type is Hospital.',
         ]);
-
+        
         //Check if Proof of Pickup is selected
         $validator->after(function ($validator) use ($request) {
 
@@ -404,8 +417,17 @@ class DeliveryController extends Controller
                     DeliveryItem::create(array_merge($itemData, [
                         'delivery_id' => $delivery->id,
                     ]));
+
+                    // //Add hospital id with company id
+                    // if($itemData->hospital_id){
+                    //     CompanyHospital::create([
+                    //         'hospital_id' => $itemData->hospital_id,
+                    //         'company_id' => auth()->id()
+                    //     ]);
+                    // }
                 }
             }
+            
 
             // Track delivery usage for subscription
             if ($request->user()->subscription) {

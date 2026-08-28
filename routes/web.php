@@ -12,6 +12,7 @@ use App\Http\Controllers\Company\SpecimenTypeController;
 use App\Http\Controllers\Company\TemperatureRequirementController;
 use App\Http\Controllers\Company\VehicleRequirementController;
 use App\Http\Controllers\Company\CompanyDashboardController;
+use App\Http\Controllers\Hospital\HospitalController;
 use App\Http\Controllers\Auth\CompanyAuthController;
 use App\Events\DriverLocationUpdated;
 use App\Models\TemperatureRequirement;
@@ -65,6 +66,13 @@ Route::get('/company/login', function () {
         return redirect('/company/dashboard');
     }
     return view('company/company-login');
+});
+
+Route::get('/hospital/login', function () {
+    if (Auth::check()) {
+        return redirect('/hospital/dashboard');
+    }
+    return view('hospital/hospital-login');
 });
 
 Route::get('/test-driver-location', function () {
@@ -132,6 +140,7 @@ Route::get('/verify', function () {
 Route::post('/admin', [AuthController::class, 'login'])->name('login');
 Route::post('/company/signup', [CompanyAuthController::class, 'signup'])->name('signup');
 Route::post('/company/login', [CompanyAuthController::class, 'login'])->name('company-login');
+Route::post('/hospital/login', [HospitalController::class, 'login'])->name('hospital-login');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::post('/verify-code', [AuthController::class, 'verifyCode']);
 Route::post('/submit-verify', [AuthController::class, 'submitVerify'])->name('submit-verify');
@@ -159,6 +168,11 @@ Route::prefix('admin/dashboard')->middleware(['admin.auth', 'can:view-enquiries'
         return view('admin.users');
     });
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+});
+
+
+Route::prefix('hospital/dashboard')->middleware('hospital.auth','no.cache')->group(function () {
+    Route::get('/', [HospitalController::class, 'index'])->name('hospital-dashboard');
 });
 Route::prefix('company/dashboard')->middleware('custom.auth','no.cache')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('company-dashboard');
