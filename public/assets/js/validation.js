@@ -394,20 +394,25 @@ function validateForm() {
 validateForm();
 
 
-    const hospitalValidator = new JustValidate('#add_hospital');
+    const addHospitalForm = document.querySelector('#add_hospital');
 
-    hospitalValidator.addField('#hospital_email', [
-        {
-            rule: 'required',
-            errorMessage: 'Hospital email is required',
-        },
-        {
-            rule: 'email',
-            errorMessage: 'Enter a valid email address',
-        }
-    ]);
+    let hospitalValidator = null;
 
-    const hospital_name = document.querySelector('#hospital_name');
+    if (addHospitalForm) {
+        hospitalValidator = new JustValidate('#add_hospital');
+    
+        hospitalValidator.addField('#hospital_email', [
+            {
+                rule: 'required',
+                errorMessage: 'Hospital email is required',
+            },
+            {
+                rule: 'email',
+                errorMessage: 'Enter a valid email address',
+            }
+        ]);
+
+        const hospital_name = document.querySelector('#hospital_name');
         if (hospital_name) {
             hospitalValidator.addField(document.querySelector('#hospital_name'), [
                 {
@@ -484,3 +489,4 @@ validateForm();
                 }
             ])
         }
+    }

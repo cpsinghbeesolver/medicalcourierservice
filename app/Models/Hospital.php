@@ -21,4 +21,9 @@ class Hospital extends Model
         'contact_person',
         'created_by'
     ];
+
+    public function items()
+    {
+        return $this->hasMany(DeliveryItem::class, 'hospital_id', 'id');
+    }
 }

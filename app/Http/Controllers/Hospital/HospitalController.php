@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Models\Hospital;
+use App\Models\DeliveryItem;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
@@ -22,7 +23,38 @@ class HospitalController extends Controller
      */
     public function index(Request $request)
     {
-        return view('hospital.dashboard');
+        $user = auth()->user();
+        $hospital = $user->hospital;
+        $items = $hospital->items;
+        $drivers = [];
+        // dd($items);
+        if($items){
+            $i = 0;
+            foreach ($items as $item) {
+                $delivery = $item->delivery;
+                if($delivery){
+                    $driver_profile = \App\Models\DriverProfile::with('user')
+                    ->where('user_id', $delivery->driver_id)
+                    ->distinct('user_id')
+                    ->get()
+                    ->map(function ($driver) {
+                        return collect([
+                            'id' => $driver->user->id,
+                            'title' => $driver->user->name,
+                            'company_id' => $driver->created_by,
+                            'current_latitude' => $driver->current_latitude,
+                            'current_longitude' => $driver->current_longitude,
+                            'availability_status' => $driver->availability_status
+                        ]);
+                    }); 
+                    // dd($driver_profile[0]);
+                    $drivers[] = $driver_profile[0];
+                }
+                $i++;
+            }
+        }
+        // dd($hospital);
+        return view('hospital.maps',compact('hospital','items','drivers'));
     }
 
     public function login(Request $request)

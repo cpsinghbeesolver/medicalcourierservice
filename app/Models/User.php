@@ -13,6 +13,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Traits\EncryptsPhiData;
 use Illuminate\Support\Str;
 use App\Models\Notifications;
+use App\Models\DeliveryItem;
+use App\Models\Delivery;
 
 class User extends Authenticatable
 {
@@ -175,5 +177,10 @@ class User extends Authenticatable
         return $this->notifications()
             ->where('is_read', 0)
             ->exists();
+    }
+    
+    public function hospital()
+    {
+        return $this->hasOne(Hospital::class, 'hospital_id', 'id');
     }
 }

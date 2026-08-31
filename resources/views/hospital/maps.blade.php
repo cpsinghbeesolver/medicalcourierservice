@@ -5,7 +5,7 @@
 
 @section('styles')
 <!-- Google Maps API - Get your FREE key at: https://console.cloud.google.com/google/maps-apis/start -->
-<script src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.api_key') }}&libraries=geometry"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.api_key') }}&libraries=marker&libraries=geometry&loading=async"></script>
 <style>
     .maps-container {
         display: flex;
@@ -153,7 +153,6 @@
         border-radius: 8px;
         padding: 12px;
         margin-bottom: 10px;
-        cursor: pointer;
         transition: all 0.3s;
     }
 
@@ -306,6 +305,16 @@
     .refresh-button.refreshing i {
         animation: spin 1s linear infinite;
     }
+    .gm-ui-hover-effect{
+        width: 24px !important;
+        height: 22px !important;
+        top: 3px;
+        right: 2px;
+    }
+    .gm-ui-hover-effect>span{
+        margin: 0px !important;
+    }
+
 
     @keyframes spin {
         from { transform: rotate(0deg); }
@@ -324,7 +333,7 @@
             <select id="driverSelect">
                 <option value="">Choose a driver...</option>
                 @foreach($drivers as $driver)
-                    <option value="{{ $driver['id'] }}">{{ $driver['title'] }}</option> 
+                    <option value="{{ $driver['id'] }}">{{ $driver['title'] }} - {{ ucfirst(str_replace('_', ' ', $driver['availability_status'])) }}</option> 
                 @endforeach
             </select>
         </div>
@@ -339,8 +348,8 @@
             </div>
             <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid #e0e0e0;">
                 <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                    <span style="font-size: 12px; color: #7f8c8d;">Today's Deliveries:</span>
-                    <span style="font-size: 13px; font-weight: 600; color: #2c3e50;" id="totalDeliveries">0</span>
+                    <span style="font-size: 12px; color: #7f8c8d;">Pending Deliveries:</span>
+                    <span style="font-size: 13px; font-weight: 600; color: #2c3e50;" id="pendingDeliveries">0</span>
                 </div>
                 <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
                     <span style="font-size: 12px; color: #7f8c8d;">In Progress:</span>
@@ -395,7 +404,7 @@
 
         <div class="map-canvas" id="mainMap"></div>
 
-        <div class="map-legend">
+        <!-- <div class="map-legend">
             <div class="legend-title">Legend</div>
             <div class="legend-item">
                 <div class="legend-icon driver"></div>
@@ -417,7 +426,7 @@
                 <div class="legend-icon completed"></div>
                 <span>Completed</span>
             </div>
-        </div>
+        </div> -->
     </div>
 </div>
 @endsection
@@ -426,31 +435,197 @@
 <script>
     // const token = localStorage.getItem('api_token');
     const token = '{{ session("web_token") }}';
+
     let map;
     let markers = [];
     let driverMarker = null;
     let selectedDriverId = null;
     let refreshInterval = null;
+    let newDriverMarker = null;
+    let driverMarkers = {};
+
+    function initDriver(){
+        //drivers markers on map
+        const drivers = @json($drivers);
+        drivers.forEach(driver => {
+            // console.log(driver);
+            //if(driver.availability_status == 'available'){
+                //if(driver.current_latitude != null && driver.current_longitude != null){
+                    console.log(driver.title);
+                    var item = {
+                        driver_id: driver.id,
+                        driver_lat: driver.current_latitude,
+                        driver_long: driver.current_longitude,
+                        driver_name: driver.title
+                    };
+                    if(driver.availability_status == 'available'){
+                        changeLocation(item);
+                    }
+                    listenSocket(driver.id,driver.company_id);
+                    disconnectSocket(driver.id);
+                //}
+            //}
+        });
+    }
+
+    //Listen socket
+    let driverLocationChannel = null;
+    let driverDisconnectChannel = null;
+    
+    window.live_driver_id = null;
+    window.live_driver_lat = null;
+    window.live_driver_long = null;
+    window.live_driver_name = null;
+    window.isSingleDriverMode = false;
+    window.avatar = null;
+    window.live_drivers_locations = [];
+    window.authUserId = {{ auth()->id() }};
+
+    function disconnectSocket(driver_id){
+        // console.log('driver-disconnected');
+        const channelName = 'driver-disconnected.'+driver_id;
+        // Prevent duplicate subscription
+        Echo.leave(channelName);
+
+        driverDisconnectChannel = Echo.private(channelName);
+
+        driverDisconnectChannel
+            .subscribed(() => {
+                console.log('Subscribed to:', channelName);
+            })
+            .error((error) => {
+                console.error('Channel error:', error);
+            })
+            .listenForWhisper('get-driver-disconnected', (e) => {
+                console.log('Disconnect Socket Response:', e);
+                window.live_drivers_locations =
+                window.live_drivers_locations.filter(
+                    d => Number(d.driver_id) !== Number(e.driver_id)
+                );
+
+                clearDriverMarker(e.driver_id);
+                if($('.driver-info-card').hasClass('show')){
+                    $('.driver-status').addClass('off_duty');
+                    $('#driverStatus').html('<span class="status-indicator"></span><span id="driverStatusText">OFF DUTY</span>');
+                }
+            });
+    }
+
+    function clearDriverMarker(driver_id){
+        if (driverMarkers[driver_id]) {
+            driverMarkers[driver_id].map = null;
+        }
+    }
+
+    function listenSocket(driver_id,company_id){
+        const channelName = 'driver-locations.' + company_id +'.'+driver_id;
+        // Prevent duplicate subscription
+        Echo.leave(channelName);
+
+        driverLocationChannel = Echo.private(channelName);
+
+        driverLocationChannel
+            .subscribed(() => {
+                console.log('Subscribed to:', channelName);
+                console.log('Pusher state:', Echo.connector.pusher.connection.state);
+            })
+            .error((error) => {
+                console.error('Channel error:', error);
+            })
+            .listenForWhisper('driver-location-updated', (e) => {
+
+                console.log('Socket Response:', e);
+
+                window.live_driver_id = e.driver_id;
+                window.live_driver_lat = parseFloat(e.latitude);
+                window.live_driver_long = parseFloat(e.longitude);
+                window.live_driver_name = e.driver_name;
+
+                const driver = {
+                    driver_id: e.driver_id,
+                    driver_lat: parseFloat(e.latitude),
+                    driver_long: parseFloat(e.longitude),
+                    driver_name: e.driver_name
+                };
+
+                const index = window.live_drivers_locations.findIndex(
+                    d => d.driver_id == driver.driver_id
+                );
+
+                if (index === -1) {
+                    window.live_drivers_locations.push(driver);
+                } else {
+                    window.live_drivers_locations[index] = driver;
+                }
+
+                const driverSelect = $('#driverSelect').val();
+
+                if (driverSelect) {
+                    const selectedDriver = window.live_drivers_locations.find(
+                        item => item.driver_id == driverSelect
+                    );
+                    // alert(selectedDriver);
+                    if (selectedDriver) {
+                        changeLocation(selectedDriver);
+                        //move map to socket driver location
+                        if(selectedDriver.driver_lat != null && selectedDriver.driver_long != null){
+                            const position = {
+                                lat: Number(selectedDriver.driver_lat),
+                                lng: Number(selectedDriver.driver_long)
+                            };
+
+                            // map.setCenter(position);
+                            smoothPanTo(map, position, 2000); // same duration as marker animation
+                            //map.setZoom(15);
+                        }
+                        
+                    }
+                }else{
+                    window.live_drivers_locations.forEach(item => {
+                        changeLocation(item);
+                    });
+                }
+
+                
+
+                console.log(
+                    'Live Drivers:',
+                    window.live_drivers_locations
+                );
+            });
+    }
 
     // Initialize map
-    function initMap() {
+    async function initMap() {
+        const hospital = @json($hospital);
+        const { Map } = await google.maps.importLibrary("maps");
+        const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
         // Default center (will be updated when driver is selected)
-        const defaultCenter = { lat: 40.7128, lng: -74.0060 }; // New York
-
+        var defaultCenter = { lat: 30.7046, lng: 76.7179 }; 
         map = new google.maps.Map(document.getElementById('mainMap'), {
-            zoom: 12,
+            zoom: 13,
+            maxZoom: 16,
+            minZoom: 12,
+            mapId: "{{ config('services.google_maps.api_key') }}",
             center: defaultCenter,
             mapTypeControl: true,
             streetViewControl: false,
             fullscreenControl: true,
-            zoomControl: true,
-            styles: [
-                {
-                    featureType: "poi",
-                    elementType: "labels",
-                    stylers: [{ visibility: "off" }]
-                }
-            ]
+            zoomControl: true
+        });
+
+        google.maps.event.addListener(map, 'zoom_changed', () => {
+            if (mapPanFrame) {
+                cancelAnimationFrame(mapPanFrame);
+                mapPanFrame = null;
+            }
+        });
+
+        google.maps.event.addListener(map, 'dragstart', () => {
+            if (mapPanFrame) {
+                cancelAnimationFrame(mapPanFrame);
+                mapPanFrame = null;
+            }
         });
     }
 
@@ -484,15 +659,37 @@
         }
     }
 
+    function intial_markers(){
+        if(window.live_drivers_locations != ''){
+            console.log(window.live_drivers_locations);
+            for (let item of window.live_drivers_locations) {
+                //newDriverMarker = null;
+                changeLocation(item);
+            }
+        }
+    }
+
+    function clearAllMarkers() {
+        Object.values(driverMarkers).forEach(marker => {
+            marker.map = null;
+        });
+
+        driverMarkers = {};
+    }
+
     // Handle driver selection
     document.getElementById('driverSelect').addEventListener('change', async (e) => {
+        //await initMap();
         const driverId = e.target.value;
-
+        clearAllMarkers();
         if (!driverId) {
+            window.isSingleDriverMode = false;
             clearMap();
             document.getElementById('driverInfoCard').classList.remove('show');
-            document.getElementById('activeDeliveriesSection').style.display = 'none';
-            document.getElementById('completedDeliveriesSection').style.display = 'none';
+            $('#activeDeliveriesSection').hide();
+            $('#completedDeliveriesSection').hide();
+            $('#inProgressDeliveriesSection').hide();
+            $('#pendingDeliveriesSection').hide();
             document.getElementById('noDataMessage').style.display = 'block';
 
             // Clear refresh interval
@@ -500,27 +697,187 @@
                 clearInterval(refreshInterval);
                 refreshInterval = null;
             }
+            // return;
+            intial_markers();
+            map.setZoom(13);
+        }else{
+            window.isSingleDriverMode = true;
+            selectedDriverId = driverId;
+            document.getElementById('noDataMessage').style.display = 'none';
+
+            let profileData = await loadDriverData(driverId);
+            if(window.live_drivers_locations != ''){
+                for (const item of window.live_drivers_locations) {
+                    if (item.driver_id == driverId) {
+                        changeLocation(item);
+                    }
+                }
+            }else if(profileData.driver_profile.availability_status == 'available' && profileData.driver_profile.current_location.latitude != 'null' &&  profileData.driver_profile.current_location.longitude != 'null'){
+                var item = {
+                        driver_id: profileData.id,
+                        driver_lat: profileData.driver_profile.current_location.latitude,
+                        driver_long: profileData.driver_profile.current_location.longitude,
+                        driver_name: profileData.name
+                    };
+                changeLocation(item);
+            }
+
+            //set map default
+            if(profileData.driver_profile.current_location.latitude != null &&  profileData.driver_profile.current_location.longitude != null){
+                const position = {
+                    lat: Number(profileData.driver_profile.current_location.latitude),
+                    lng: Number(profileData.driver_profile.current_location.longitude)
+                };
+
+                map.setCenter(position);
+                map.setZoom(15);
+            }
+        }
+    });
+
+    let mapPanFrame = null;
+    function smoothPanTo(map, newPosition, duration = 2000) {
+        if (mapPanFrame) {
+            cancelAnimationFrame(mapPanFrame);
+        }
+
+        const center = map.getCenter();
+        const start = { lat: center.lat(), lng: center.lng() };
+        const end = newPosition;
+        const startTime = performance.now();
+
+        function easeInOutQuad(t) {
+            return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+        }
+
+        function animate(currentTime) {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const eased = easeInOutQuad(progress);
+
+            const lat = start.lat + (end.lat - start.lat) * eased;
+            const lng = start.lng + (end.lng - start.lng) * eased;
+
+            map.panTo({ lat, lng });
+
+            if (progress < 1) {
+                mapPanFrame = requestAnimationFrame(animate);
+            } else {
+                mapPanFrame = null;
+            }
+        }
+
+        mapPanFrame = requestAnimationFrame(animate);
+    }
+
+    
+    
+    
+    async function changeLocation(item) {
+        if (!item || item.driver_lat == null || item.driver_long == null) {
             return;
         }
 
-        selectedDriverId = driverId;
-        document.getElementById('noDataMessage').style.display = 'none';
+        const position = {
+            lat: Number(item.driver_lat),
+            lng: Number(item.driver_long)
+        };
 
-        // if(window.live_driver_id == driverId){
-        if(1 == 1){
-            await loadDriverData(driverId);
-        }else{
-            initMap();
+        const driverId = item.driver_id;
+
+        // Create marker if it doesn't exist
+        if (!driverMarkers[driverId]) {
+            const pin = document.createElement("div");
+
+            // --- PIN SHAPE STYLING ---
+            pin.style.width = "32px";
+            pin.style.height = "32px";
+            pin.style.background = "#F59E0B";
+            pin.style.border = "2px solid white";
+            pin.style.borderRadius = "50% 50% 50% 0";
+
+            // Rotate the pin teardrop and shift the sharp tip to the anchor point
+            pin.style.transform = "rotate(-45deg)";
+            pin.style.transformOrigin = "bottom left"; 
+
+            pin.style.boxShadow = "0 2px 6px rgba(0,0,0,0.3)";
+            pin.style.display = "flex";
+            pin.style.alignItems = "center";
+            pin.style.justifyContent = "center";
+
+            // --- INNER TEXT CONTAINER (Straight text + 15px font) ---
+            const label = document.createElement("span");
+            label.style.transform = "rotate(45deg)"; // Counter-rotate to stay straight
+            label.style.color = "black";
+            label.style.fontWeight = "bold";
+            label.style.fontSize = "15px";            // Set font size to 15px
+            label.style.lineHeight = "1";
+            label.style.display = "block";
+            label.textContent = item.driver_name
+                ? item.driver_name.charAt(0).toUpperCase()
+                : "D";
+
+            pin.appendChild(label);
+
+            const marker = new google.maps.marker.AdvancedMarkerElement({
+                map: map,
+                position: position,
+                content: pin,
+                title: item.driver_name || "Driver"
+            });
+
+            const infoWindow = new google.maps.InfoWindow();
+
+            marker.addListener("click", () => {
+                infoWindow.setContent(`
+                    <div style="padding: 5px;">
+                        <strong>${item.driver_name || "Driver"}</strong>
+                    </div>
+                `);
+
+                infoWindow.open({
+                    map: map,
+                    anchor: marker
+                });
+            });
+
+            driverMarkers[driverId] = marker;
+
+        } else {
+
+            // Move existing marker
+            // driverMarkers[driverId].position = position;
+            animateMarker(driverMarkers[driverId], position, 2000);
         }
 
-        // Start auto-refresh every 10 seconds for live tracking
-        if (refreshInterval) {
-            clearInterval(refreshInterval);
+        function animateMarker(marker, newPosition, duration = 1500) {
+            const start = marker.position;
+
+            const startLat = start.lat;
+            const startLng = start.lng;
+
+            const endLat = newPosition.lat;
+            const endLng = newPosition.lng;
+
+            const startTime = performance.now();
+
+            function animate(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+
+                const lat = startLat + (endLat - startLat) * progress;
+                const lng = startLng + (endLng - startLng) * progress;
+
+                marker.position = { lat, lng };
+
+                if (progress < 1) {
+                    requestAnimationFrame(animate);
+                }
+            }
+
+            requestAnimationFrame(animate);
         }
-        // refreshInterval = setInterval(() => {
-        //     loadDriverData(driverId, true);
-        // }, 10000);
-    });
+    }
 
     async function loadDriverData(driverId, silent = false) {
         try {
@@ -552,9 +909,8 @@
             if (deliveriesData.success && deliveriesData.data) {
                 const deliveries = deliveriesData.data.deliveries;
                 updateDeliveriesList(deliveries);
-                updateMap(profileData.data, deliveries);
             }
-
+            return profileData.data;
         } catch (error) {
             console.error('Error loading driver data:', error);
             if (!silent) {
@@ -571,6 +927,7 @@
         const infoCard = document.getElementById('driverInfoCard');
 
         avatar.textContent = driver.name.charAt(0).toUpperCase();
+        window.avatar = avatar.textContent;
         name.textContent = driver.name;
 
         const driverStatus = driver.driver_profile?.availability_status || 'off_duty';
@@ -578,6 +935,20 @@
         statusText.textContent = driverStatus.replace('_', ' ').toUpperCase();
 
         infoCard.classList.add('show');
+    }
+
+    function clearMap() {
+        markers.forEach(marker => {
+            if (marker.setMap) {
+                marker.setMap(null);
+            }
+        });
+        markers = [];
+
+        if (driverMarker) {
+            driverMarker.setMap(null);
+            driverMarker = null;
+        }
     }
 
     function updateDeliveriesList(deliveries) {
@@ -607,9 +978,10 @@
 
         // Update counts in driver info card
         const totalToday = inProgressDeliveries.length + pendingDeliveries.length + completedDeliveries.length;
-        document.getElementById('totalDeliveries').textContent = totalToday;
+        document.getElementById('pendingDeliveries').textContent = pendingDeliveries.length;
         document.getElementById('inProgressCount').textContent = inProgressDeliveries.length;
         document.getElementById('completedCount').textContent = completedDeliveries.length;
+        // document.getElementById('pendingCount').textContent = pendingDeliveries.length;
 
         // Update In Progress deliveries
         if (inProgressDeliveries.length > 0) {
@@ -622,7 +994,7 @@
                     <div class="delivery-number">${delivery.delivery_number}</div>
                     <div class="delivery-route">
                         <i class="fas fa-circle" style="color: #10B981;"></i>
-                        ${delivery.pickup.city}
+                        ${truncateText(delivery.pickup.address, 30)}
                         <i class="fas fa-arrow-right"></i>
                         <i class="fas fa-circle" style="color: #EF4444;"></i>
                         ${delivery.delivery.city}
@@ -648,7 +1020,7 @@
                     <div class="delivery-number">${delivery.delivery_number}</div>
                     <div class="delivery-route">
                         <i class="fas fa-circle" style="color: ${statusColor};"></i>
-                        ${delivery.pickup.city}
+                        ${truncateText(delivery.pickup.address, 30)}
                         <i class="fas fa-arrow-right"></i>
                         <i class="fas fa-circle" style="color: ${statusColor};"></i>
                         ${delivery.delivery.city}
@@ -670,7 +1042,7 @@
                     <div class="delivery-number">${delivery.delivery_number}</div>
                     <div class="delivery-route">
                         <i class="fas fa-circle" style="color: #6B7280;"></i>
-                        ${delivery.pickup.city}
+                        ${truncateText(delivery.pickup.address, 30)}
                         <i class="fas fa-arrow-right"></i>
                         <i class="fas fa-circle" style="color: #6B7280;"></i>
                         ${delivery.delivery.city}
@@ -685,319 +1057,12 @@
         }
     }
 
-    function updateMap(driver, deliveries) {
-        // return false; 
-        // map.setZoom('2');
-        // Clear existing markers
-        clearMap();
-
-        const bounds = new google.maps.LatLngBounds();
-        let hasLocations = false;
-
-        // Add driver's current location if available
-        if (driver.driver_profile && driver.driver_profile.current_latitude && driver.driver_profile.current_longitude) {
-            const driverLat = parseFloat(driver.driver_profile.current_latitude);
-            const driverLng = parseFloat(driver.driver_profile.current_longitude);
-            
-            driverMarker = new google.maps.Marker({
-                position: { lat: driverLat, lng: driverLng },
-                map: map,
-                title: `${driver.name} - Current Location`,
-                icon: {
-                    path: google.maps.SymbolPath.CIRCLE,
-                    scale: 14,
-                    fillColor: '#3B82F6',
-                    fillOpacity: 1,
-                    strokeColor: '#FFFFFF',
-                    strokeWeight: 3
-                },
-                label: {
-                    text: 'D',
-                    color: '#FFFFFF',
-                    fontSize: '12px',
-                    fontWeight: 'bold'
-                },
-                zIndex: 1000
-            });
-
-            const driverInfoWindow = new google.maps.InfoWindow({
-                content: `
-                    <div style="padding: 10px;">
-                        <h4 style="margin: 0 0 8px 0; color: #3B82F6; font-size: 14px; font-weight: 600;">
-                            <i class="fas fa-user"></i> ${driver.name}
-                        </h4>
-                        <p style="margin: 0; font-size: 12px; color: #7f8c8d;">Current Location</p>
-                        <p style="margin: 5px 0 0 0; font-size: 11px; color: #95a5a6;">
-                            Updated: ${new Date().toLocaleTimeString()}
-                        </p>
-                    </div>
-                `
-            });
-
-            driverMarker.addListener('click', () => {
-                driverInfoWindow.open(map, driverMarker);
-            });
-
-            bounds.extend({ lat: driverLat, lng: driverLng });
-            hasLocations = true;
-        }
-
-        // Add In Progress delivery markers (active/live)
-        const inProgressDeliveries = deliveries.filter(d =>
-            ['in_transit', 'picked_up'].includes(d.status)
-        );
-        
-        inProgressDeliveries.forEach(delivery => {
-            //alert(delivery.pickup.location.latitude);
-            // if(driver.driver_profile ==  )
-            addDeliveryMarkers(delivery, 'in_progress', bounds);
-            hasLocations = true;
-        });
-        
-        // Add Pending/Assigned delivery markers
-        const pendingDeliveries = deliveries.filter(d =>
-            ['pending', 'assigned'].includes(d.status)
-        );
-
-        pendingDeliveries.forEach(delivery => {
-            addDeliveryMarkers(delivery, 'pending', bounds);
-            hasLocations = true;
-        });
-
-        // Add completed delivery markers
-        const today = new Date().toISOString().split('T')[0];
-        const completedDeliveries = deliveries.filter(d =>
-            d.status === 'delivered' &&
-            d.delivery_actual_time &&
-            d.delivery_actual_time.startsWith(today)
-        );
-
-        completedDeliveries.forEach(delivery => {
-            addDeliveryMarkers(delivery, 'completed', bounds);
-            hasLocations = true;
-        });
-        
-        // Fit map to bounds
-        if (hasLocations) {
-            map.fitBounds(bounds);
-            setTimeout(() => {
-                const currentZoom = map.getZoom();
-                if (currentZoom > 15) {
-                    //map.setZoom(15);
-                }
-            }, 100);
-        }
-    }
-
-    function addDeliveryMarkers(delivery, type, bounds) {
-        //map.setZoom(1);
-        const pickupLat = parseFloat(delivery.pickup.location.latitude);
-        const pickupLng = parseFloat(delivery.pickup.location.longitude);
-        const deliveryLat = parseFloat(delivery.delivery.location.latitude);
-        // const deliveryLat = 30.6428;
-        const deliveryLng = parseFloat(delivery.delivery.location.longitude);
-        // const deliveryLng = 76.8169;
-        // pickupLat = pickupLat + 100;
-        // pickupLng = pickupLng + 100;
-
-        if (!pickupLat || !pickupLng || !deliveryLat || !deliveryLng) {
-            return;
-        }
-
-        // Set colors based on delivery type
-        let pickupColor, deliveryColor, lineColor, statusText;
-
-        if (type === 'in_progress') {
-            pickupColor = '#10B981';  // Green
-            deliveryColor = '#EF4444'; // Red
-            lineColor = '#3B82F6';     // Blue
-            statusText = delivery.status === 'in_transit' ? 'EN ROUTE' : 'PICKED UP';
-        } else if (type === 'pending') {
-            pickupColor = '#F59E0B';   // Orange
-            deliveryColor = '#F59E0B'; // Orange
-            lineColor = '#FCD34D';     // Light Orange
-            statusText = delivery.status === 'assigned' ? 'ASSIGNED' : 'PENDING';
-        } else { // completed
-            pickupColor = '#6B7280';   // Gray
-            deliveryColor = '#6B7280'; // Gray
-            lineColor = '#9CA3AF';     // Light Gray
-            statusText = 'COMPLETED';
-        }
-
-        // Pickup marker
-        const pickupMarker = new google.maps.Marker({
-            position: { lat: pickupLat, lng: pickupLng },
-            map: map,
-            title: 'Pickup: ' + delivery.pickup.address,
-            icon: {
-                path: google.maps.SymbolPath.CIRCLE,
-                scale: 10,
-                fillColor: pickupColor,
-                fillOpacity: 1,
-                strokeColor: '#FFFFFF',
-                strokeWeight: 2
-            },
-            label: {
-                text: 'P',
-                color: '#FFFFFF',
-                fontSize: '10px',
-                fontWeight: 'bold'
-            }
-        });
-
-        // function animateMarker(marker, oldPos, newPos, duration = 5000) {
-
-        //     const startTime = performance.now();
-
-        //     function animate(currentTime) {
-
-        //         const elapsed = currentTime - startTime;
-        //         const progress = Math.min(elapsed / duration, 1);
-
-        //         const lat = oldPos.lat + (newPos.lat - oldPos.lat) * progress;
-        //         const lng = oldPos.lng + (newPos.lng - oldPos.lng) * progress;
-        //         console.log(lat+' '+lng);
-        //         // console.log(lng);
-        //         marker.setPosition({
-        //             lat: lat,
-        //             lng: lng
-        //         });
-
-        //         if (progress < 1) {
-        //             requestAnimationFrame(animate);
-        //         }
-        //     }
-
-        //     requestAnimationFrame(animate);
-        // }
-        // var oldPos = { lat: 30.7026120, lng: 76.7025280 };
-        // var newPos = { lat: 30.6802 , lng: 76.7457 };
-        // animateMarker(
-        //     pickupMarker,
-        //     oldPos,
-        //     newPos,
-        //     6000
-        // );
-
-        // Delivery marker
-        const deliveryMarker = new google.maps.Marker({
-            position: { lat: deliveryLat, lng: deliveryLng },
-            map: map,
-            title: 'Delivery: ' + delivery.delivery.address,
-            icon: {
-                path: google.maps.SymbolPath.CIRCLE,
-                scale: 10,
-                fillColor: deliveryColor,
-                fillOpacity: 1,
-                strokeColor: '#FFFFFF',
-                strokeWeight: 2
-            },
-            label: {
-                text: 'D',
-                color: '#FFFFFF',
-                fontSize: '10px',
-                fontWeight: 'bold'
-            }
-        });
-
-        // Route line
-        const routePath = new google.maps.Polyline({
-            path: [
-                { lat: pickupLat, lng: pickupLng },
-                { lat: deliveryLat, lng: deliveryLng }
-            ],
-            geodesic: true,
-            strokeColor: lineColor,
-            strokeOpacity: type === 'in_progress' ? 0.9 : (type === 'pending' ? 0.6 : 0.4),
-            strokeWeight: type === 'in_progress' ? 4 : (type === 'pending' ? 3 : 2),
-            map: map
-        });
-        routePath.setMap(null);
-
-        // Info windows
-        const pickupInfoWindow = new google.maps.InfoWindow({
-            content: `
-                <div style="padding: 10px; max-width: 250px;">
-                    <h4 style="margin: 0 0 5px 0; color: ${pickupColor}; font-size: 13px; font-weight: 600;">
-                        <i class="fas fa-map-marker-alt"></i> Pickup Location
-                    </h4>
-                    <p style="margin: 0 0 5px 0; font-size: 12px; font-weight: 600;">${delivery.delivery_number}</p>
-                    <p style="margin: 0 0 8px 0; font-size: 12px; color: #2c3e50;">${delivery.pickup.address}</p>
-                    <p style="margin: 0; padding: 4px 8px; background: ${pickupColor}; color: white; border-radius: 4px; font-size: 11px; font-weight: 600; display: inline-block;">${statusText}</p>
-                </div>
-            `
-        });
-
-        const deliveryInfoWindow = new google.maps.InfoWindow({
-            content: `
-                <div style="padding: 10px; max-width: 250px;">
-                    <h4 style="margin: 0 0 5px 0; color: ${deliveryColor}; font-size: 13px; font-weight: 600;">
-                        <i class="fas fa-flag-checkered"></i> Delivery Location
-                    </h4>
-                    <p style="margin: 0 0 5px 0; font-size: 12px; font-weight: 600;">${delivery.delivery_number}</p>
-                    <p style="margin: 0 0 8px 0; font-size: 12px; color: #2c3e50;">${delivery.delivery.address}</p>
-                    <p style="margin: 0; padding: 4px 8px; background: ${deliveryColor}; color: white; border-radius: 4px; font-size: 11px; font-weight: 600; display: inline-block;">${statusText}</p>
-                </div>
-            `
-        });
-
-        pickupMarker.addListener('click', () => {
-            deliveryInfoWindow.close();
-            pickupInfoWindow.open(map, pickupMarker);
-        });
-
-        deliveryMarker.addListener('click', () => {
-            pickupInfoWindow.close();
-            deliveryInfoWindow.open(map, deliveryMarker);
-        });
-
-        markers.push(pickupMarker, deliveryMarker, routePath);
-        bounds.extend({ lat: pickupLat, lng: pickupLng });
-        bounds.extend({ lat: deliveryLat, lng: deliveryLng });
-    }
-
-    function clearMap() {
-        markers.forEach(marker => {
-            if (marker.setMap) {
-                marker.setMap(null);
-            }
-        });
-        markers = [];
-
-        if (driverMarker) {
-            driverMarker.setMap(null);
-            driverMarker = null;
-        }
-    }
-
-    function focusDelivery(deliveryId) {
-        // Highlight selected delivery in list
-        document.querySelectorAll('.delivery-list-item').forEach(item => {
-            item.classList.remove('active');
-        });
-
-        const selectedItem = document.querySelector(`[data-delivery-id="${deliveryId}"]`);
-        if (selectedItem) {
-            selectedItem.classList.add('active');
-        }
-    }
-
-    async function refreshDriverLocation() {
-        if (!selectedDriverId) return;
-
-        const button = document.getElementById('refreshButton');
-        button.classList.add('refreshing');
-
-        await loadDriverData(selectedDriverId, true);
-
-        setTimeout(() => {
-            button.classList.remove('refreshing');
-        }, 500);
-    }
-
     // Initialize
     window.addEventListener('load', () => {
         initMap();
+        setTimeout(() => {
+            initDriver();
+        }, 1000);
         //loadDrivers();
     });
 
@@ -1008,24 +1073,16 @@
         }
     });
 
-    window.live_driver_id = null;
-    window.live_driver_lat = null;
-    window.live_driver_long = null;
-    document.addEventListener('DOMContentLoaded', () => {
-            window.Echo.private('driver-locations')
-            .subscribed(() => {
-                console.log('Subscribed to driver-locations');
-            })
-            .error((error) => {
-                console.error('Channel error:', error);
-            })
-            .listenForWhisper('driver-location-updated', (e) => {
-                window.live_driver_id = e.driver_id;
-                window.live_driver_lat = e.lat;
-                window.live_driver_long = e.long;
-                console.log('DriverLocationUpdated', e);
-                console.log('Live Driver ID:', window.live_driver_id);
-            });
-        });
+    function focusDelivery(deliveryId) {
+        return;
+    }
+
+    function truncateText(text, maxLength = 50) {
+        return text && text.length > maxLength
+            ? text.substring(0, maxLength) + '...'
+            : text;
+    }
+
+    
 </script>
 @endsection
