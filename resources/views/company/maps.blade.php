@@ -597,10 +597,58 @@
 
     // Initialize map
     async function initMap() {
+
+        let d_latitude = 38.8951;
+        let d_longitude = -77.0364;
+
+        // Get current location first
+        if (navigator.geolocation) {
+
+            try {
+
+                const position = await new Promise((resolve, reject) => {
+
+                    navigator.geolocation.getCurrentPosition(
+                        resolve,
+                        reject,
+                        {
+                            enableHighAccuracy: true,
+                            timeout: 10000,
+                            maximumAge: 0
+                        }
+                    );
+
+                });
+
+                d_latitude = position.coords.latitude;
+                d_longitude = position.coords.longitude;
+
+            } catch (error) {
+
+                console.error('Location error:', error.message);
+
+            }
+
+        } else {
+
+            console.error('Geolocation is not supported by this browser.');
+
+        }
+
+        // console.log('Latitude:', d_latitude);
+        // console.log('Longitude:', d_longitude);
+
         const { Map } = await google.maps.importLibrary("maps");
         const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
-        // Default center (will be updated when driver is selected)
-        var defaultCenter = { lat: 30.7046, lng: 76.7179 }; 
+
+        // IMPORTANT: lat = latitude, lng = longitude
+        const defaultCenter = {
+            lat: d_latitude,
+            lng: d_longitude
+        };
+
+        console.log('Map Center:', defaultCenter);
+
         map = new google.maps.Map(document.getElementById('mainMap'), {
             zoom: 13,
             maxZoom: 16,
@@ -614,17 +662,21 @@
         });
 
         google.maps.event.addListener(map, 'zoom_changed', () => {
+
             if (mapPanFrame) {
                 cancelAnimationFrame(mapPanFrame);
                 mapPanFrame = null;
             }
+
         });
 
         google.maps.event.addListener(map, 'dragstart', () => {
+
             if (mapPanFrame) {
                 cancelAnimationFrame(mapPanFrame);
                 mapPanFrame = null;
             }
+
         });
     }
 

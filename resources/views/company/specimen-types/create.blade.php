@@ -4,7 +4,7 @@
 @section('content')
 <div class="profile-container">
     <div class="profile-section">
-        <form action="{{ route('specimen-types.store') }}" method="POST">
+        <form action="{{ route('specimen-types.store') }}" autocomplete="off" novalidate="novalidate" id="add_speciment_type" method="POST">
             @csrf
 
             @include('company/specimen-types._form')

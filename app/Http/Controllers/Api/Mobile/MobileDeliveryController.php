@@ -1142,7 +1142,7 @@ class MobileDeliveryController extends Controller
                                        ->first();
                     // print_r($item);die;
                     if ($item) {
-                        if($scannedItem['barcode'] != $item->barcode){
+                        if($scannedItem['barcode'] != '' && $scannedItem['barcode'] != $item->barcode){
                             return response()->json([
                                 'success' => false,
                                 'message' => "Barcode mismatch for item name: {$item->item_name}"
