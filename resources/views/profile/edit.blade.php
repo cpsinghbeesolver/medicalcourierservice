@@ -423,6 +423,13 @@
                         <div class="invalid-feedback" id="phone-error"></div>
                     </div>
 
+                    @if(auth()->user()->isHospital())
+                        <div class="col-md-6 mb-3">
+                            <label for="address" class="form-label">Address</label>
+                            <input type="text" class="form-control" id="address" name="address">
+                            <div class="invalid-feedback" id="address-error"></div>
+                        </div>
+                    @else
                     <div class="col-md-6 mb-3">
                         <label for="dob" class="form-label">Date of Birth</label>
                         <div class="location-input-wrapper">
@@ -437,7 +444,7 @@
                         <textarea class="form-control" id="address" name="address" rows="3" placeholder="Enter your full address"></textarea>
                         <div class="invalid-feedback" id="address-error"></div>
                     </div>
-
+                    @endif
                     <div class="col-12 mb-3">
                         <label for="role" class="form-label">Role</label>
                         <input type="text" class="form-control" id="role" name="role" disabled placeholder="User role">
@@ -537,8 +544,11 @@
 
             document.getElementById('name').value = user.name || '';
             document.getElementById('email').value = user.email || '';
-            document.getElementById('profile_phone').value = user.phone || '';
-            document.getElementById('dob').value = user.dob || '';
+            document.getElementById('profile_phone').value = user.role === 'hospital' ? user.hospital?.phone ?? '' : user.phone ?? '';
+            const dob = document.getElementById('dob');
+            if (dob) {
+                dob.value = user.dob || '';
+            }
             document.getElementById('address').value = user.address || '';
             document.getElementById('role').value = user.role ? user.role.toUpperCase() : '';
 
@@ -606,7 +616,10 @@
             formData.append('_method', 'PUT');
             formData.append('name', document.getElementById('name').value);
             formData.append('phone', document.getElementById('profile_phone').value);
-            formData.append('dob', document.getElementById('dob').value);
+            const dob = document.getElementById('dob');
+            if (dob) {
+                formData.append('dob', dob.value || '');
+            }
             formData.append('address', document.getElementById('address').value);
 
             if (selectedFile) {

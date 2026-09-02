@@ -32,7 +32,8 @@ class HospitalController extends Controller
             $i = 0;
             foreach ($items as $item) {
                 $delivery = $item->delivery;
-                if($delivery){
+                //check if driver id exists
+                if (!collect($drivers)->contains('id', $delivery->driver_id)) {
                     $driver_profile = \App\Models\DriverProfile::with('user')
                     ->where('user_id', $delivery->driver_id)
                     ->distinct('user_id')
@@ -162,7 +163,9 @@ class HospitalController extends Controller
         }
 
         // Generate a random password
-        $password = Str::random(12);
+        $password = str_shuffle(
+            Str::random(11) . rand(0, 9)
+        );
         $user = User::create([
             'name' => $request->hospital_name,
             'email' => $request->hospital_email,

@@ -76,7 +76,7 @@ class DeliveryController extends Controller
      * )
      */
     public function index(Request $request)
-    {
+    {   
         //check if user is superadmin
         if(Auth::user()->role_id == 1){
             $query = Delivery::with(['driver', 'creator', 'items']);    
@@ -88,10 +88,12 @@ class DeliveryController extends Controller
                 'items' => function ($query) {
                     $query->with('specimenType:id,name');
                 },
-            ])->where('created_by', Auth::id());
+            ]);
             // $query = Delivery::with(['driver', 'creator', 'items'])->where('created_by', Auth::id());
         }
-        
+        if(Auth::user()->isAdmin()){
+            $query->where('created_by', Auth::id());
+        }
         // Apply filters
         if ($request->has('status')) {
             $query->where('status', $request->status);
@@ -765,12 +767,14 @@ class DeliveryController extends Controller
      */
     public function show($id)
     {
+        //$query = Delivery::with(['driver', 'creator', 'items.specimenType','items.tempratureRequirement','items.hospital', 'verifications','vehicleRequirement']);
+        
         $delivery = Delivery::with([
             'driver',
             'creator',
-            'items' => function ($query) {
-                $query->with(['specimenType', 'tempratureRequirement']);
-            },
+            'items.specimenType',
+    'items.tempratureRequirement',
+    'items.hospital',
             'verifications',
             'vehicleRequirement'
         ])->find($id);

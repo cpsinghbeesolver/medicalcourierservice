@@ -364,7 +364,7 @@
             });
         }
 
-        setupPasswordToggle('password', 'togglePassword');
+        setupPasswordToggle('hospital-password', 'togglePassword');
     </script>
 </body>
 </html>

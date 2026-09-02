@@ -1,7 +1,7 @@
 @extends('common.layout')
 
 @section('title', 'Live Driver Tracking')
-@section('page-title', 'Maps - Live Driver Tracking')
+@section('page-title', 'Live Driver Tracking')
 
 @section('styles')
 <!-- Google Maps API - Get your FREE key at: https://console.cloud.google.com/google/maps-apis/start -->
@@ -176,6 +176,16 @@
         font-weight: 600;
         color: #2c3e50;
         margin-bottom: 5px;
+    }
+    
+    .scheduled {
+        font-size: 13px;
+        color: #2c3e50;
+    }
+    .date_time {
+        font-size: 13px;
+        font-weight: 600;
+        color: #2c3e50;
     }
 
     .delivery-route {
@@ -598,10 +608,17 @@
     // Initialize map
     async function initMap() {
         const hospital = @json($hospital);
+        // console.log(hospital);
         const { Map } = await google.maps.importLibrary("maps");
         const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
         // Default center (will be updated when driver is selected)
-        var defaultCenter = { lat: 30.7046, lng: 76.7179 }; 
+        let d_latitude = 38.8951;
+        let d_longitude = -77.0364;
+        if(hospital.latitude && hospital.longitude){
+            d_latitude = parseFloat(hospital.latitude);
+            d_longitude = parseFloat(hospital.longitude);
+        }
+        var defaultCenter = { lat: d_latitude, lng: d_longitude }; 
         map = new google.maps.Map(document.getElementById('mainMap'), {
             zoom: 13,
             maxZoom: 16,
@@ -613,6 +630,50 @@
             fullscreenControl: true,
             zoomControl: true
         });
+
+
+        //Hospital Pin
+        const hospital_pin = document.createElement("div");
+
+        // --- PIN SHAPE STYLING ---
+        hospital_pin.style.width = "38px";
+        hospital_pin.style.height = "38px";
+        hospital_pin.style.background = "#f51f0b";
+        hospital_pin.style.border = "2px solid white";
+        hospital_pin.style.borderRadius = "50% 50% 50% 0";
+
+        // Rotate the pin teardrop and shift the sharp tip to the anchor point
+        hospital_pin.style.transform = "rotate(-45deg)";
+        hospital_pin.style.transformOrigin = "bottom left"; 
+
+        hospital_pin.style.boxShadow = "0 2px 6px rgba(0,0,0,0.3)";
+        hospital_pin.style.display = "flex";
+        hospital_pin.style.alignItems = "center";
+        hospital_pin.style.justifyContent = "center";
+
+        // --- INNER TEXT CONTAINER (Straight text + 15px font) ---
+        const hospital_label = document.createElement("span");
+        hospital_label.style.transform = "rotate(45deg)"; // Counter-rotate to stay straight
+        hospital_label.style.color = "#f51f0b";
+        hospital_label.style.fontWeight = "bold";
+        hospital_label.style.fontSize = "30px";            // Set font size to 15px
+        hospital_label.style.lineHeight = "1";
+        hospital_label.style.display = "flex";
+        hospital_label.style.width = "27px";
+        hospital_label.style.height = "27px";
+        hospital_label.style.alignItems = "center";
+        hospital_label.style.borderRadius = "100%";
+        hospital_label.style.background = "white";
+        hospital_label.style.justifyContent = "center";
+        hospital_label.textContent = "+"
+
+        hospital_pin.appendChild(hospital_label);
+        const marker = new google.maps.marker.AdvancedMarkerElement({
+                map: map,
+                position: defaultCenter,
+                content: hospital_pin,
+                title: "Hospital"
+            });
 
         google.maps.event.addListener(map, 'zoom_changed', () => {
             if (mapPanFrame) {
@@ -994,11 +1055,14 @@
                     <div class="delivery-number">${delivery.delivery_number}</div>
                     <div class="delivery-route">
                         <i class="fas fa-circle" style="color: #10B981;"></i>
-                        ${truncateText(delivery.pickup.address, 30)}
-                        <i class="fas fa-arrow-right"></i>
-                        <i class="fas fa-circle" style="color: #EF4444;"></i>
-                        ${delivery.delivery.city}
+                        ${truncateText(delivery.pickup.address, 40)}
+                       
                     </div>
+                    <div class="delivery-number"></div>
+                    <div class="scheduled">Scheduled at: </div>
+                    <div class="date_time">${datTimeFormat(delivery.scheduled_time_window_start)}</div>
+                    <div class="scheduled">Target Date Time: </div>
+                    <div class="date_time">${datTimeFormat(delivery.scheduled_time_window_end)}</div>
                     <div class="live-badge" style="background: ${statusColor};">
                         <span class="pulse"></span>
                         ${statusText}
@@ -1020,11 +1084,14 @@
                     <div class="delivery-number">${delivery.delivery_number}</div>
                     <div class="delivery-route">
                         <i class="fas fa-circle" style="color: ${statusColor};"></i>
-                        ${truncateText(delivery.pickup.address, 30)}
-                        <i class="fas fa-arrow-right"></i>
-                        <i class="fas fa-circle" style="color: ${statusColor};"></i>
-                        ${delivery.delivery.city}
+                        ${truncateText(delivery.pickup.address, 40)}
                     </div>
+                    <div class="delivery-number"></div>
+                    <div class="scheduled">Scheduled at: </div>
+                    <div class="date_time">${datTimeFormat(delivery.scheduled_time_window_start)}</div>
+                    <div class="scheduled">Target Date Time: </div>
+                    <div class="date_time">${datTimeFormat(delivery.scheduled_time_window_end)}</div>
+                    
                     <div style="display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; background: ${statusColor}; color: white; border-radius: 12px; font-size: 11px; font-weight: 600; margin-top: 5px;">
                         ${statusText}
                     </div>
@@ -1042,11 +1109,14 @@
                     <div class="delivery-number">${delivery.delivery_number}</div>
                     <div class="delivery-route">
                         <i class="fas fa-circle" style="color: #6B7280;"></i>
-                        ${truncateText(delivery.pickup.address, 30)}
-                        <i class="fas fa-arrow-right"></i>
-                        <i class="fas fa-circle" style="color: #6B7280;"></i>
-                        ${delivery.delivery.city}
+                        ${truncateText(delivery.pickup.address, 40)}
                     </div>
+                    <div class="delivery-number"></div>
+                    <div class="scheduled">Scheduled at: </div>
+                    <div class="date_time">${datTimeFormat(delivery.scheduled_time_window_start)}</div>
+                    <div class="scheduled">Target Date Time: </div>
+                    <div class="date_time">${datTimeFormat(delivery.scheduled_time_window_end)}</div>
+                    
                     <div style="display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; background: #6B7280; color: white; border-radius: 12px; font-size: 11px; font-weight: 600; margin-top: 5px;">
                         <i class="fas fa-check"></i> Completed
                     </div>

@@ -164,6 +164,31 @@
                             </div>
                             <div class="form-row two-cols">
                                 <div class="form-group">
+                                    <label>Drop Off Type <span class="astrik">*</span></label>
+                                    <div class="location-input-wrapper">
+                                        <select name="items[{{$loop->index}}][dropoff_type]" class="dropoff_type">
+                                            <option value="hospital" {{ $deliveryItem->hospital ? 'selected' : '' }}>Hospital</option>
+                                            <option value="address"  {{ !$deliveryItem->hospital ? 'selected' : '' }} >Address</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group type_hospital">
+                                    <div class="add-more-container">
+                                        <label>Hospital <span class="astrik">*</span></label>
+                                        <button type="button" class="btn-add-type" onclick="addHospital(this)" title="Add Hospital">
+                                                <i class="fas fa-plus"></i>
+                                        </button>
+                                    </div>
+                                    <div class="">
+                                        <input type="text" name="items[{{$loop->index}}][search_hospital]" value="{{ optional($deliveryItem)->hospital->name ?? '' }}" class="search-hospital" placeholder="Search Hospital" autocomplete="off" {{ !$deliveryItem->hospital ? 'disabled' : '' }}>
+                                        <input type="hidden" name="items[{{$loop->index}}][hospital_id]" class="hospital-id" value="{{ optional($deliveryItem)->hospital->id ?? '' }}">
+                                        <div class="hospital-autocomplete-results"></div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <div class="form-row three-cols type_address" style="display: none;">
+                                <div class="form-group">
                                     <label>Drop Off Address <span class="astrik">*</span></label>
                                     <div class="location-input-wrapper">
                                         <i class="fas fa-map-marker-alt location-icon"></i>
@@ -182,6 +207,26 @@
                                         <input type="hidden" name="items[{{$loop->index}}][dropoff_state]" value="{{ old('items.' . $loop->index . 'dropoff_state', optional($deliveryItem)->dropoff_state ?? '') }}" class="delivery-state">
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <label>Drop Off Phone <span class="astrik">*</span></label>
+                                        <input type="text"
+                                            name="items[{{$loop->index}}][dropoff_phone]"
+                                            placeholder="Search dropoff phone..." class="validatePhone numbers-only invalid-phone"
+                                            value="{{ old('items.' . $loop->index . 'dropoff_phone', optional($deliveryItem)->dropoff_phone ?? '') }}"
+                                            required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Drop Off Contact Person</label>
+                                        <input type="text"
+                                            name="items[{{$loop->index}}][dropoff_contact_person]"
+                                            placeholder="Search dropoff contact person..."
+                                            value="{{ old('items.' . $loop->index . 'dropoff_contact_person', optional($deliveryItem)->dropoff_contact_person ?? '') }}"
+                                            required>
+                                </div>
+                            </div>
+
+                            <div class="form-row two-cols">
+                                
                                 <div class="form-group">
                                     <label>Near By Landmark <span class="astrik">*</span></label>
                                         <input type="text"
@@ -217,22 +262,7 @@
                                 </div>
                             </div>
                             <div class="form-row two-cols">
-                                <div class="form-group">
-                                    <label>Drop Off Phone <span class="astrik">*</span></label>
-                                        <input type="text"
-                                            name="items[{{$loop->index}}][dropoff_phone]"
-                                            placeholder="Search dropoff phone..." class="validatePhone numbers-only invalid-phone"
-                                            value="{{ old('items.' . $loop->index . 'dropoff_phone', optional($deliveryItem)->dropoff_phone ?? '') }}"
-                                            required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Drop Off Contact Person</label>
-                                        <input type="text"
-                                            name="items[{{$loop->index}}][dropoff_contact_person]"
-                                            placeholder="Search dropoff contact person..."
-                                            value="{{ old('items.' . $loop->index . 'dropoff_contact_person', optional($deliveryItem)->dropoff_contact_person ?? '') }}"
-                                            required>
-                                </div>
+                                
                             </div>
                             <div class="form-row two-cols">
                                 <div class="form-group">

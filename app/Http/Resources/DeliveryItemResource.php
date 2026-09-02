@@ -34,7 +34,8 @@ class DeliveryItemResource extends JsonResource
             'dropoff_phone' => $this->dropoff_phone,
             'dropoff_contact_person' => $this->dropoff_contact_person,
             'signature_image' => $this->signature_image,
-            'photo_proof' => $this->photo_proof
+            'photo_proof' => $this->photo_proof,
+            'hospital' => $this->hospital
         ];
     }
 }

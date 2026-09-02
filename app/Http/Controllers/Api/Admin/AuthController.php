@@ -210,12 +210,20 @@ class AuthController extends Controller
      */
     public function logout(Request $request)
     {
+        
         if(auth()->user()->isAdmin()){
             Auth::logout();
             $request->session()->invalidate();
             $request->session()->regenerateToken();
             return redirect('/admin');
-        }else{
+        }
+        else if(auth()->user()->isHospital()){
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+            return redirect('/hospital/login');
+        }
+        else{
             Auth::logout();
             $request->session()->invalidate();
             $request->session()->regenerateToken();
@@ -238,8 +246,7 @@ class AuthController extends Controller
      */
     public function me(Request $request)
     {
-        $user = $request->user()->load('driverProfile');
-
+        $user = $request->user()->load('driverProfile')->load('hospital');
         return $this->successResponse(
             new UserResource($user),
             'Profile retrieved successfully'

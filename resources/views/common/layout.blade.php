@@ -231,7 +231,14 @@
         <aside class="sidebar">
             <div class="sidebar-logo">
                 <div class="">
-                    <img src="/assets/img/logo.png" class="logo-image" alt="{{ env('APP_NAME') }} Logo">
+                    @if(auth()->user()->isAdmin())
+                        <a href="">
+                    @elseif(auth()->user()->isDispatcher())
+                        <a href="/company/dashboard">
+                    @elseif(auth()->user()->isHospital())
+                        <a href="/hospital/dashboard">
+                    @endif
+                    <img src="/assets/img/logo.png" class="logo-image" alt="{{ env('APP_NAME') }} Logo"></a>
                 </div>
             </div>
 
@@ -310,6 +317,7 @@
         <main class="main-content">
             <!-- Top Header -->
             <header class="top-header">
+                @if(auth()->user()->isDispatcher())
                 <div class="header-search">
                     <i class="fas fa-search"></i>
                     <input type="text" id="searchInputHeader" placeholder="Search" autocomplete="off">
@@ -333,6 +341,7 @@
 
                     </div>
                 </div>
+                @endif
                 <div class="header-actions">
                     @if(auth()->user()->isDispatcher())
                         @if(request()->is('company/dashboard/drivers/create'))
@@ -348,6 +357,7 @@
                         Create Job <i class="fas fa-plus"></i>
                     </button>
                     @endif
+                    @if(auth()->user()->isDispatcher())
                     <div class="notification-wrapper">
                         <div class="notification-icon" id="notificationIcon">
                             <i class="fas fa-bell"></i>
@@ -358,6 +368,7 @@
                             </div>
                         </div>
                     </div>
+                    @endif
                     <div class="notification-dropdown" id="notificationDropdown">
                         <div class="notification-header">
                             <span>Notifications</span>
@@ -377,6 +388,10 @@
                             @if(auth()->user()->isDispatcher())
                                 <a href="/company/profile/edit"><i class="fas fa-user-edit"></i> Edit Profile</a>
                                 <a href="/company/profile/change-password"><i class="fas fa-key"></i> Change Password</a>
+                            @endif
+                            @if(auth()->user()->isHospital())
+                                <a href="/hospital/profile/edit"><i class="fas fa-user-edit"></i> Edit Profile</a>
+                                <a href="/hospital/profile/change-password"><i class="fas fa-key"></i> Change Password</a>
                             @endif
                             @if(auth()->user()->isAdmin())
                                 <a href="/admin/profile/edit"><i class="fas fa-user-edit"></i> Edit Profile</a>
@@ -1059,6 +1074,19 @@
                 $(this).parents('.item-card').find('.type_address').show();
             }
         });
+
+        function datTimeFormat(datetime = ''){
+            const date = new Date(datetime);
+            const formatted = date.toLocaleString('en-IN', {
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true
+            });
+            return formatted;
+        }
         
     </script>
 

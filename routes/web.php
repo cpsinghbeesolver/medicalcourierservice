@@ -171,8 +171,14 @@ Route::prefix('admin/dashboard')->middleware(['admin.auth', 'can:view-enquiries'
 });
 
 
-Route::prefix('hospital/dashboard')->middleware('hospital.auth','no.cache')->group(function () {
-    Route::get('/', [HospitalController::class, 'index'])->name('hospital-dashboard');
+Route::prefix('hospital')->middleware('hospital.auth','no.cache')->group(function () {
+    Route::get('/dashboard', [HospitalController::class, 'index'])->name('hospital-dashboard');
+    Route::get('/profile/edit', function () {
+        return view('profile.edit');
+    });
+    Route::get('/profile/change-password', function () {
+        return view('profile.change-password');
+    });
 });
 Route::prefix('company/dashboard')->middleware('custom.auth','no.cache')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('company-dashboard');

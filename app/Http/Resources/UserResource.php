@@ -28,6 +28,9 @@ class UserResource extends JsonResource
             'driver_profile' => $this->whenLoaded('driverProfile', function () {
                 return new DriverProfileResource($this->driverProfile);
             }),
+            'hospital' => $this->whenLoaded('hospital', function () {
+                return new HospitalResource($this->hospital);
+            }),
             'created_at' => $this->created_at->toIso8601String(),
         ];
     }

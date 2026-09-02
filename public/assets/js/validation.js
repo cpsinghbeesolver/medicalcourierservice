@@ -489,4 +489,13 @@ validateForm();
                 }
             ])
         }
+
+        hospitalValidator.onSuccess((event) => {
+
+            event.preventDefault();
+
+            console.log('Hospital form is valid');
+
+            // Add hospital AJAX here
+        });
     }

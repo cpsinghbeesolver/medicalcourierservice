@@ -368,7 +368,9 @@ class MobileDeliveryController extends Controller
                         'description' => $item->description,
                         'requires_special_handling' => $item->requires_special_handling,
                         'handling_instructions' => $item->handling_instructions,
-                        'dropoff' => [
+                        'dropoff' => $item->hospital !== null
+                        ? null
+                        : [
                             'name' => $item->dropoff_name,
                             'address' => $item->dropoff_address,
                             'city' => $item->dropoff_city,
@@ -378,8 +380,8 @@ class MobileDeliveryController extends Controller
                             'contact_person' => $item->dropoff_contact_person,
                             'location' => [
                                 'latitude' => $item->dropoff_latitude,
-                                'longitude' => $item->dropoff_longitude
-                            ]
+                                'longitude' => $item->dropoff_longitude,
+                            ],
                         ],
                         'hospital' => $item->hospital,
                         'status' => $item->status
@@ -478,7 +480,7 @@ class MobileDeliveryController extends Controller
 
         $delivery = Delivery::where('id', $id)
                            ->where('driver_id', $user->id)
-                           ->with('items.specimenType','items.tempratureRequirement')
+                           ->with('items.specimenType','items.tempratureRequirement','items.hospital')
                            ->with('vehicleRequirement')
                            ->first();
 
@@ -597,7 +599,9 @@ class MobileDeliveryController extends Controller
                         'requires_special_handling' => $item->requires_special_handling,
                         'handling_instructions' => $item->handling_instructions,
                         'description' => $item->description,
-                        'dropoff' => [
+                        'dropoff' => $item->hospital !== null
+                        ? null
+                        : [
                             'name' => $item->dropoff_name,
                             'address' => $item->dropoff_address,
                             'city' => $item->dropoff_city,
@@ -607,9 +611,10 @@ class MobileDeliveryController extends Controller
                             'contact_person' => $item->dropoff_contact_person,
                             'location' => [
                                 'latitude' => $item->dropoff_latitude,
-                                'longitude' => $item->dropoff_longitude
-                            ]
+                                'longitude' => $item->dropoff_longitude,
+                            ],
                         ],
+                        'hospital' => $item->hospital,
                         'status' => $item->status
                     ];
                 }),
@@ -702,10 +707,14 @@ class MobileDeliveryController extends Controller
     public function startDelivery(Request $request, $id)
     {
         $user = $request->user();
+        $driverProfile = $user->driverProfile;
 
+        if (!$driverProfile) {
+            return $this->errorResponse('Driver profile not found', 404);
+        }
         $delivery = Delivery::where('id', $id)
                            ->where('driver_id', $user->id)
-                           ->with('items.specimenType','items.tempratureRequirement')
+                           ->with('items.specimenType','items.tempratureRequirement','items.hospital')
                            ->with('vehicleRequirement')
                            ->first();
             
@@ -722,6 +731,10 @@ class MobileDeliveryController extends Controller
                 'message' => 'Delivery cannot be started from current status: ' . $delivery->status
             ], 400);
         }
+        $driverProfile->update([
+            'availability_status' => 'busy',
+        ]);
+
         $delivery->status = 'in_transit';
         $delivery->temperature_requirement = $request->temperature_reading;
         $delivery->notes = $request->notes;
@@ -820,7 +833,9 @@ class MobileDeliveryController extends Controller
                         'requires_special_handling' => $item->requires_special_handling,
                         'handling_instructions' => $item->handling_instructions,
                         'description' => $item->description,
-                        'dropoff' => [
+                        'dropoff' => $item->hospital !== null
+                        ? null
+                        : [
                             'name' => $item->dropoff_name,
                             'address' => $item->dropoff_address,
                             'city' => $item->dropoff_city,
@@ -830,9 +845,10 @@ class MobileDeliveryController extends Controller
                             'contact_person' => $item->dropoff_contact_person,
                             'location' => [
                                 'latitude' => $item->dropoff_latitude,
-                                'longitude' => $item->dropoff_longitude
-                            ]
+                                'longitude' => $item->dropoff_longitude,
+                            ],
                         ],
+                        'hospital' => $item->hospital,
                         'status' => $item->status
                     ];
                 }),
@@ -1097,6 +1113,11 @@ class MobileDeliveryController extends Controller
     public function completeDelivery(Request $request, $id)
     {
         $user = $request->user();
+        $driverProfile = $user->driverProfile;
+
+        if (!$driverProfile) {
+            return $this->errorResponse('Driver profile not found', 404);
+        }
         $delivery = Delivery::where('id', $id)
                            ->where('driver_id', $user->id)
                            ->with('items')
@@ -1156,6 +1177,10 @@ class MobileDeliveryController extends Controller
                         //$item->scanned_at = $scannedItem['scanned_at'];
                         $item->status = 'collected';
                         $item->save();
+
+                        $driverProfile->update([
+                            'availability_status' => 'available',
+                        ]);
                     }
                 }
             }
@@ -1269,7 +1294,11 @@ class MobileDeliveryController extends Controller
     {
         
         $user = $request->user();
+        $driverProfile = $user->driverProfile;
 
+        if (!$driverProfile) {
+            return $this->errorResponse('Driver profile not found', 404);
+        }
         $validator = Validator::make($request->all(), [
             'type' => 'required|string|in:delivery,item'
         ]);
@@ -1288,6 +1317,9 @@ class MobileDeliveryController extends Controller
 
         DB::beginTransaction();
         try {
+            $driverProfile->update([
+                'availability_status' => 'available',
+            ]);
             if($request->type == 'delivery'){
                 if (!$delivery) {
                     return response()->json([
@@ -1377,8 +1409,6 @@ class MobileDeliveryController extends Controller
                     ]
                 ]);
             }
-
-        
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json([

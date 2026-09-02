@@ -590,25 +590,46 @@
                         </div>
                         <div class="info-row">
                             <div class="info-label">Specimen ID:</div>
-                            <div class="info-value">${formatValue(item.barcode)}</div>
+                            <div class="info-value">${formatValue(item.item_code)}</div>
                         </div>
-                        <div class="info-row">
-                            <div class="info-label">Drop Off Location:</div>
-                            <div class="info-value">${formatValue(item.dropoff_name)}</div>
+                        ${!item.hospital ? `
+                        <div class="dropoff_address">
+                            <div class="info-row">
+                                <div class="info-label">Drop Off Location:</div>
+                                <div class="info-value">${formatValue(item.dropoff_name)}</div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-label">Drop Off Address:</div>
+                                <div class="info-value">${formatValue(item.dropoff_address)}</div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-label">Drop Off Phone:</div>
+                                <div class="info-value">${formatValue(item.dropoff_phone)}</div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-label">Drop Off Contact Person:</div>
+                                <div class="info-value">${formatValue(item.dropoff_contact_person)}</div>
+                            </div>
                         </div>
-                        <div class="info-row">
-                            <div class="info-label">Drop Off Address:</div>
-                            <div class="info-value">${formatValue(item.dropoff_address)}</div>
-                        </div>
-                        <div class="info-row">
-                            <div class="info-label">Drop Off Phone:</div>
-                            <div class="info-value">${formatValue(item.dropoff_phone)}</div>
-                        </div>
-                        <div class="info-row">
-                            <div class="info-label">Drop Off Contact Person:</div>
-                            <div class="info-value">${formatValue(item.dropoff_contact_person)}</div>
-                        </div>
-                        
+                        ` : ''}
+                        ${item.hospital ? `
+                            <div class="dropoff_hospital">
+                                <div class="info-row">
+                                    <div class="info-label">Hospital Name:</div>
+                                    <div class="info-value">${formatValue(item.hospital.name)}</div>
+                                </div>
+
+                                <div class="info-row">
+                                    <div class="info-label">Hospital Address:</div>
+                                    <div class="info-value">${formatValue(item.hospital.address)}</div>
+                                </div>
+
+                                <div class="info-row">
+                                    <div class="info-label">Hospital Phone:</div>
+                                    <div class="info-value">${formatValue(item.hospital.phone)}</div>
+                                </div>
+                            </div>
+                        ` : ''}
                         <div class="info-row">
                             <div class="info-label">Temperature Requirement:</div>
                             <div class="info-value">${formatValue(item.temperature_requirement_name || item.temperature_requirement)}</div>

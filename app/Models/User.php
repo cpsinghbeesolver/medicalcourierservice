@@ -179,7 +179,7 @@ class User extends Authenticatable
             ->exists();
     }
     
-    public function hospital()
+    public function hospital(): HasOne
     {
         return $this->hasOne(Hospital::class, 'hospital_id', 'id');
     }

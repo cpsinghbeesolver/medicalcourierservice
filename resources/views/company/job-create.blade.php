@@ -455,7 +455,7 @@
                 
             </div>
             <div class="specimen_type_modal-footer">
-                <button class="btn-modal btn-modal-cancel" onclick="closeModalHospital()">Cancel</button>
+                <button class="btn-modal btn-modal-cancel" type="button" onclick="closeModalHospital()">Cancel</button>
                 <button class="btn-modal btn-modal-assign" id="btnAddHospital" onclick="confirmAddHospital(0)" type="submit">Add Hospital</button>
             </div>
             </form>
