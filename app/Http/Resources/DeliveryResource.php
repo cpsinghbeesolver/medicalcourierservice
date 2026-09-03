@@ -50,6 +50,12 @@ class DeliveryResource extends JsonResource
                 'actual_time' => $this->delivery_actual_time?->toIso8601String(),
             ],
             'urgency_level' => $this->urgency_level,
+            'temperature_reading' => $this->temperature_reading,
+            'temperature_type' => match ((string) $this->temperature_type) {
+                '1' => 'Fahrenheit',
+                '2' => 'Celsius',
+                default => 'Fahrenheit',
+            },
             'container_count' => $this->container_count,
             'required_vehicle_type' => $this->required_vehicle_type,
             'vehicle_requirement' => $this->whenLoaded('vehicleRequirement', function () {

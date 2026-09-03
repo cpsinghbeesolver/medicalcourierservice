@@ -343,11 +343,17 @@
         <div class="stat-value" id="totalJobs">0</div>
         <div class="stat-description">Total number of jobs created</div>
     </div>
+    <div class="stat-card transit" id="weeklyDeliveredCard">
+        <h4>Weekly Scheduled</h4>
+        <div class="stat-value" id="weeklyDelivered">0</div>
+        <div class="stat-description">Jobs scheduled for this week</div>
+    </div>
     <div class="stat-card active" id="activeJobsCard">
         <h4>Active Jobs</h4>
         <div class="stat-value" id="activeJobs">0</div>
         <div class="stat-description">Assigned, Picked Up & In Transit</div>
     </div>
+    
     <div class="stat-card pending" id="pendingJobsCard">
         <h4>Pending Assignment</h4>
         <div class="stat-value" id="pendingJobs">0</div>
@@ -363,6 +369,7 @@
         <div class="stat-value" id="inTransit">0</div>
         <div class="stat-description">Specimens currently being transported</div>
     </div>
+    
 </div>
 
 <!-- Filters -->
@@ -557,6 +564,33 @@
 
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('deliveredToday').textContent = deliveries.filter(d => d.status === 'delivered' && d.delivery?.actual_time && new Date(d.delivery.actual_time).toISOString().split('T')[0] === today).length;
+            
+            //This week's delivered count            
+            const now = new Date();
+            const startOfWeek = new Date(now);
+            const day = now.getDay(); // Sunday = 0
+
+            const diff = day === 0 ? -6 : 1 - day;
+
+            startOfWeek.setDate(now.getDate() + diff);
+            startOfWeek.setHours(0, 0, 0, 0);
+
+            const endOfWeek = new Date(startOfWeek);
+            endOfWeek.setDate(startOfWeek.getDate() + 7);
+            document.getElementById('weeklyDelivered').textContent =
+            deliveries.filter(d => {
+                if (
+                    !d.pickup.scheduled_time
+                ) {
+                    return false;
+                }
+
+                const deliveryDate = new Date(d.pickup.scheduled_time);
+
+                return deliveryDate >= startOfWeek &&
+                    deliveryDate < endOfWeek;
+            }).length;
+
             document.getElementById('inTransit').textContent = deliveries.filter(d => ['in_transit', 'picked_up'].includes(d.status)).length;
         }
 

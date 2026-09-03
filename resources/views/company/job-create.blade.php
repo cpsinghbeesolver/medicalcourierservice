@@ -5,31 +5,7 @@
 
 @section('styles')
 <style>
-    .hospital-autocomplete-results {
-        position: absolute;
-        z-index: 10;
-        display: none;
-        max-height: 220px;
-        overflow-y: auto;
-        background: #fff;
-        border: 1px solid #d9d9d9;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
-    }
-
-    .hospital-autocomplete-option {
-        display: block;
-        width: 100%;
-        padding: 8px 10px;
-        border: 0;
-        background: #fff;
-        text-align: left;
-        cursor: pointer;
-    }
-
-    .hospital-autocomplete-option:hover,
-    .hospital-autocomplete-option:focus {
-        background: #f2f2f2;
-    }
+    
 </style>
 @endsection
 
@@ -242,7 +218,7 @@
                         <div class="form-row two-cols">
                             
                             <div class="form-group">
-                                <label>Near By Landmark <span class="astrik">*</span></label>
+                                <label>Near By Landmark</label>
                                 <input type="text"
                                     name="items[0][dropoff_location]"
                                     placeholder="Please enter nearby landmark"
@@ -908,7 +884,7 @@
             </div>
             <div class="form-row two-cols">
                 <div class="form-group">
-                    <label>Near By Landmark <span class="astrik">*</span></label>
+                    <label>Near By Landmark</label>
                     <input type="text" name="items[${itemIndex}][dropoff_location]" placeholder="Please enter dropoff location" maxlength="100" required="">
                 </div>
                 <div class="form-group">
@@ -1040,6 +1016,7 @@
                     handling_instructions: formData.get(`items[${idx}][handling_instructions]`),
                     item_code: specimenId,
                     hospital_id: formData.get(`items[${idx}][hospital_id]`) || null,
+                    search_hospital: formData.get(`items[${idx}][search_hospital]`) || null,
                     dropoff_phone: formData.get(`items[${idx}][dropoff_phone]`),
                     description: formData.get(`items[${idx}][description]`),
                     dropoff_contact_person: formData.get(`items[${idx}][dropoff_contact_person]`),

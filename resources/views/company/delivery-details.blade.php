@@ -833,6 +833,20 @@
 
             <div class="info-grid">
                 <div class="info-section full-width">
+                    <h4>Temperature </h4>
+                    <div class="info-row">
+                        <div class="info-label">Reading:</div>
+                        <div class="info-value">${formatValue(delivery.temperature_reading)}</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Type:</div>
+                        <div class="info-value">${formatValue(delivery.temperature_type)}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-grid">
+                <div class="info-section full-width">
                     <h4>Delivery Notes & Instructions</h4>
                     <div class="info-row">
                         <div class="info-label">Special Instructions:</div>

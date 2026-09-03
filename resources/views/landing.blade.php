@@ -605,7 +605,7 @@
                                  </clipPath>
                               </defs>
                            </svg>
-                           API Access: Connect ReliaStat Tech directly to hospital EMR systems (Epic/Cerner).
+                           API Access: Connect ReliaStatTech directly to hospital EMR systems (Epic/Cerner).
                         </li>
                         <li class="s d-flex gap-3">
                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">

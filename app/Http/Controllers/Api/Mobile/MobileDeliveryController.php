@@ -498,7 +498,6 @@ class MobileDeliveryController extends Controller
         }
 
         $delivery->status = 'accepted';
-        $delivery->temperature_requirement = $request->temperature_reading;
         $delivery->notes = $request->notes;
         $delivery->save();
 
@@ -736,7 +735,8 @@ class MobileDeliveryController extends Controller
         ]);
 
         $delivery->status = 'in_transit';
-        $delivery->temperature_requirement = $request->temperature_reading;
+        $delivery->temperature_reading = $request->temperature_reading;
+        $delivery->temperature_type = $request->temp_type;
         $delivery->notes = $request->notes;
         $delivery->save();
         $delivery->refresh();
@@ -1695,6 +1695,7 @@ class MobileDeliveryController extends Controller
         }
 
         $delivery->temperature_reading = $request->reading;
+        $delivery->temperature_type = $request->temp_type;
         $delivery->notes = $request->notes;
         $delivery->save();
         return response()->json([

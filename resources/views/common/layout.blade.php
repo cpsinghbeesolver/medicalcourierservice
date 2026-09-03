@@ -1069,9 +1069,14 @@
             if(value == 'hospital'){
                 $(this).parents('.item-card').find('.search-hospital').prop('disabled',false);
                 $(this).parents('.item-card').find('.type_address').hide();
+                // $(this).parents('.item-card').find('.type_address input').each(function(){
+                //     $(this).val('');
+                // });
             }else{
                 $(this).parents('.item-card').find('.search-hospital').prop('disabled',true);
                 $(this).parents('.item-card').find('.type_address').show();
+                // $(this).parents('.item-card').find('.hospital-id').val('');
+                // $(this).parents('.item-card').find('.search-hospital').val('');
             }
         });
 

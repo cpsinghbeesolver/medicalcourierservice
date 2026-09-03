@@ -86,6 +86,7 @@ class Delivery extends Model
         'requires_recepient_id_scan',
         'dispatched_at',
         'accepted_by_driver_at',
+        'temperature_type'
     ];
 
     protected $casts = [

@@ -4,7 +4,7 @@
 @section('content')
 <div class="profile-container">
     <div class="profile-section">
-        <form action="{{ route('specimen-types.update', $specimenType) }}" method="POST">
+        <form action="{{ route('specimen-types.update', $specimenType) }}" id="add_speciment_type" method="POST">
             @csrf
             @method('PUT')
 

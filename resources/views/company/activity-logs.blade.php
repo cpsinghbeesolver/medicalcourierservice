@@ -178,8 +178,10 @@
         border-radius: 8px;
         padding: 20px;
         margin-bottom: 15px;
-        cursor: pointer;
         transition: all 0.3s;
+    }
+    .item-card .item-sub-card{
+        cursor: pointer;
     }
 
     .item-card:hover {
@@ -321,6 +323,15 @@
 
 .calendar-input-wrapper input[type="text"] {
     padding-left: 38px !important;
+}
+.gm-ui-hover-effect{
+    height: 28px !important;
+}
+.section-line{
+    border: 1px solid #ccc;
+    border-radius: 9px;
+    padding: 0px;
+    margin-bottom: 27px;
 }
 </style>
 @endsection
@@ -464,6 +475,7 @@
         const deliveryId = delivery.id;
 
         return `
+            <div class="section-line"></div>
             <div class="delivery-card">
                 <div class="delivery-from">
                     <i class="fas fa-map-marker-alt"></i>
@@ -492,52 +504,53 @@
                     <h3>Item Delivered</h3>
                 </div>
                 ${deliveredItems.map((item, index) => `
-                    <div class="item-card" onclick="toggleItemDetails('item-${deliveryId}-${index}')">
-                        <div class="item-badge">Item ${index + 1}</div>
-                        <div class="item-details">
-                            <div class="detail-row">
-                                <span class="detail-label">Name</span>
-                                <span class="detail-value">${item.description || item.specimen_type || 'N/A'}</span>
-                            </div>
-                            <div class="detail-row">
-                                <span class="detail-label">Specimen Type</span>
-                                <span class="detail-value">${item.specimen_name || 'N/A'}</span>
-                            </div>
-                            <div class="detail-row">
-                                <span class="detail-label">Accession/Specimen ID</span>
-                                <span class="detail-value">${item.barcode || item.item_code || 'N/A'}</span>
-                            </div>
-                            <div class="detail-row">
-                                <span class="detail-label">Drop off location</span>
-                                <span class="detail-value">${delivery.delivery.address || 'N/A'}</span>
+                    <div class="item-card">
+                        <div class="item-sub-card" onclick="toggleItemDetails('item-${deliveryId}-${index}')">
+                            <div class="item-badge">Item ${index + 1}</div>
+                            <div class="item-details">
+                                <div class="detail-row">
+                                    <span class="detail-label">Name</span>
+                                    <span class="detail-value">${item.item_name || 'N/A'}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Specimen Type</span>
+                                    <span class="detail-value">${item.specimen_name || 'N/A'}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Accession/Specimen ID</span>
+                                    <span class="detail-value">${item.barcode || item.item_code || 'N/A'}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Vehicle</span>
+                                    <span class="detail-value">${delivery.vehicle_requirement?.name || 'N/A'}</span>
+                                </div>
                             </div>
                         </div>
-
                         <div class="item-more-details" id="details-item-${deliveryId}-${index}">
                             <div class="section-header info">
                                 <i class="fas fa-info-circle"></i>
-                                <h3>More Info</h3>
+                                <h3><a target="_blank" href="/company/dashboard/deliveries/${deliveryId}">More Info</a></h3>
                             </div>
                             <div class="info-grid">
                                 <div class="info-item">
-                                    <span class="info-label">Urgency Level</span>
+                                    <span class="info-label">Priority</span>
                                     <span class="info-value">${delivery.priority || 'N/A'}</span>
                                 </div>
                                 <div class="info-item">
-                                    <span class="info-label">Temperature Requirement</span>
-                                    <span class="info-value">${item.temperature_requirement || 'N/A'}</span>
+                                    <span class="info-label">Urgency Level</span>
+                                    <span class="info-value">${delivery.urgency_level || 'N/A'}</span>
                                 </div>
                                 <div class="info-item">
-                                    <span class="info-label">Vehicle Requirements</span>
-                                    <span class="info-value">${delivery.vehicle_requirements || 'N/A'}</span>
-                                </div>
-                                <div class="info-item">
-                                    <span class="info-label">Number of containers or bags</span>
-                                    <span class="info-value">${item.quantity || 1}</span>
+                                    <span class="info-label">Temperature Type</span>
+                                    <span class="info-value">${delivery.temperature_type || 'N/A'}</span>
                                 </div>
                                 <div class="info-item">
                                     <span class="info-label">Temperature Reading</span>
-                                    <span class="info-value">N/A</span>
+                                    <span class="info-value">${delivery.temperature_reading || 'N/A'}</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Number of containers or bags</span>
+                                    <span class="info-value">${delivery.container_count || 1}</span>
                                 </div>
                             </div>
 
@@ -549,10 +562,16 @@
                                 <div class="map-canvas" id="map-${deliveryId}-${index}"
                                      data-pickup-lat="${delivery.pickup.location.latitude || ''}"
                                      data-pickup-lng="${delivery.pickup.location.longitude || ''}"
-                                     data-delivery-lat="${delivery.delivery.location.latitude || ''}"
-                                     data-delivery-lng="${delivery.delivery.location.longitude || ''}"
-                                     data-pickup-address="${delivery.pickup.address || ''}"
-                                     data-delivery-address="${delivery.delivery.address || ''}">
+                                     data-delivery-lat="${item.hospital
+                                        ? (item.hospital.latitude || '')
+                                        : (item.dropoff_latitude || '')}"
+                                    data-delivery-lng="${item.hospital
+                                        ? (item.hospital.longitude || '')
+                                        : (item.dropoff_longitude || '')}"
+                                    data-pickup-address="${delivery.pickup.address || ''}"
+                                    data-delivery-address="${item.hospital
+                                        ? (item.hospital.address || '')
+                                        : (item.dropoff_address || '')}">
                                 </div>
                             </div>
                         </div>
@@ -568,53 +587,56 @@
                 ${notDeliveredItems.map((item, index) => {
                     const itemIndex = deliveredItems.length + index;
                     return `
-                    <div class="item-card not-delivered" onclick="toggleItemDetails('item-${deliveryId}-${itemIndex}')">
-                        <div class="item-badge">Item ${itemIndex + 1}</div>
-                        <div class="item-details">
-                            <div class="detail-row">
-                                <span class="detail-label">Name</span>
-                                <span class="detail-value">${item.description || item.specimen_type || 'N/A'}</span>
-                            </div>
-                            <div class="detail-row">
-                                <span class="detail-label">Specimen Type</span>
-                                <span class="detail-value">${item.specimen_name || 'N/A'}</span>
-                            </div>
-                            <div class="detail-row">
-                                <span class="detail-label">Accession/Specimen ID</span>
-                                <span class="detail-value">${item.barcode || item.item_code || 'N/A'}</span>
-                            </div>
-                            <div class="detail-row">
-                                <span class="detail-label">Drop off location</span>
-                                <span class="detail-value">${delivery.delivery.address || 'N/A'}</span>
+                    <div class="item-card not-delivered">
+                        <div class="item-sub-card" onclick="toggleItemDetails('item-${deliveryId}-${itemIndex}')">
+                            <div class="item-badge">Item ${itemIndex + 1}</div>
+                            <div class="item-details">
+                                <div class="detail-row">
+                                    <span class="detail-label">Name</span>
+                                    <span class="detail-value">${item.item_name || 'N/A'}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Specimen Type</span>
+                                    <span class="detail-value">${item.specimen_name || 'N/A'}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Accession/Specimen ID</span>
+                                    <span class="detail-value">${item.barcode || item.item_code || 'N/A'}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Vehicle</span>
+                                    <span class="detail-value">${delivery.vehicle_requirement?.name || 'N/A'}</span>
+                                </div>
                             </div>
                         </div>
 
                         <div class="item-more-details" id="details-item-${deliveryId}-${itemIndex}">
                             <div class="section-header info">
                                 <i class="fas fa-info-circle"></i>
-                                <h3>More Info</h3>
+                                <h3><a target="_blank" href="/company/dashboard/deliveries/${deliveryId}">More Info</a></h3>
                             </div>
                             <div class="info-grid">
                                 <div class="info-item">
-                                    <span class="info-label">Urgency Level</span>
+                                    <span class="info-label">Priority</span>
                                     <span class="info-value">${delivery.priority || 'N/A'}</span>
                                 </div>
                                 <div class="info-item">
-                                    <span class="info-label">Temperature Requirement</span>
-                                    <span class="info-value">${item.temperature_requirement || 'N/A'}</span>
+                                    <span class="info-label">Urgency Level</span>
+                                    <span class="info-value">${delivery.urgency_level || 'N/A'}</span>
                                 </div>
                                 <div class="info-item">
-                                    <span class="info-label">Vehicle Requirements</span>
-                                    <span class="info-value">${delivery.vehicle_requirements || 'N/A'}</span>
-                                </div>
-                                <div class="info-item">
-                                    <span class="info-label">Number of containers or bags</span>
-                                    <span class="info-value">${item.quantity || 1}</span>
+                                    <span class="info-label">Temperature Type</span>
+                                    <span class="info-value">${delivery.temperature_type || 'N/A'}</span>
                                 </div>
                                 <div class="info-item">
                                     <span class="info-label">Temperature Reading</span>
-                                    <span class="info-value">N/A</span>
+                                    <span class="info-value">${delivery.temperature_reading || 'N/A'}</span>
                                 </div>
+                                <div class="info-item">
+                                    <span class="info-label">Number of containers or bags</span>
+                                    <span class="info-value">${delivery.container_count || 1}</span>
+                                </div>
+                                
                             </div>
 
                             <div class="section-header map">
@@ -639,7 +661,6 @@
     }
 
     function toggleItemDetails(itemId) {
-        return;
         const detailsSection = document.getElementById(`details-${itemId}`);
         const allItemCards = document.querySelectorAll('.item-card');
         const allDetails = document.querySelectorAll('.item-more-details');
@@ -671,9 +692,13 @@
         const pickupLng = parseFloat(mapElement.dataset.pickupLng);
         const deliveryLat = parseFloat(mapElement.dataset.deliveryLat);
         const deliveryLng = parseFloat(mapElement.dataset.deliveryLng);
+        // const pickupLat = parseFloat('30.705918');
+        // const pickupLng = parseFloat('76.692532');
+        // const deliveryLat = parseFloat('30.7068');
+        // const deliveryLng = parseFloat('76.8459');
         const pickupAddress = mapElement.dataset.pickupAddress;
         const deliveryAddress = mapElement.dataset.deliveryAddress;
-
+        // alert(pickupLat + ' ' + pickupLng + ' ' + deliveryLat + ' ' + deliveryLng);
         // Check if coordinates are valid
         if (!pickupLat || !pickupLng || !deliveryLat || !deliveryLng) {
             mapElement.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #7f8c8d;"><i class="fas fa-map-marker-alt" style="margin-right: 10px;"></i> Location coordinates not available</div>';
@@ -781,17 +806,18 @@
         });
 
         // Draw route line between pickup and delivery (Uber-style)
-        const routePath = new google.maps.Polyline({
-            path: [
-                { lat: pickupLat, lng: pickupLng },
-                { lat: deliveryLat, lng: deliveryLng }
-            ],
-            geodesic: true,
-            strokeColor: '#3B82F6',
-            strokeOpacity: 0.8,
-            strokeWeight: 4,
-            map: map
-        });
+        // const routePath = new google.maps.Polyline({
+        //     path: [
+        //         { lat: pickupLat, lng: pickupLng },
+        //         { lat: deliveryLat, lng: deliveryLng }
+        //     ],
+        //     geodesic: true,
+        //     strokeColor: '#3B82F6',
+        //     strokeOpacity: 0.8,
+        //     strokeWeight: 4,
+        //     map: map
+        // });
+        drawRoute(map,pickupLat, pickupLng, deliveryLat, deliveryLng);
 
         // Fit bounds to show both markers
         const bounds = new google.maps.LatLngBounds();
@@ -806,6 +832,47 @@
                 map.setZoom(15);
             }
         });
+    }
+
+    async function drawRoute(map,pickupLat, pickupLng, deliveryLat, deliveryLng) {
+
+        const { Route } = await google.maps.importLibrary("routes");
+
+        try {
+
+            const { routes } = await Route.computeRoutes({
+                origin: {
+                    lat: Number(pickupLat),
+                    lng: Number(pickupLng)
+                },
+                destination: {
+                    lat: Number(deliveryLat),
+                    lng: Number(deliveryLng)
+                },
+                travelMode: "DRIVING",
+                fields: ["path"]
+            });
+
+            if (!routes?.length) {
+                console.warn('No route found');
+                return;
+            }
+
+            const polylines = routes[0].createPolylines({
+                polylineOptions: {
+                    strokeColor: '#3B82F6',
+                    strokeOpacity: 0.8,
+                    strokeWeight: 4
+                }
+            });
+
+            polylines.forEach(polyline => {
+                polyline.setMap(map);
+            });
+
+        } catch (error) {
+            console.error('Route error:', error);
+        }
     }
 
     loadDrivers();

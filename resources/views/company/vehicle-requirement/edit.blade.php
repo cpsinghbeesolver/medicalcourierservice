@@ -4,7 +4,7 @@
 @section('content')
 <div class="profile-container">
     <div class="profile-section">
-        <form action="{{ route('vehicle-requirement.update', $VehicleRequirement) }}" method="POST">
+        <form action="{{ route('vehicle-requirement.update', $VehicleRequirement) }}" id="add_vehicle_requirement" method="POST">
             @csrf
             @method('PUT')
 

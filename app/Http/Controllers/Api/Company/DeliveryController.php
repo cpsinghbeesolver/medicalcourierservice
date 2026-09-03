@@ -79,7 +79,7 @@ class DeliveryController extends Controller
     {   
         //check if user is superadmin
         if(Auth::user()->role_id == 1){
-            $query = Delivery::with(['driver', 'creator', 'items']);    
+            $query = Delivery::with(['driver', 'creator', 'items','vehicleRequirement']);    
         } else {
             // dd('here');
             $query = Delivery::with([
@@ -88,6 +88,7 @@ class DeliveryController extends Controller
                 'items' => function ($query) {
                     $query->with('specimenType:id,name');
                 },
+                'vehicleRequirement'
             ]);
             // $query = Delivery::with(['driver', 'creator', 'items'])->where('created_by', Auth::id());
         }
@@ -202,16 +203,11 @@ class DeliveryController extends Controller
         $validator = Validator::make($request->all(), [
             // PHI - Patient/Specimen Information
             'job_title' => 'required|string|max:255',
-            //'specimen_id' => 'required|string|max:255|unique:deliveries,specimen_id',
-            //'patient_initials' => 'required|string|max:10',
             'urgency_level' => 'required|in:routine,stat,life_threatening',
 
             // Pickup Information
             'pickup_name' => 'required|string|max:255',
             'pickup_address' => 'required|string',
-            // 'pickup_city' => 'required|string|max:100',
-            // 'pickup_state' => 'required|string|max:50',
-            // 'pickup_zip' => 'required|string|max:20',
             'pickup_phone' => 'required|integer',
             'pickup_contact_person' => 'nullable|string|max:255',
             'pickup_latitude' => 'nullable|numeric|between:-90,90',
@@ -222,29 +218,16 @@ class DeliveryController extends Controller
             'scheduled_time_window_end' => 'required|date|after:scheduled_time_window_start',
 
             // Delivery Information
-            //'delivery_name' => 'required|string|max:255',
-            //'delivery_address' => 'required|string',
-            // 'delivery_city' => 'required|string|max:100',
-            // 'delivery_state' => 'required|string|max:50',
-            // 'delivery_zip' => 'required|string|max:20',
-            //'delivery_phone' => 'required|string|max:20',
-            // 'delivery_contact_person' => 'nullable|string|max:255',
-            // 'delivery_latitude' => 'nullable|numeric|between:-90,90',
-            // 'delivery_longitude' => 'nullable|numeric|between:-180,180',
             'container_count' => 'nullable|integer|max:1000',
-            // Legacy time fields (for backward compatibility)
 
             'priority' => 'required|in:low,normal,high,urgent',
 
             // Driver Assignment and Vehicle
             'driver_id' => 'nullable|exists:users,id',
-            //'required_vehicle_type' => 'nullable|string|max:100',
 
             // Special Instructions
             'special_instructions' => 'nullable|string',
             'notes' => 'nullable|string',
-            //'distance_km' => 'nullable|numeric|min:0',
-            //'estimated_duration_minutes' => 'nullable|integer|min:0',
 
             // Digital Chain of Custody
             'requires_barcode_scan' => 'nullable|boolean',
@@ -280,10 +263,6 @@ class DeliveryController extends Controller
                 'nullable',
                 'required_if:items.*.dropoff_type,hospital',
             ],
-            
-            // 'items.*.quantity' => 'nullable|integer|min:1',
-            // 'items.*.temperature_requirement' => 'nullable|in:ambient,refrigerated,frozen,dry_ice,controlled',
-            // 'items.*.requires_special_handling' => 'nullable|boolean',
         ], [
             'items.*.item_name.required' => 'Item name is required.',
             'items.*.dropoff_address.required_if' => 'Dropoff Address is required when Dropoff type is Address.',
@@ -484,52 +463,35 @@ class DeliveryController extends Controller
     
     public function editDelivery(Request $request, $delivery_id, FirebaseService $firebase)
     {
+        // dd($request->all());
         $validator = Validator::make($request->all(), [
             // PHI - Patient/Specimen Information
             'job_title' => 'required|string|max:255',
-            //'specimen_id' => 'required|string|max:255|unique:deliveries,specimen_id',
-            //'patient_initials' => 'required|string|max:10',
             'urgency_level' => 'required|in:routine,stat,life_threatening',
 
             // Pickup Information
             'pickup_name' => 'required|string|max:255',
             'pickup_address' => 'required|string',
-            // 'pickup_city' => 'required|string|max:100',
-            // 'pickup_state' => 'required|string|max:50',
-            // 'pickup_zip' => 'required|string|max:20',
             'pickup_phone' => 'required|integer',
             'pickup_contact_person' => 'nullable|string|max:255',
             'pickup_latitude' => 'nullable|numeric|between:-90,90',
             'pickup_longitude' => 'nullable|numeric|between:-180,180',
-            'container_count' => 'nullable|integer|max:1000',
 
             // Time Window
             'scheduled_time_window_start' => 'required|date',
             'scheduled_time_window_end' => 'required|date|after:scheduled_time_window_start',
 
             // Delivery Information
-            //'delivery_name' => 'required|string|max:255',
-            //'delivery_address' => 'required|string',
-            // 'delivery_city' => 'required|string|max:100',
-            // 'delivery_state' => 'required|string|max:50',
-            // 'delivery_zip' => 'required|string|max:20',
-            //'delivery_phone' => 'required|string|max:20',
-            // 'delivery_contact_person' => 'nullable|string|max:255',
-            // 'delivery_latitude' => 'nullable|numeric|between:-90,90',
-            // 'delivery_longitude' => 'nullable|numeric|between:-180,180',
-            // Legacy time fields (for backward compatibility)
+            'container_count' => 'nullable|integer|max:1000',
 
             'priority' => 'required|in:low,normal,high,urgent',
 
             // Driver Assignment and Vehicle
             'driver_id' => 'nullable|exists:users,id',
-            //'required_vehicle_type' => 'nullable|string|max:100',
 
             // Special Instructions
             'special_instructions' => 'nullable|string',
             'notes' => 'nullable|string',
-            //'distance_km' => 'nullable|numeric|min:0',
-            //'estimated_duration_minutes' => 'nullable|integer|min:0',
 
             // Digital Chain of Custody
             'requires_barcode_scan' => 'nullable|boolean',
@@ -545,22 +507,30 @@ class DeliveryController extends Controller
             'items' => 'nullable|array',
             'items.*.item_name' => 'required|string|max:255',
             'items.*.handling_instructions' => 'nullable|string',
-            'items.*.dropoff_location' => 'nullable|string|max:255',
+            'items.*.dropoff_location' => 'nullable|string',
             'items.*.dropoff_phone' => 'nullable|string|max:20',
             'items.*.dropoff_latitude' => 'nullable|numeric|between:-90,90',
             'items.*.dropoff_longitude' => 'nullable|numeric|between:-180,180',
             'items.*.description' => 'nullable|string',
             'items.*.dropoff_contact_person' => 'nullable|string|max:255',
-            'items.*.dropoff_address' => 'required|nullable|string',
+            // 'items.*.dropoff_address' => 'required|nullable|string',
             'items.*.item_type' => 'required|string',
             'items.*.item_code' => 'required|nullable|string',
             'items.*.specimen_type' => 'nullable|string',
-            
-            // 'items.*.quantity' => 'nullable|integer|min:1',
-            // 'items.*.temperature_requirement' => 'nullable|in:ambient,refrigerated,frozen,dry_ice,controlled',
-            // 'items.*.requires_special_handling' => 'nullable|boolean',
+            'items.*.dropoff_address' => [
+                'nullable',
+                'string',
+                'required_if:items.*.dropoff_type,address',
+            ],
+
+            'items.*.hospital_id' => [
+                'nullable',
+                'required_if:items.*.dropoff_type,hospital',
+            ],
         ], [
             'items.*.item_name.required' => 'Item name is required.',
+            'items.*.dropoff_address.required_if' => 'Dropoff Address is required when Dropoff type is Address.',
+            'items.*.hospital_id.required_if' => 'Please select a Hospital when Dropoff type is Hospital.',
         ]);
 
         //Check if Proof of Pickup is selected
@@ -689,6 +659,9 @@ class DeliveryController extends Controller
 
             if ($request->has('items') && is_array($request->items)) {
                 foreach ($request->items as $item) {
+                    if(!$item['search_hospital']){
+                        $item['hospital_id'] = null;
+                    }
                     DeliveryItem::create(array_merge($item, [
                         'delivery_id' => $delivery->id,
                     ]));

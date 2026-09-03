@@ -31,6 +31,8 @@ class DeliveryItemResource extends JsonResource
             'status' => $this->status,
             'dropoff_name' => $this->dropoff_name,
             'dropoff_address' => $this->dropoff_address,
+            'dropoff_latitude' => $this->dropoff_latitude,
+            'dropoff_longitude' => $this->dropoff_longitude,
             'dropoff_phone' => $this->dropoff_phone,
             'dropoff_contact_person' => $this->dropoff_contact_person,
             'signature_image' => $this->signature_image,

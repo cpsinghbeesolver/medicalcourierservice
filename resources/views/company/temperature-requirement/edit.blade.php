@@ -4,7 +4,7 @@
 @section('content')
 <div class="profile-container">
     <div class="profile-section">
-        <form action="{{ route('temperature-requirement.update', $TemperatureRequirement) }}" method="POST">
+        <form action="{{ route('temperature-requirement.update', $TemperatureRequirement) }}" id="add_temperature_requirement" method="POST">
             @csrf
             @method('PUT')
 

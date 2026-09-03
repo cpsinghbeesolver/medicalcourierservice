@@ -2,7 +2,7 @@ const validators = new Map();
 
 function validateForm() {
 
-    document.querySelectorAll('form#jobCreateForm, #jobEditForm, #loginForm, #createDriverForm, #profileForm, #changePasswordForm').forEach((form) => {
+    document.querySelectorAll('form#jobCreateForm, #add_temperature_requirement, #add_vehicle_requirement, #add_speciment_type,#jobEditForm, #loginForm, #createDriverForm, #profileForm, #changePasswordForm').forEach((form) => {
 
         // Destroy existing validator for this form
         if (validators.has(form)) {
@@ -317,15 +317,15 @@ function validateForm() {
         //             }
         //         ]);
         // });
-        document.querySelectorAll('[name^="items["][name$="[dropoff_location]"]')
-            .forEach((field) => {
-                validator.addField(field, [
-                    {
-                        rule: 'required',
-                        errorMessage: 'Near By Landmark is required',
-                    }
-                ]);
-        });
+        // document.querySelectorAll('[name^="items["][name$="[dropoff_location]"]')
+        //     .forEach((field) => {
+        //         validator.addField(field, [
+        //             {
+        //                 rule: 'required',
+        //                 errorMessage: 'Near By Landmark is required',
+        //             }
+        //         ]);
+        // });
 
         document.querySelectorAll('[name^="items["][name$="[specimen_id]"]')
             .forEach((field) => {
@@ -378,16 +378,18 @@ function validateForm() {
 
         validator
         .onSuccess((event) => {
-            
             if (document.getElementById('loginForm')) {
                 document.querySelector('.loading-spinner').style.display = 'block';
                 document.getElementById('loginBtn').disabled = true;
                 event.currentTarget.submit();
             }
-            if(document.getElementById('createDriverForm')){
+            else if(document.getElementById('createDriverForm')){
                 show_load_spinner();
                 event.currentTarget.submit();
-            }        
+            }
+            // else{
+            //     event.currentTarget.submit();
+            // }        
         });
     });
 }

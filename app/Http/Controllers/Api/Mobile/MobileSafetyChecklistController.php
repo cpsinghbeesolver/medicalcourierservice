@@ -114,6 +114,7 @@ class MobileSafetyChecklistController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
         $user = $request->user();
         if ($user->role_id != '4') {
             return response()->json([
@@ -149,22 +150,25 @@ class MobileSafetyChecklistController extends Controller
         DB::beginTransaction();
         try {
             // Check if checklist for today already exists
-            $checklist = SafetyChecklist::where('driver_id', $user->id)
-                ->whereDate('checklist_date', today())
-                ->first();
+            // $checklist = SafetyChecklist::where('driver_id', $user->id)
+            //     ->whereDate('checklist_date', today())
+            //     ->first();
 
             $data = $request->except(['_token']);
             $data['driver_id'] = $user->id;
             $data['checklist_date'] = today();
             $data['completed_at'] = now();
 
-            if ($checklist) {
+            /*if ($checklist) {
                 $checklist->update($data);
                 $message = 'Safety checklist updated successfully';
             } else {
                 $checklist = SafetyChecklist::create($data);
                 $message = 'Safety checklist submitted successfully';
-            }
+            }*/
+
+            $checklist = SafetyChecklist::create($data);
+            $message = 'Safety checklist submitted successfully';
 
             // Calculate if all checks passed
             $checklist->all_checks_passed = $checklist->calculateAllChecksPassed();

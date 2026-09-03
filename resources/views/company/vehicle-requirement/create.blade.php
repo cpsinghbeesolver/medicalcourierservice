@@ -4,7 +4,7 @@
 @section('content')
 <div class="profile-container">
     <div class="profile-section">
-        <form action="{{ route('vehicle-requirement.store') }}" method="POST">
+        <form action="{{ route('vehicle-requirement.store') }}" id="add_vehicle_requirement" method="POST">
             @csrf
 
             @include('company/vehicle-requirement._form')
