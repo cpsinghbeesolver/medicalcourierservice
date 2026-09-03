@@ -383,7 +383,7 @@ function validateForm() {
                 document.getElementById('loginBtn').disabled = true;
                 event.currentTarget.submit();
             }
-            else if(document.getElementById('createDriverForm')){
+            else if(document.getElementById('createDriverForm') || document.getElementById('add_temperature_requirement') || document.getElementById('add_vehicle_requirement') || document.getElementById('add_speciment_type')){
                 show_load_spinner();
                 event.currentTarget.submit();
             }

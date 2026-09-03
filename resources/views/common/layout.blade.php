@@ -389,10 +389,10 @@
                                 <a href="/company/profile/edit"><i class="fas fa-user-edit"></i> Edit Profile</a>
                                 <a href="/company/profile/change-password"><i class="fas fa-key"></i> Change Password</a>
                             @endif
-                            @if(auth()->user()->isHospital())
+                            <!-- @if(auth()->user()->isHospital())
                                 <a href="/hospital/profile/edit"><i class="fas fa-user-edit"></i> Edit Profile</a>
                                 <a href="/hospital/profile/change-password"><i class="fas fa-key"></i> Change Password</a>
-                            @endif
+                            @endif -->
                             @if(auth()->user()->isAdmin())
                                 <a href="/admin/profile/edit"><i class="fas fa-user-edit"></i> Edit Profile</a>
                                 <a href="/admin/profile/change-password"><i class="fas fa-key"></i> Change Password</a>
@@ -978,13 +978,15 @@
         //add hospital
         $('#addHospitalModal').on('submit', function(e) {
             e.preventDefault();
+            show_load_spinner();
+            // return false;
             if (document.querySelector('#add_hospital .just-validate-error-label')) {
                 hide_load_spinner();
                 return false;
             }
             const formData = new FormData(e.target);
             const data = Object.fromEntries(formData.entries());
-            
+            $('#btnAddHospital').prop('disabled', true);
             $.ajax({
                 url: '/api/v1/add-hospital',
                 type: 'POST',
@@ -1000,12 +1002,14 @@
                     if (result.success) {
                         showDialog('Hospital added successfully!', 'success');
                         $('#add_hospital')[0].reset();
+                        document.getElementById('addVehicleRequirementModal').classList.remove('show');
                     } 
                     
                 },
                 error: function (result) {
                     hide_load_spinner();
                     showDialog(result.responseJSON.message, 'error');
+                    $('#btnAddHospital').prop('disabled', false);
                 }
             });
         });

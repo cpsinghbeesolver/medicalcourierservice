@@ -66,14 +66,14 @@ Route::get('/company/login', function () {
         return redirect('/company/dashboard');
     }
     return view('company/company-login');
-});
+})->name('company-login');
 
 Route::get('/hospital/login', function () {
     if (Auth::check()) {
         return redirect('/hospital/dashboard');
     }
     return view('hospital/hospital-login');
-});
+})->name('hospital-login');
 
 Route::get('/test-driver-location', function () {
     Log::emergency('Location updated');

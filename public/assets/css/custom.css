@@ -850,6 +850,7 @@ color: #000000;
         position: fixed;
         top: 40%;
         left: 50%;
+        z-index: 999;
     }
 
 
