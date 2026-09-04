@@ -299,9 +299,9 @@
                     <li><a href="/company/dashboard/maps" class="{{ request()->is('company/dashboard/maps*') ? 'active' : '' }}">
                         <i class="fas fa-map-marker-alt"></i> Maps
                     </a></li>
-                    <li><a href="/company/dashboard/chat" class="{{ request()->is('company/dashboard/chat*') ? 'active' : '' }}">
+                    <!-- <li><a href="/company/dashboard/chat" class="{{ request()->is('company/dashboard/chat*') ? 'active' : '' }}">
                         <i class="fas fa-message"></i> Chat
-                    </a></li>
+                    </a></li> -->
                 @endif
                 @if(auth()->user()->isAdmin())
                     <li><a href="/admin/dashboard/tenants" class="{{ request()->is('dashboard/tenants*') ? 'active' : '' }}">
