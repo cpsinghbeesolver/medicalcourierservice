@@ -493,6 +493,7 @@
 
         async function loadStatistics() {
             try {
+                show_load_spinner();
                 const response = await fetch('/api/v1/deliveries', {
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -503,8 +504,10 @@
                 if (data.success && data.data) {
                     updateStatistics(data.data.deliveries || []);
                 }
+                hide_load_spinner();
             } catch (error) {
                 console.error('Error loading delivery statistics:', error);
+                hide_load_spinner();
             }
         }
 

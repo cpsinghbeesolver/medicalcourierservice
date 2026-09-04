@@ -144,7 +144,7 @@
             <div class="info-box">
                 <h3 style="margin-top: 0; color: #495057;">Here are Your Login Credentials</h3>
                 <div class="message-box">
-                    <b style="margin-top: 10px;"><a href="{{ route('hospital-login') }}" target="_blank">Click here to login</a></b>
+                    <b style="margin-top: 10px;"><a href="{{ route('hospital-login-page') }}" target="_blank">Click here to login</a></b>
                 </div>
                 <div class="info-row">
                     <div class="info-label">Email:</div>

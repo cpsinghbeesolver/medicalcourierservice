@@ -46,6 +46,16 @@ class SafetyChecklist extends Model
         'signature_image',
         'latitude',
         'longitude',
+        'vehicle_locked',
+        'lights_functional',
+        'tire_pressure_checked',
+        'windshield_cleaned',
+        'secure_phi_containers',
+        'id_badge_visible',
+        'biohazard_bags_available',
+        'secure_transport_containers',
+        'gloves_available',
+        'extra_leakproof_bags'
     ];
 
     protected $casts = [

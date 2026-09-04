@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
             RolesTableSeeder::class,
             UserSeeder::class,
             DriverProfileSeeder::class,
-            DeliverySeeder::class,
+            //DeliverySeeder::class,
             ActivityLogSeeder::class,
         ]);
 

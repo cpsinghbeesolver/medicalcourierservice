@@ -73,7 +73,7 @@ Route::get('/hospital/login', function () {
         return redirect('/hospital/dashboard');
     }
     return view('hospital/hospital-login');
-})->name('hospital-login');
+})->name('hospital-login-page');
 
 Route::get('/test-driver-location', function () {
     Log::emergency('Location updated');
@@ -226,6 +226,10 @@ Route::prefix('company/dashboard')->middleware('custom.auth','no.cache')->group(
 
     Route::get('/contacts', function () {
         return view('company.contacts');
+    });
+
+    Route::get('/chat', function () {
+        return view('company.chat');
     });
 
     Route::resource('specimen-types', SpecimenTypeController::class);

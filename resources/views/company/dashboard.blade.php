@@ -184,6 +184,7 @@
     // Fetch dashboard statistics
     async function fetchStatistics() {
         try {
+            show_load_spinner();
             const response = await fetch('/api/v1/deliveries', {
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -216,9 +217,11 @@
                 // Create charts
                 createPerformanceChart();
                 createActivityChart(completed, assigned);
+                hide_load_spinner();
             }
         } catch (error) {
             console.error('Error fetching statistics:', error);
+            hide_load_spinner();
         }
     }
 

@@ -114,6 +114,7 @@ class MobileSafetyChecklistController extends Controller
      */
     public function store(Request $request)
     {
+        // print_r($request->all());return;
         // dd($request->all());
         $user = $request->user();
         if ($user->role_id != '4') {
@@ -158,7 +159,9 @@ class MobileSafetyChecklistController extends Controller
             $data['driver_id'] = $user->id;
             $data['checklist_date'] = today();
             $data['completed_at'] = now();
-
+            $data['vehicle_locked'] = 1;
+            // var_dump($data['vehicle_locked']);
+            // print_r($data);return;
             /*if ($checklist) {
                 $checklist->update($data);
                 $message = 'Safety checklist updated successfully';
