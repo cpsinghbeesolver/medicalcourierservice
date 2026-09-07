@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\Mobile\MobileSafetyChecklistController;
 use App\Http\Controllers\Api\Mobile\MobileJobRequestController;
 use App\Http\Controllers\Api\Mobile\MobileDeviceController;
 use App\Http\Controllers\Api\Mobile\MobileNotificationController;
+use App\Http\Controllers\Api\Mobile\ChatController;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use App\Events\DriverLocationUpdated;
@@ -66,23 +67,7 @@ Route::prefix('v1')->middleware('auth:sanctum')->group(function () {
     Route::get('/driver/availability-status', [MobileDriverController::class, 'availabilityStatus']);
     Route::put('/driver/profile', [MobileDriverController::class, 'updateProfile']);
     Route::put('/driver/profile', [MobileDriverController::class, 'updateProfile']);
-    // Route::post('/update-driver-location', function (Request $request) {
-    //     $driverProfile = App\Models\DriverProfile::where('user_id', $request->driver_id)->first();
-    //     if(!$driverProfile){
-    //         return response()->json([
-    //             'success' => false,
-    //             'message' => 'Driver profile not found'
-    //         ], 404); 
-    //     }
-    //     $driverProfile->current_latitude = $request->latitude;
-    //     $driverProfile->current_longitude = $request->longitude;
-    //     $driverProfile->save();
-    //     return response()->json([
-    //         'success' => true,
-    //         'message' => 'Location updated successfully'
-    //     ]);
-    // });
-
+    
     // Safety Checklist
     Route::get('/safety-checklist/today', [MobileSafetyChecklistController::class, 'today']);
     Route::post('/safety-checklist', [MobileSafetyChecklistController::class, 'store']);
@@ -101,4 +86,24 @@ Route::prefix('v1')->middleware('auth:sanctum')->group(function () {
     Route::put('/notifications/{id}/read', [MobileNotificationController::class, 'markAsRead']);
     Route::get('/notifications/read-all', [MobileNotificationController::class, 'markAsReadAll']);
     Route::get('/notification/has-unread', [MobileNotificationController::class, 'hasUnread']);
+
+    // chat messages
+    Route::post('/chat/conversations', [ChatController::class, 'createConversation']);
+    // Get company/driver conversations
+    Route::get('/chat/get-conversations', [ChatController::class, 'conversations']);// Get messages
+    Route::get(
+        '/chat/conversations/{conversation}/messages',
+        [ChatController::class, 'messages']
+    );
+    // Send message
+    Route::post(
+        '/chat/conversations/{conversation}/send-messages',
+        [ChatController::class, 'sendMessage']
+    );
+
+    // Mark messages as read
+    Route::post(
+        '/chat/conversations/{conversation}/read',
+        [ChatController::class, 'markAsRead']
+    );
 });

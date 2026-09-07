@@ -1605,7 +1605,69 @@
         closeNewChat();
 
     }
+    var web_token = "{{ session('web_token') }}";
+    function getConversations() {
+        // This function can be used to fetch conversations from the server
+        // using AJAX or any other method. For now, it just logs a message.
+        console.log('Fetching conversations...');
+        // fetch('/chat/messages', {
+        //     method: 'GET',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //         'X-CSRF-TOKEN':
+        //             document.querySelector(
+        //                'meta[name="csrf-token"]'
+        //            ).content
+        //     },
+        //     body: JSON.stringify({
+        //         receiver_id: 5,
+        //         message: message
+        //     })
+        // });
+        $.ajax({
+            url: '/api/mobile/v1/chat/get-conversations',
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${web_token}`,
+                'Accept': 'application/json'
+            },
+            // data: { query: query },
+            success: function(response) {
+                console.log(response);
+                $('#searchResults').show();
+                //resonse is an array of user objects with id and name properties
+                var resultsHtml = '';
+                if(response.data.length === 0) {
+                    resultsHtml = '<div class="search-item"><span>No results found</span></div>';
+                }else{
+                    response.data.forEach(function(user) {
+                        resultsHtml += '<div class="conversation-item active" data-name="John Smith" data-type="drivers" data-unread="true" onclick="openConversation(\'John Smith\')">
+                    <div class="avatar avatar-blue">
+                        JS
+                        <span class="online-dot"></span>
+                    </div>
 
+                    <div class="conversation-info">
+                        <div class="conversation-top">
+                            <strong>John Smith</strong>
+                            <span class="message-time">10:42 AM</span>
+                        </div>
+
+                        <div class="conversation-bottom">
+                            <span class="last-message">
+                                The delivery has been picked up.
+                            </span>
+
+                            <span class="unread-count">2</span>
+                        </div>
+                    </div>
+                </div>';
+                    });
+                }
+                $('#searchResults').html(resultsHtml);
+            }
+        });
+    }
 
     /* =========================================
     AUTO SCROLL
@@ -1618,6 +1680,8 @@
 
         messagesArea.scrollTop =
             messagesArea.scrollHeight;
+
+        getConversations();
 
     });
 

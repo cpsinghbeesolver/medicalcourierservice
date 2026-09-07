@@ -1248,7 +1248,109 @@
           "404": { "description": "Notification not found" }
         }
       }
+    },
+    "/api/mobile/v1/chat/conversations": {
+      "post": {
+        "tags": ["Mobile - Chat Module"],
+        "summary": "Send Messages",
+        "description": "",
+        "security": [{ "sanctum": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["company_id"],
+                "properties": {
+                  "company_id": {
+                    "type": "string",
+                    "example": ""
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Notification sent successfully" }
+        }
+      }
+    },
+    "/api/mobile/v1/chat/get-conversations": {
+      "get": {
+        "tags": ["Mobile - Chat Module"],
+        "summary": "Fetch Messages",
+        "description": "",
+        "security": [{ "sanctum": [] }],
+        "responses": {
+          "200": { "description": "Fetch Messages successfully" }
+        }
+      }
+    },
+    "/api/mobile/v1/chat/conversations/{conversation}/messages": {
+      "get": {
+        "tags": ["Mobile - Chat Module"],
+        "summary": "Fetch Messages",
+        "parameters": [
+          { "name": "conversation", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "description": "",
+        "security": [{ "sanctum": [] }],
+        "responses": {
+          "200": { "description": "Fetch Messages successfully" },
+          "404": { "description": "Messages not found" }
+        }
+      }
+    },
+    "/api/mobile/v1/chat/conversations/{conversation}/send-messages": {
+      "post": {
+        "tags": ["Mobile - Chat Module"],
+        "summary": "Send Messages",
+        "description": "",
+        "security": [{ "sanctum": [] }],
+        "parameters": [
+          { "name": "conversation", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["message"],
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "example": "Hello, how are you?"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Messages sent successfully" },
+          "404": { "description": "Conversation not found" }
+        }
+      }
+    },
+    "/chat/conversations/{conversation}/read": {
+      "put": {
+        "tags": ["Mobile - Chat Module"],
+        "summary": "Mark Messages as Read",
+        "description": "",
+        "security": [{ "sanctum": [] }],
+        "parameters": [
+          { "name": "conversation", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": {
+          "200": { "description": "Messages marked as read" },
+          "404": { "description": "Conversation not found" }
+        }
+      }
     }
+    
   },
   "components": {
     "securitySchemes": {
