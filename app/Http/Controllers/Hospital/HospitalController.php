@@ -215,19 +215,19 @@ class HospitalController extends Controller
     public function show(Request $request)
     {
         $search = $request->input('search');
-        if(!$search){
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Query parameter is required',
-            ], 400);
-        }
+        // if(!$search){
+        //     return response()->json([
+        //         'status' => 'error',
+        //         'message' => 'Query parameter is required',
+        //     ], 400);
+        // }
 
         $hospitals = Hospital::query()
-            ->when($search, function ($query) use ($search) {
-                $query->where('name', 'like', "%{$search}%");
-            })
             ->select('id', 'name')
-            ->limit(20)
+            ->when($search, function ($query) use ($search) {
+                $query->where('name', 'like', "%{$search}%")
+                    ->limit(20);
+            })
             ->get();
 
         return response()->json([

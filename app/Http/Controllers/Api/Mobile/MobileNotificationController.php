@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Mobile;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Delivery;
 use App\Services\FirebaseService;
 
 class MobileNotificationController extends Controller
@@ -155,10 +156,19 @@ class MobileNotificationController extends Controller
         ->notifications()
         ->where('type', $request->get('type', 'mobile'))
         ->findOrFail($id);
+        $data = $notification->toArray()['data'];
+        $status = null;
+        if($data['delivery_id'] ?? false){
+            $delivery = Delivery::find($data['delivery_id']);
+            if($delivery){
+                $status = $delivery->status;
+            }
+        }
         $notification->update(['is_read' => '1']);
 
         return response()->json([
             'success' => true,
+            'status' => $status,
             'message' => 'Notification marked as read.',
         ]);
     }

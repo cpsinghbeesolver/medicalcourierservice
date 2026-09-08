@@ -20,6 +20,7 @@ class CompanyDashboardController extends Controller
         $specimenTypes = SpecimenType::where('company_id', auth()->id())->where('status',1)->orderBy('name')->get();
         $temperatureRequirements = TemperatureRequirement::where('company_id', auth()->id())->where('status',1)->orderBy('name')->get();
         $vehicleRequirements = VehicleRequirement::where('company_id', auth()->id())->where('status',1)->orderBy('name')->get();
-        return view('company.job-create', compact('specimenTypes','temperatureRequirements','vehicleRequirements'));
+        $hospitals = \App\Models\Hospital::where('created_by', auth()->id())->get();
+        return view('company.job-create', compact('specimenTypes','temperatureRequirements','vehicleRequirements','hospitals'));
     }
 }

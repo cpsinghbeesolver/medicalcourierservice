@@ -53,11 +53,19 @@ class ChatController extends Controller
         $conversations = $query
             ->orderByDesc('last_message_at')
             ->get();
-
-        return response()->json([
-            'success' => true,
-            'data' => $conversations,
-        ]);
+        if ($user->role_id == 2) {
+            $html = view('company.chat-conversations', compact('conversations'))->render();
+            return response()->json([
+                'success' => true,
+                'html' => $html,
+                'data' => $conversations,
+            ]);
+        }else{
+            return response()->json([
+                'success' => true,
+                'data' => $conversations,
+            ]);
+        }
     }
 
     public function messages(Request $request, ChatConversation $conversation)

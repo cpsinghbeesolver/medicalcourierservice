@@ -1025,12 +1025,40 @@
                 input.data('hospitalAutocompleteInitialized', true);
                 const results = input.siblings('.hospital-autocomplete-results');
 
+                input.on('click', function () {
+                    const search = input.val().trim();
+                    if(search == '' && $('.hospital-autocomplete-results').is(':hidden')){
+                        $.ajax({
+                            url: '/api/v1/search-hospitals',
+                            type: 'GET',
+                            dataType: 'json',
+                            data: { search: search },
+                            headers: {
+                                'Authorization': `Bearer ${token}`,
+                                'Accept': 'application/json'
+                            },
+                            success: function (response) {
+                                if (!input.is(':focus') || input.val().trim() !== search) return;
+
+                                response.data.forEach(function (hospital) {
+                                    $('<button>', {
+                                        type: 'button',
+                                        class: 'hospital-autocomplete-option',
+                                        text: hospital.name
+                                    }).data('hospital', hospital).appendTo(results);
+                                });
+
+                                results.toggle(response.data.length > 0);
+                            }
+                        });
+                    }
+                });
                 input.on('input', function () {
                     const search = input.val().trim();
                     input.siblings('.hospital-id').val('');
                     results.empty().hide();
 
-                    if (search.length < 2) return;
+                    //if (search.length < 2) return;
 
                     $.ajax({
                         url: '/api/v1/search-hospitals',

@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Mail\DriverCreated;
+use App\Events\NewDeliveryAdded;
 
 
 Route::get('/test-mail', function () {
@@ -273,6 +274,7 @@ Route::get('/welcome', function () {
 Route::get('/test-url', function () {
     ///Auth::loginUsingId(1);
     // dd(auth()->user());
+    event(new NewDeliveryAdded('88'));
     return 'Mail sent';
 });
 

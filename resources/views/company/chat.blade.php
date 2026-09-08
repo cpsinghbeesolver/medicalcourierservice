@@ -997,117 +997,6 @@
             <div class="conversation-list" id="conversationList">
 
                 {{-- Conversation --}}
-                <div
-                    class="conversation-item active"
-                    data-name="John Smith"
-                    data-type="drivers"
-                    data-unread="true"
-                    onclick="openConversation('John Smith')"
-                >
-                    <div class="avatar avatar-blue">
-                        JS
-                        <span class="online-dot"></span>
-                    </div>
-
-                    <div class="conversation-info">
-                        <div class="conversation-top">
-                            <strong>John Smith</strong>
-                            <span class="message-time">10:42 AM</span>
-                        </div>
-
-                        <div class="conversation-bottom">
-                            <span class="last-message">
-                                The delivery has been picked up.
-                            </span>
-
-                            <span class="unread-count">2</span>
-                        </div>
-                    </div>
-                </div>
-
-
-                {{-- Conversation --}}
-                <div
-                    class="conversation-item"
-                    data-name="Michael Johnson"
-                    data-type="drivers"
-                    data-unread="false"
-                    onclick="openConversation('Michael Johnson')"
-                >
-                    <div class="avatar avatar-green">
-                        MJ
-                    </div>
-
-                    <div class="conversation-info">
-                        <div class="conversation-top">
-                            <strong>Michael Johnson</strong>
-                            <span class="message-time">Yesterday</span>
-                        </div>
-
-                        <div class="conversation-bottom">
-                            <span class="last-message">
-                                Thanks, received the instructions.
-                            </span>
-                        </div>
-                    </div>
-                </div>
-
-
-                {{-- Conversation --}}
-                <div
-                    class="conversation-item"
-                    data-name="Sarah Williams"
-                    data-type="drivers"
-                    data-unread="true"
-                    onclick="openConversation('Sarah Williams')"
-                >
-                    <div class="avatar avatar-purple">
-                        SW
-                        <span class="online-dot"></span>
-                    </div>
-
-                    <div class="conversation-info">
-                        <div class="conversation-top">
-                            <strong>Sarah Williams</strong>
-                            <span class="message-time">Yesterday</span>
-                        </div>
-
-                        <div class="conversation-bottom">
-                            <span class="last-message">
-                                Is the pickup address correct?
-                            </span>
-
-                            <span class="unread-count">1</span>
-                        </div>
-                    </div>
-                </div>
-
-
-                {{-- Conversation --}}
-                <div
-                    class="conversation-item"
-                    data-name="Operations Team"
-                    data-type="team"
-                    data-unread="false"
-                    onclick="openConversation('Operations Team')"
-                >
-                    <div class="avatar avatar-navy">
-                        OT
-                    </div>
-
-                    <div class="conversation-info">
-                        <div class="conversation-top">
-                            <strong>Operations Team</strong>
-                            <span class="message-time">Mon</span>
-                        </div>
-
-                        <div class="conversation-bottom">
-                            <span class="last-message">
-                                New delivery assigned.
-                            </span>
-                        </div>
-                    </div>
-                </div>
 
             </div>
         </aside>
@@ -1634,37 +1523,13 @@
             // data: { query: query },
             success: function(response) {
                 console.log(response);
-                $('#searchResults').show();
                 //resonse is an array of user objects with id and name properties
                 var resultsHtml = '';
                 if(response.data.length === 0) {
                     resultsHtml = '<div class="search-item"><span>No results found</span></div>';
                 }else{
-                    response.data.forEach(function(user) {
-                        resultsHtml += '<div class="conversation-item active" data-name="John Smith" data-type="drivers" data-unread="true" onclick="openConversation(\'John Smith\')">
-                    <div class="avatar avatar-blue">
-                        JS
-                        <span class="online-dot"></span>
-                    </div>
-
-                    <div class="conversation-info">
-                        <div class="conversation-top">
-                            <strong>John Smith</strong>
-                            <span class="message-time">10:42 AM</span>
-                        </div>
-
-                        <div class="conversation-bottom">
-                            <span class="last-message">
-                                The delivery has been picked up.
-                            </span>
-
-                            <span class="unread-count">2</span>
-                        </div>
-                    </div>
-                </div>';
-                    });
                 }
-                $('#searchResults').html(resultsHtml);
+                $('#conversationList').html(response.html);
             }
         });
     }
