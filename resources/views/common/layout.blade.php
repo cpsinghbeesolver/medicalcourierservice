@@ -247,12 +247,12 @@
 
 
                 @if(auth()->user()->isAdmin())
-                    <li><a href="/admin/dashboard" class="{{ (request()->is('dashboard') && !request()->is('/admin/dashboard/*')) || request()->is('/admin/dashboard/create-job') || request()->is('/admin/dashboard/drivers/create') ? 'active' : '' }}">
+                    <li><a href="/admin/dashboard" class="{{ (request()->is('admin/dashboard') && !request()->is('admin/dashboard/*')) ? 'active' : '' }}">
                         <i class="fas fa-th-large"></i> Dashboard
                         </a>
                     </li>
                     <li>
-                        <a href="/admin/dashboard/enquiries" class="{{ request()->is('/admin/dashboard/enquiries*') ? 'active' : '' }}">
+                        <a href="/admin/dashboard/enquiries" class="{{ request()->is('admin/dashboard/enquiries*') ? 'active' : '' }}">
                             <i class="fas fa-briefcase"></i> Enquiries
                         </a>
                     </li>
@@ -308,10 +308,10 @@
                     </a></li>
                 @endif
                 @if(auth()->user()->isAdmin())
-                    <li><a href="/admin/dashboard/tenants" class="{{ request()->is('dashboard/tenants*') ? 'active' : '' }}">
+                    <li><a href="/admin/dashboard/tenants" class="{{ request()->is('admin/dashboard/tenants*') ? 'active' : '' }}">
                         <i class="fa-solid fa-building-user"></i> Tenant Management
                     </a></li>
-                    <li><a href="/admin/dashboard/users" class="{{ request()->is('dashboard/users*') ? 'active' : '' }}">
+                    <li><a href="/admin/dashboard/users" class="{{ request()->is('admin/dashboard/users*') ? 'active' : '' }}">
                         <i class="fas fa-users"></i> User Management
                     </a></li>
                     <li><a href="/dashboard/hospitals" class="{{ request()->is('dashboard/hospitals*') ? 'active' : '' }}">
