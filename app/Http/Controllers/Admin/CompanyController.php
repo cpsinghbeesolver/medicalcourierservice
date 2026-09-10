@@ -124,7 +124,7 @@ class CompanyController extends Controller
      */
     public function show($id)
     {
-        $company = User::where('role_id', 2)->with('tenant')->findOrFail($id);
+        $company = User::where('role_id', 2)->with(['tenant', 'vehicleRequirements', 'temperatureRequirements'])->findOrFail($id);
         return view('admin.companies.view', compact('company'));
     }
 

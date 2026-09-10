@@ -47,6 +47,44 @@
                 </div>
             </div>
         </div>
+
+        <div class="profile-section">
+            <div class="section-header">
+                <h3><i class="fas fa-truck"></i> Vehicle Requirements</h3>
+            </div>
+
+            <div class="info-grid">
+                @forelse($company->vehicleRequirements as $requirement)
+                    <div class="info-item">
+                        <span class="info-label">{{ $requirement->name }}</span>
+                        <span class="badge {{ $requirement->status == 'active' ? 'active' : 'inactive' }}">
+                            {{ ucfirst($requirement->status) }}
+                        </span>
+                    </div>
+                @empty
+                    <p>No vehicle requirements set.</p>
+                @endforelse
+            </div>
+        </div>
+
+        <div class="profile-section">
+            <div class="section-header">
+                <h3><i class="fas fa-temperature-low"></i> Temperature Requirements</h3>
+            </div>
+
+            <div class="info-grid">
+                @forelse($company->temperatureRequirements as $requirement)
+                    <div class="info-item">
+                        <span class="info-label">{{ $requirement->name }}</span>
+                        <span class="badge {{ $requirement->status == 'active' ? 'active' : 'inactive' }}">
+                            {{ ucfirst($requirement->status) }}
+                        </span>
+                    </div>
+                @empty
+                    <p>No temperature requirements set.</p>
+                @endforelse
+            </div>
+        </div>
     </div>
 
 @endsection
