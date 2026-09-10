@@ -8,6 +8,7 @@
     <title>@yield('title', 'Admin Dashboard') - {{ env('APP_NAME') }}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/libphonenumber-js@1.11.13/bundle/libphonenumber-max.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
     <script src="{{ asset('assets/js/jquery-4.0.0.js') }}"></script>
     <script src="{{ asset('assets/js/custom.js') }}"></script>
@@ -243,8 +244,8 @@
             </div>
 
             <ul class="sidebar-menu">
-                
-                
+
+
                 @if(auth()->user()->isAdmin())
                     <li><a href="/admin/dashboard" class="{{ (request()->is('dashboard') && !request()->is('/admin/dashboard/*')) || request()->is('/admin/dashboard/create-job') || request()->is('/admin/dashboard/drivers/create') ? 'active' : '' }}">
                         <i class="fas fa-th-large"></i> Dashboard
@@ -255,9 +256,9 @@
                             <i class="fas fa-briefcase"></i> Enquiries
                         </a>
                     </li>
-                    
+
                 @endif
-                
+
                 @if(auth()->user()->isDispatcher())
                     <li><a href="/company/dashboard" class="{{ (request()->is('company/dashboard') && !request()->is('company/dashboard/*')) ? 'active' : '' }}">
                         <i class="fas fa-th-large"></i> Dashboard
@@ -313,13 +314,16 @@
                     <li><a href="/admin/dashboard/users" class="{{ request()->is('dashboard/users*') ? 'active' : '' }}">
                         <i class="fas fa-users"></i> User Management
                     </a></li>
+                    <li><a href="/dashboard/hospitals" class="{{ request()->is('dashboard/hospitals*') ? 'active' : '' }}">
+                        <i class="fas fa-hospital"></i> Hospital Management
+                    </a></li>
                 @endif
-                
+
             </ul>
         </aside>
 
         <!-- Main Content -->
-         
+
         <main class="main-content">
             <!-- Top Header -->
             <header class="top-header">
@@ -382,7 +386,7 @@
                         </div>
                         <div class="notification-list">
                             <div class="notification-item"><span>Loading...</span></div>
-                            
+
                         </div>
                     </div>
                     <div class="divider"></div>
@@ -434,7 +438,7 @@
                  @elseif(session('warning'))
                     <div class="alert alert-warning">
                         {{ session('warning') }}
-                    </div>    
+                    </div>
                 @endif
                 <h1 class="page-title">@yield('page-title', 'Dashboard')</h1>
                 @yield('content')
@@ -465,7 +469,7 @@
         <i class="fas fa-spinner fa-spin" style="font-size: 32px; color: #a8b456;"></i>
         <p style="margin-top: 15px;" class="loading-text"></p>
     </div>
-    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{ asset('assets/js/validation.js') }}"></script>
     <script>
         $('#searchInputHeader').on('keyup', function() {
@@ -497,7 +501,7 @@
                         response.data.forEach(function(user) {
                             if(user.type === 'Driver') {
                                 resultsHtml += '<div class="search-item"><a href="/company/dashboard/drivers/' + user.id + '"><span>' + user.title + '</span></a><span class="small">'+ user.type +'</span></div>';
-                            }else{  
+                            }else{
                                 resultsHtml += '<div class="search-item"><a href="/company/dashboard/deliveries/' + user.id + '"><span>' + user.title + '</span></a><span class="small">'+ user.type +'</span></div>';
                             }
                         });
@@ -505,13 +509,13 @@
                     $('#searchResults').html(resultsHtml);
                 }
             });
-        }); 
-        
+        });
+
 
         // Load user data and profile photo
         async function loadUserProfile() {
             const token = "{{ session('web_token') }}";
-            
+
             // if (!token) {
             //     window.location.href = '/';
             //     return;
@@ -626,7 +630,7 @@
                             }
                         }
                     });
-                } 
+                }
                 dropdown.classList.toggle('show');
             }
             if (userDropdown) {
@@ -634,7 +638,7 @@
             }
         }
 
-        
+
 
         function closeDropdowns(event) {
             const userMenu = document.querySelector('.user-menu');
@@ -803,7 +807,7 @@
             const notificationDropdown = document.getElementById('notificationDropdown');
             const markAllReadBtn = document.getElementById('markAllReadBtn');
             const notificationItem = document.getElementsByClassName('notification-item');
-            
+
 
             if (jobManagementToggle && jobManagementMenu) {
                 jobManagementToggle.addEventListener('click', function (e) {
@@ -873,7 +877,7 @@
             });
 
             const current_company_id = '{{ auth()->id() }}';
-            
+
             document.addEventListener('DOMContentLoaded', () => {
                 window.Echo.private('deliveries')
                     .listen('DeliveryStatusUpdated', (e) => {
@@ -892,7 +896,7 @@
                 $(this).val($(this).val().replace(/[^a-zA-Z\s]/g, ''));
             });
 
-            
+
 
         });
         function isValidEmail(email) {
@@ -919,7 +923,7 @@
                 .getElementById('country_code')
                 .selectedOptions[0]
                 .dataset.country;
-                
+
             if (!phone) {
                 // error.textContent = 'Phone number is required.';
                 return false;
@@ -980,7 +984,7 @@
             $('#searchResults').hide();
             $(this).hide();
         });
-        
+
         //add hospital
         $('#addHospitalModal').on('submit', function(e) {
             e.preventDefault();
@@ -1009,8 +1013,8 @@
                         showDialog('Hospital added successfully! Please search for it.', 'success');
                         $('#add_hospital')[0].reset();
                         document.getElementById('addHospitalModal').classList.remove('show');
-                    } 
-                    
+                    }
+
                 },
                 error: function (result) {
                     hide_load_spinner();
@@ -1101,7 +1105,7 @@
             });
         }
 
-         
+
         $('body').on('click', '.dropoff_type', function() {
             var value = $(this).val();
             if(value == 'hospital'){
@@ -1130,9 +1134,8 @@
             });
             return formatted;
         }
-        
-    </script>
 
+    </script>
     @yield('scripts')
 </body>
 </html>
