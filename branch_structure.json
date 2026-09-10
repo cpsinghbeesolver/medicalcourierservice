@@ -1,0 +1,21 @@
+{
+  "default_branch": "main",
+  "branches": [
+    "admin_changes_dev",
+    "dev_backend",
+    "main",
+    "origin"
+  ],
+  "parent": {
+    "admin_changes_dev": "main",
+    "dev_backend": "main",
+    "main": null,
+    "origin": "main"
+  },
+  "order": [
+    "main",
+    "admin_changes_dev",
+    "dev_backend",
+    "origin"
+  ]
+}
