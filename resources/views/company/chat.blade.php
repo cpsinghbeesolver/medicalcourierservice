@@ -1509,7 +1509,7 @@
                     $('.chat-window').show();
                     resultsHtml = response.html;
                 }
-                $('#conversationList').html(resultsHtml);
+                $('#conversationList').html(resultsHtml); 
             }
         });
     }
