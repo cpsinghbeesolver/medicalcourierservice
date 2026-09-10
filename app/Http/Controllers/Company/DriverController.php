@@ -63,7 +63,7 @@ class DriverController extends Controller
             return back()->withErrors($validator->errors()->all())->withInput();
             // return $this->errorResponse('Validation error', 422, $validator->errors());
         }
-        
+
         $phoneExists = User::whereNotNull('phone')
             ->get(['id', 'phone'])
             ->contains(function ($user) use ($request) {
@@ -141,9 +141,9 @@ class DriverController extends Controller
             $bloodborneFilePath = $request->file('bloodborne_file')->store('bloodborne_pathogen/' . $user->id, 'public');
             $profile->update([
                 'bloodborne_pathogen_file' => Storage::url($bloodborneFilePath),
-            ]);    
+            ]);
         }
-        
+
 
         // Log activity
         ActivityLog::create([
@@ -158,8 +158,8 @@ class DriverController extends Controller
         Mail::to($request->email)->send(new DriverCreated($request->email, $request->password, Auth::user()->name, $request->name));
         return back()->with('success', 'Driver Profile created successfully!');
         // TODO: Send email with verification code in production
-        
-        
+
+
         // return $this->successResponse([
         //     'user' => new UserResource($user),
         //     'driver_profile' => new DriverProfileResource($profile),
@@ -275,7 +275,7 @@ class DriverController extends Controller
         ]);
 
         if ($request->hasFile('hipaa_file')) {
-            
+
             if ($profile->hipaa_certification_file) {
                 Storage::disk('public')->delete(
                     str_replace('/storage/', '', $profile->hipaa_certification_file)

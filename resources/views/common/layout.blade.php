@@ -317,6 +317,9 @@
                     <li><a href="/dashboard/hospitals" class="{{ request()->is('dashboard/hospitals*') ? 'active' : '' }}">
                         <i class="fas fa-hospital"></i> Hospital Management
                     </a></li>
+                    <li><a href="/company/dashboard/drivers" class="{{ request()->is('company/dashboard/drivers') || (request()->is('company/dashboard/drivers/*') || request()->is('company/dashboard/drivers/create')) ? 'active' : '' }}">
+                        <i class="fas fa-user-tie"></i> Driver Management
+                    </a></li>
                 @endif
 
             </ul>
