@@ -83,12 +83,12 @@ class User extends Authenticatable
             'dob' => 'date',
         ];
     }
-    
+
     public function roleRelation()
     {
         return $this->belongsTo(Roles::class, 'role_id');
     }
-    
+
     public function getRoleAttribute()
     {
         return Str::lower($this->roleRelation?->name);
@@ -100,6 +100,11 @@ class User extends Authenticatable
     public function driverProfile(): HasOne
     {
         return $this->hasOne(DriverProfile::class);
+    }
+
+    public function tenant()
+    {
+        return $this->belongsTo(Tenant::class, 'tenant_id');
     }
 
     /**
@@ -178,7 +183,7 @@ class User extends Authenticatable
             ->where('is_read', 0)
             ->exists();
     }
-    
+
     public function hospital(): HasOne
     {
         return $this->hasOne(Hospital::class, 'hospital_id', 'id');

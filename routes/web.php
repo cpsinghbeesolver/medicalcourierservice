@@ -14,6 +14,7 @@ use App\Http\Controllers\Company\VehicleRequirementController;
 use App\Http\Controllers\Company\CompanyDashboardController;
 use App\Http\Controllers\Hospital\HospitalController;
 use App\Http\Controllers\Admin\HospitalController as AdminHospitalController;
+use App\Http\Controllers\Admin\CompanyController as AdminCompanyController;
 use App\Http\Controllers\Auth\CompanyAuthController;
 use App\Events\DriverLocationUpdated;
 use App\Models\TemperatureRequirement;
@@ -261,6 +262,21 @@ Route::prefix('dashboard')->name('dashboard.')->group(function () {
     Route::get('hospitals/{id}/edit', [AdminHospitalController::class, 'edit'])->name('hospitals.edit');
     Route::put('hospitals/{id}', [AdminHospitalController::class, 'update'])->name('hospitals.update');
     Route::delete('hospitals/{id}', [AdminHospitalController::class, 'destroy'])->name('hospitals.destroy');
+
+    Route::get('companies', [AdminCompanyController::class, 'index'])->name('companies');
+
+    Route::get('companies/create', [AdminCompanyController::class, 'create'])->name('companies.create');
+
+    Route::post('companies', [AdminCompanyController::class, 'store'])->name('companies.store');
+
+    Route::get('companies/{id}', [AdminCompanyController::class, 'show'])->name('companies.show');
+
+    Route::get('companies/{id}/edit', [AdminCompanyController::class, 'edit'])->name('companies.edit');
+
+    Route::put('companies/{id}', [AdminCompanyController::class, 'update'])->name('companies.update');
+
+    Route::delete('companies/{id}', [AdminCompanyController::class, 'destroy'])->name('companies.destroy');
+
 });
 
 Route::prefix('company')->middleware('custom.auth','no.cache')->group(function () {
