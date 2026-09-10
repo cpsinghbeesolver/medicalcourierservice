@@ -20,6 +20,7 @@ use App\Services\FirebaseService;
 use App\Models\User;
 use App\Models\CompanyHospital;
 use App\Jobs\SendFirebaseNotificationJob;
+use App\Events\NewDeliveryAdded;
 
 class DeliveryController extends Controller
 {
@@ -446,10 +447,11 @@ class DeliveryController extends Controller
                         ]
                     );
                 }
+                event(new NewDeliveryAdded($delivery->id,$driver->id));
             }
 
             DB::commit();
-
+            
             return $this->successResponse(
                 new DeliveryResource($delivery->load(['items', 'creator'])),
                 'Delivery created successfully',
@@ -476,8 +478,8 @@ class DeliveryController extends Controller
             'pickup_address' => 'required|string',
             'pickup_phone' => 'required|integer',
             'pickup_contact_person' => 'nullable|string|max:255',
-            'pickup_latitude' => 'nullable|numeric|between:-90,90',
-            'pickup_longitude' => 'nullable|numeric|between:-180,180',
+            'pickup_latitude' => 'required|numeric|between:-90,90',
+            'pickup_longitude' => 'required|numeric|between:-180,180',
 
             // Time Window
             'scheduled_time_window_start' => 'required|date',
@@ -530,6 +532,8 @@ class DeliveryController extends Controller
                 'required_if:items.*.dropoff_type,hospital',
             ],
         ], [
+            'pickup_latitude.required' => '<b>Missing pickup latitude:</b> Please select another location from the list.',
+            'pickup_longitude.required' => '<b>Missing pickup longitude:</b> Please select another location from the list.',
             'items.*.item_name.required' => 'Item name is required.',
             'items.*.dropoff_address.required_if' => 'Dropoff Address is required when Dropoff type is Address.',
             'items.*.hospital_id.required_if' => 'Please select a Hospital when Dropoff type is Hospital.',

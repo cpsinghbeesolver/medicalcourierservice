@@ -24,6 +24,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Mail\DriverCreated;
 use App\Events\NewDeliveryAdded;
+use App\Http\Controllers\Api\Mobile\ChatController;
 
 
 Route::get('/test-mail', function () {
@@ -199,6 +200,7 @@ Route::prefix('company/dashboard')->middleware('custom.auth','no.cache')->group(
     Route::get('/drivers', function () {
         return view('company.drivers');
     });
+    Route::get('/hospitals', [HospitalController::class, 'list'])->name('hospitals-list');
 
     Route::get('/drivers/create', function () {
         return view('company.driver-create');
@@ -229,7 +231,8 @@ Route::prefix('company/dashboard')->middleware('custom.auth','no.cache')->group(
         return view('company.contacts');
     });
 
-    Route::get('/chat', function () {
+    Route::get('/chat/{id}', [ChatController::class, 'createJobConversation']);
+    Route::get('/chat/', function () {
         return view('company.chat');
     });
 
@@ -274,7 +277,7 @@ Route::get('/welcome', function () {
 Route::get('/test-url', function () {
     ///Auth::loginUsingId(1);
     // dd(auth()->user());
-    event(new NewDeliveryAdded('88'));
+    event(new NewDeliveryAdded('88','105'));
     return 'Mail sent';
 });
 

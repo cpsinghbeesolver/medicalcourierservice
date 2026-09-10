@@ -10,6 +10,7 @@ class ChatConversation extends Model
         'company_id',
         'driver_id',
         'last_message_at',
+        'delivery_id'
     ];
 
     protected $casts = [
@@ -29,6 +30,11 @@ class ChatConversation extends Model
     public function messages()
     {
         return $this->hasMany(ChatMessage::class, 'conversation_id');
+    }
+
+    public function delivery()
+    {
+        return $this->belongsTo(Delivery::class, 'delivery_id');
     }
 
     public function latestMessage()

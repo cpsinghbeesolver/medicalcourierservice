@@ -1261,9 +1261,13 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["company_id"],
+                "required": ["company_id","delivery_id"],
                 "properties": {
                   "company_id": {
+                    "type": "string",
+                    "example": ""
+                  },
+                  "delivery_id": {
                     "type": "string",
                     "example": ""
                   }
@@ -1273,7 +1277,7 @@
           }
         },
         "responses": {
-          "200": { "description": "Notification sent successfully" }
+          "200": { "description": "Conversation created successfully" }
         }
       }
     },

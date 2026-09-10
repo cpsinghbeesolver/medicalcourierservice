@@ -171,7 +171,7 @@
                                             <i class="fas fa-plus"></i>
                                     </button>
                                 </div>
-                                <div class="">
+                                <div class="div-hospital-search">
                                     <input type="text" name="items[0][search_hospital]" class="search-hospital" placeholder="Search Hospital" autocomplete="off">
                                     <input type="hidden" name="items[0][hospital_id]" class="hospital-id">
                                     <div class="hospital-autocomplete-results"></div>
@@ -690,6 +690,7 @@
     function addHospital(thisButton){
         var index = $(thisButton).parents('.item-card').attr('data-item-index');
         $('#btnAddHospital').attr('onclick', 'confirmAddHospital(' + index + ')');
+        $('form#add_hospital')[0].reset();
         document.getElementById('addHospitalModal').classList.add('show');  
     }
 
@@ -852,7 +853,7 @@
                                 <i class="fas fa-plus"></i>
                         </button>
                     </div>
-                    <div class="">
+                    <div class="div-hospital-search">
                         <input type="text" name="items[${itemIndex}][search_hospital]" class="search-hospital" placeholder="Search Hospital" autocomplete="off">
                         <input type="hidden" name="items[${itemIndex}][hospital_id]" class="hospital-id">
                         <div class="hospital-autocomplete-results"></div>

@@ -3,9 +3,17 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Traits\EncryptsPhiData;
 
 class ChatMessage extends Model
 {
+    use EncryptsPhiData,SoftDeletes;
+
+    protected $encryptedPhiFields = [
+        'message',
+    ];
+
     protected $fillable = [
         'conversation_id',
         'sender_id',
