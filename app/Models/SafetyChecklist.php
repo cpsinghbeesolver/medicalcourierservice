@@ -55,7 +55,8 @@ class SafetyChecklist extends Model
         'biohazard_bags_available',
         'secure_transport_containers',
         'gloves_available',
-        'extra_leakproof_bags'
+        'extra_leakproof_bags',
+        'notes'
     ];
 
     protected $casts = [

@@ -18,16 +18,16 @@ class NewDeliveryAdded implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
     
-    public $delivery_id;
+    public $delivery_id,$driver_id;
 
     /**
      * Create a new event instance.
      */
-    public function __construct($delivery_id)
+    public function __construct($delivery_id,$driver_id)
     {
         $this->delivery_id = $delivery_id;
-        Log::emergency('New delivery added');
-            
+        $this->driver_id = $driver_id;
+        Log::emergency('New delivery added');            
     }
 
     /**
@@ -38,26 +38,32 @@ class NewDeliveryAdded implements ShouldBroadcastNow
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('new-delivery-added.' . $this->delivery_id),
+            new PrivateChannel('new-delivery-added.'. $this->driver_id),
         ];
     }
     
     public function broadcastAs(): string
     {
-        return 'client-get-new-delivery-added';
+        return 'new-delivery-added';
     }
 
     public function broadcastWith(): array
     {
-        $deliveries = Delivery::with(['driver:id,name,phone', 'creator:id,name', 'items'])->where('id', $this->delivery_id)->get();
-        // Transform for mobile optimization
-        if($deliveries){
-            $transformedDeliveries = $deliveries->map(function($delivery) {
-                return [
+        $delivery = Delivery::with([
+            'driver:id,name,phone',
+            'creator:id,name',
+            'items'
+        ])->where('id', $this->delivery_id)->first();
+
+        if ($delivery) {
+            return [
+                'success' => true,
+                'data' => [
                     'id' => $delivery->id,
                     'delivery_number' => $delivery->delivery_number,
                     'status' => $delivery->status,
                     'priority' => $delivery->priority,
+
                     'pickup' => [
                         'name' => $delivery->pickup_name,
                         'address' => $delivery->pickup_address,
@@ -67,9 +73,10 @@ class NewDeliveryAdded implements ShouldBroadcastNow
                         'actual_time' => $delivery->pickup_actual_time,
                         'location' => [
                             'latitude' => $delivery->pickup_latitude,
-                            'longitude' => $delivery->pickup_longitude
-                        ]
+                            'longitude' => $delivery->pickup_longitude,
+                        ],
                     ],
+
                     'delivery' => [
                         'name' => $delivery->delivery_name,
                         'address' => $delivery->delivery_address,
@@ -86,28 +93,29 @@ class NewDeliveryAdded implements ShouldBroadcastNow
                         'requires_dropoff_photo' => $delivery->requires_dropoff_photo,
                         'location' => [
                             'latitude' => $delivery->delivery_latitude,
-                            'longitude' => $delivery->delivery_longitude
-                        ]
+                            'longitude' => $delivery->delivery_longitude,
+                        ],
                     ],
+
                     'driver' => $delivery->driver ? [
                         'id' => $delivery->driver->id,
                         'name' => $delivery->driver->name,
-                        'phone' => $delivery->driver->phone
+                        'phone' => $delivery->driver->phone,
                     ] : null,
+
                     'item_count' => $delivery->items->count(),
                     'distance_km' => $delivery->distance_km,
                     'estimated_duration_minutes' => $delivery->estimated_duration_minutes,
                     'special_instructions' => $delivery->special_instructions,
-                    'created_at' => $delivery->created_at->toIso8601String()
-                ];
-            
-            });
-            return [
-                'success' => true,
-                'data' => [
-                    'deliveries' => $transformedDeliveries,
-                ]
+                    'created_at' => $delivery->created_at?->toIso8601String(),
+                ],
             ];
         }
+
+        return [
+            'success' => false,
+            'data' => null,
+            'message' => 'Delivery not found',
+        ];
     }
 }

@@ -253,7 +253,7 @@
             <option value="off_duty">Off Duty</option>        
         </select>
     </div>
-    <div class="filter-group">
+    <!-- <div class="filter-group">
         <label>Status</label>
         <select id="filterStatus" onchange="filterStatus()">
             <option value="">Select</option>
@@ -261,13 +261,13 @@
             <option value="inactive">Inactive</option>
             <option value="suspended">Suspended</option>
         </select>
-    </div>
+    </div> -->
     <div class="filter-group">
 
         <label>Search</label>
          <div class="search-bar">
             <i class="fas fa-search"></i>
-        <input type="text" id="searchInput" onkeyup="filterDrivers()" placeholder="Search by name, email, vehicle...">
+        <input type="text" id="searchInput" onkeyup="filterDrivers()" placeholder="Search by name, email...">
     </div></div>
     <!-- <button class="btn-filter" onclick="applyFilters()">Apply Filters</button> -->
 </div>

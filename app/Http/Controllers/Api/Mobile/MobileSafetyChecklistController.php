@@ -160,6 +160,7 @@ class MobileSafetyChecklistController extends Controller
             $data['checklist_date'] = today();
             $data['completed_at'] = now();
             $data['vehicle_locked'] = 1;
+            $data['notes'] = $request->input('note', null);
             // var_dump($data['vehicle_locked']);
             // print_r($data);return;
             /*if ($checklist) {

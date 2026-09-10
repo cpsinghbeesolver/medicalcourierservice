@@ -89,6 +89,7 @@ Route::prefix('v1')->middleware('auth:sanctum')->group(function () {
 
     // chat messages
     Route::post('/chat/conversations', [ChatController::class, 'createConversation']);
+    Route::post('/chat/company-conversations', [ChatController::class, 'createConversationCompany']);
     // Get company/driver conversations
     Route::get('/chat/get-conversations', [ChatController::class, 'conversations']);// Get messages
     Route::get(

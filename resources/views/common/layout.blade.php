@@ -293,6 +293,9 @@
                     <li><a href="/company/dashboard/drivers" class="{{ request()->is('company/dashboard/drivers') || (request()->is('company/dashboard/drivers/*') || request()->is('company/dashboard/drivers/create')) ? 'active' : '' }}">
                         <i class="fas fa-user-tie"></i> Driver Management
                     </a></li>
+                    <li><a href="/company/dashboard/hospitals" class="{{ request()->is('company/dashboard/hospitals') || (request()->is('company/dashboard/hospitals/*') || request()->is('company/dashboard/hospitals/create')) ? 'active' : '' }}">
+                        <i class="fas fa-user-tie"></i> Hospital Management
+                    </a></li>
                     <li><a href="/company/dashboard/activity-logs" class="{{ request()->is('company/dashboard/activity-logs*') ? 'active' : '' }}">
                         <i class="fas fa-file-lines"></i> Audit
                     </a></li>
@@ -1003,9 +1006,9 @@
                 success: function (result) {
                     hide_load_spinner();
                     if (result.success) {
-                        showDialog('Hospital added successfully!', 'success');
+                        showDialog('Hospital added successfully! Please search for it.', 'success');
                         $('#add_hospital')[0].reset();
-                        document.getElementById('addVehicleRequirementModal').classList.remove('show');
+                        document.getElementById('addHospitalModal').classList.remove('show');
                     } 
                     
                 },

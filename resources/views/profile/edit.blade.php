@@ -445,10 +445,10 @@
                         <div class="invalid-feedback" id="address-error"></div>
                     </div>
                     @endif
-                    <div class="col-12 mb-3">
+                    <!-- <div class="col-12 mb-3">
                         <label for="role" class="form-label">Role</label>
                         <input type="text" class="form-control" id="role" name="role" disabled placeholder="User role">
-                    </div>
+                    </div> -->
                 </div>
 
                 <div class="gap-2 mt-4">
@@ -550,7 +550,7 @@
                 dob.value = user.dob || '';
             }
             document.getElementById('address').value = user.address || '';
-            document.getElementById('role').value = user.role ? user.role.toUpperCase() : '';
+            // document.getElementById('role').value = user.role ? user.role.toUpperCase() : '';
 
             // Set user initials
             const initials = user.name ? user.name.split(' ').map(n => n[0]).join('').toUpperCase() : 'U';

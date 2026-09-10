@@ -651,8 +651,8 @@
 
         map = new google.maps.Map(document.getElementById('mainMap'), {
             zoom: 13,
-            maxZoom: 16,
-            minZoom: 12,
+            //maxZoom: 16,
+            //minZoom: 12,
             mapId: "{{ config('services.google_maps.api_key') }}",
             center: defaultCenter,
             mapTypeControl: true,

@@ -1302,7 +1302,12 @@ color: #000000;
     display: block !important;
 }
 
+.div-hospital-search{
+    position: relative;
+    margin-top: 24px;
+}
 .hospital-autocomplete-results {
+        width: 100%;
         position: absolute;
         z-index: 10;
         display: none;

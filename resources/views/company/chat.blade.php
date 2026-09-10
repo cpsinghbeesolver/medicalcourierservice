@@ -9,7 +9,9 @@
     /* =========================================
     CHAT PAGE
     ========================================= */
-
+    .page-title{
+        display: none;
+    }
     .chat-page {
         padding: 28px 30px 35px;
         background: #f8f9f7;
@@ -70,8 +72,7 @@
     ========================================= */
 
     .chat-container {
-        height: calc(100vh - 190px);
-        min-height: 600px;
+        height: calc(97vh - 190px);
 
         display: flex;
 
@@ -327,9 +328,9 @@
     .conversation-bottom {
         display: flex;
         justify-content: space-between;
-        align-items: center;
-
+        align-items: start;
         margin-top: 6px;
+        flex-direction: column;
     }
 
     .last-message {
@@ -342,6 +343,14 @@
         text-overflow: ellipsis;
 
         white-space: nowrap;
+    }
+    .delivery_number{
+        color: #899398;
+        font-size: 12px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-weight: bold;
     }
 
     .unread-count {
@@ -799,6 +808,8 @@
 
     .driver-selection {
         padding-bottom: 10px;
+        max-height: 243px;
+        overflow-y: scroll;
     }
 
     .driver-option {
@@ -957,16 +968,16 @@
         ========================================== --}}
         <aside class="conversation-panel">
 
-            <div class="conversation-header">
+            <!-- <div class="conversation-header">
                 <div>
                     <h3>Messages</h3>
                     <span class="conversation-count">4 conversations</span>
                 </div>
-            </div>
+            </div> -->
 
 
             {{-- Search --}}
-            <div class="chat-search">
+            <!-- <div class="chat-search">
                 <span class="search-icon">⌕</span>
                 <input
                     type="text"
@@ -974,11 +985,11 @@
                     placeholder="Search conversations..."
                     onkeyup="searchConversations()"
                 >
-            </div>
+            </div> -->
 
 
             {{-- Filters --}}
-            <div class="conversation-filters">
+            <!-- <div class="conversation-filters">
                 <button class="filter-btn active" onclick="filterChats('all', this)">
                     All
                 </button>
@@ -990,7 +1001,7 @@
                 <button class="filter-btn" onclick="filterChats('drivers', this)">
                     Drivers
                 </button>
-            </div>
+            </div> -->
 
 
             {{-- Conversation List --}}
@@ -1018,7 +1029,7 @@
                     </div>
 
                     <div>
-                        <h3 id="chatUserName">John Smith</h3>
+                        <h3 id="chatUserName"></h3>
 
                         <div class="chat-status">
                             <span class="status-dot"></span>
@@ -1029,7 +1040,7 @@
                 </div>
 
 
-                <div class="chat-header-actions">
+                <!-- <div class="chat-header-actions">
 
                     <button title="Search">
                         ⌕
@@ -1039,7 +1050,7 @@
                         ⋮
                     </button>
 
-                </div>
+                </div> -->
 
             </div>
 
@@ -1047,91 +1058,7 @@
             {{-- Messages --}}
             <div class="messages-area" id="messagesArea">
 
-                <div class="date-divider">
-                    <span>Today</span>
-                </div>
-
-
-                {{-- Received --}}
-                <div class="message-row received">
-
-                    <div class="avatar avatar-blue message-avatar">
-                        JS
-                    </div>
-
-                    <div class="message-content">
-
-                        <div class="message-bubble">
-                            Hi, I have picked up the delivery.
-                        </div>
-
-                        <span class="message-meta">
-                            10:38 AM
-                        </span>
-
-                    </div>
-
-                </div>
-
-
-                {{-- Sent --}}
-                <div class="message-row sent">
-
-                    <div class="message-content">
-
-                        <div class="message-bubble">
-                            Great. Please proceed to the delivery address.
-                        </div>
-
-                        <span class="message-meta">
-                            10:39 AM
-                            <span class="message-check">✓✓</span>
-                        </span>
-
-                    </div>
-
-                </div>
-
-
-                {{-- Received --}}
-                <div class="message-row received">
-
-                    <div class="avatar avatar-blue message-avatar">
-                        JS
-                    </div>
-
-                    <div class="message-content">
-
-                        <div class="message-bubble">
-                            Sure. ETA is approximately 25 minutes.
-                        </div>
-
-                        <span class="message-meta">
-                            10:41 AM
-                        </span>
-
-                    </div>
-
-                </div>
-
-
-                {{-- Sent --}}
-                <div class="message-row sent">
-
-                    <div class="message-content">
-
-                        <div class="message-bubble">
-                            Perfect. Please update me once you arrive.
-                        </div>
-
-                        <span class="message-meta">
-                            10:42 AM
-                            <span class="message-check">✓✓</span>
-                        </span>
-
-                    </div>
-
-                </div>
+                
 
 
             </div>
@@ -1192,49 +1119,13 @@
 
         <div class="modal-search">
             <input
-                type="text"
+                type="text" class="search-drivers"
                 placeholder="Search drivers..."
             >
         </div>
 
         <div class="driver-selection">
 
-            <div class="driver-option" onclick="selectDriver('John Smith')">
-                <div class="avatar avatar-blue">
-                    JS
-                </div>
-
-                <div>
-                    <strong>John Smith</strong>
-                    <span>Driver</span>
-                </div>
-
-                <span class="status-dot"></span>
-            </div>
-
-            <div class="driver-option" onclick="selectDriver('Michael Johnson')">
-                <div class="avatar avatar-green">
-                    MJ
-                </div>
-
-                <div>
-                    <strong>Michael Johnson</strong>
-                    <span>Driver</span>
-                </div>
-            </div>
-
-            <div class="driver-option" onclick="selectDriver('Sarah Williams')">
-                <div class="avatar avatar-purple">
-                    SW
-                </div>
-
-                <div>
-                    <strong>Sarah Williams</strong>
-                    <span>Driver</span>
-                </div>
-
-                <span class="status-dot"></span>
-            </div>
 
         </div>
 
@@ -1323,36 +1214,47 @@
     OPEN CONVERSATION
     ========================================= */
 
-    function openConversation(name) {
+    function openConversation(e) {
+        
+        $(e).addClass('active').siblings().removeClass('active');
 
-        document
-            .querySelectorAll('.conversation-item')
-            .forEach(item => {
-
-                item.classList.remove('active');
-
-            });
-
-
-        event.currentTarget.classList.add('active');
-
-
+        var name = $(e).data('name');
         document
             .getElementById('chatUserName')
             .textContent = name;
 
 
         // Remove unread badge
-        const badge =
-            event.currentTarget.querySelector('.unread-count');
+        // const badge =
+        //     event.currentTarget.querySelector('.unread-count');
 
-        if (badge) {
+        // if (badge) {
 
-            badge.remove();
+        //     badge.remove();
 
-            event.currentTarget.dataset.unread = 'false';
+        //     event.currentTarget.dataset.unread = 'false';
 
-        }
+        // }
+        var conversation_id = $(e).data('id');
+        $.ajax({
+            url: `/api/mobile/v1/chat/conversations/${conversation_id}/messages`,
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${web_token}`,
+                'Accept': 'application/json'
+            },
+            data: {
+                receiver_id: $(e).data('id')
+            },
+            success: function(response) {
+                console.log(response);
+                $('#messagesArea').html(response.html);
+                const messagesArea =
+                    document.getElementById('messagesArea');
+                messagesArea.scrollTop =
+                    messagesArea.scrollHeight;          
+            }
+        });   
 
     }
 
@@ -1431,6 +1333,24 @@
         *     })
         * });
         */
+       var conversation_id;
+       $('#conversationList .conversation-item.active').each(function() {
+            conversation_id = $(this).data('id');
+        });
+       $.ajax({
+            url: `/api/mobile/v1/chat/conversations/${conversation_id}/send-messages`,
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${web_token}`,
+                'Accept': 'application/json'
+            },
+            data: {
+                message: message
+            },
+            success: function(response) {
+                console.log(response);       
+            }
+        }); 
 
     }
 
@@ -1470,7 +1390,49 @@
     ========================================= */
 
     function openNewChat() {
+        $.ajax({
+            url: '/api/v1/driver-profiles',
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${web_token}`,
+                'Accept': 'application/json'
+            },
+            success: function(response) {
+                console.log('response');
+                
+                var resultsHtml = '';
+                if(response.data.profiles.length === 0) {
+                    resultsHtml = '<div class="search-item"><span>No drivers found</span></div>';
+                }else{
+                    var i = 0;
+                    
+                    response.data.profiles.forEach(function(driver) {
+                        console.log(driver);
+                        if(i < 3){
+                            resultsHtml += `
+                                <div class="driver-option" onclick="selectDriver('${driver.user.name}','${driver.user.id}')">        
+                                    <div class="avatar avatar-blue">
+                                        ${driver.user.name
+                                        .split(' ')
+                                        .map(name => name.charAt(0).toUpperCase())
+                                        .join('')}
+                                    </div>
 
+                                    <div>
+                                        <strong>${driver.user.name}</strong>
+                                        <span>Driver</span>
+                                    </div>
+
+                                    ${driver.availability_status == 'available' ? '<span class="status-dot"></span>' : ''}
+                                </div>
+                            `;
+                            i++;
+                        }
+                    });
+                    $('.driver-selection').html(resultsHtml);
+                }              
+            }        
+        });
         document
             .getElementById('newChatModal')
             .classList.add('show');
@@ -1485,13 +1447,42 @@
 
     }
 
-    function selectDriver(name) {
-
-        document
-            .getElementById('chatUserName')
-            .textContent = name;
-
-        closeNewChat();
+    function selectDriver(name,driver_id) {
+        show_load_spinner('content','Loading conversations...','class');
+        $.ajax({
+            url: '/api/mobile/v1/chat/company-conversations',
+            method: 'POST',
+            data:{'driver_id':driver_id},
+            headers: {
+                'Authorization': `Bearer ${web_token}`,
+                'Accept': 'application/json'
+            },
+            // data: { query: query },
+            success: function(response) {
+                console.log(response.data.id);
+                closeNewChat();
+                getConversations();
+                setTimeout(function() {
+                    $('#conversationList .conversation-item').each(function(){
+                        if($(this).attr('data-id') == response.data.id){
+                            $(this).trigger('click');
+                        }
+                    });
+                    hide_load_spinner('content','Loading conversations...','class');
+                }, 1000);
+                
+                //document.getElementById('chatUserName').textContent = name;
+                //var html = '<div class="conversation-item active" data-name="'+name+'" data-id="1" data-type="drivers" data-unread="false" onclick="openConversation(this)"> <div class="avatar avatar-blue"> GO </div> <div class="conversation-info"> <div class="conversation-top"> <strong>'+name+'</strong> </div> </div> </div>';    
+                //$('#conversationList .conversation-item').removeClass('active');
+                //$('#conversationList').append(html);
+                //closeNewChat();
+            },
+            error: function(res){
+                hide_load_spinner('content','Loading conversations...','class');
+            }
+        });
+        
+        
 
     }
     var web_token = "{{ session('web_token') }}";
@@ -1499,20 +1490,6 @@
         // This function can be used to fetch conversations from the server
         // using AJAX or any other method. For now, it just logs a message.
         console.log('Fetching conversations...');
-        // fetch('/chat/messages', {
-        //     method: 'GET',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //         'X-CSRF-TOKEN':
-        //             document.querySelector(
-        //                'meta[name="csrf-token"]'
-        //            ).content
-        //     },
-        //     body: JSON.stringify({
-        //         receiver_id: 5,
-        //         message: message
-        //     })
-        // });
         $.ajax({
             url: '/api/mobile/v1/chat/get-conversations',
             method: 'GET',
@@ -1527,19 +1504,62 @@
                 var resultsHtml = '';
                 if(response.data.length === 0) {
                     resultsHtml = '<div class="search-item"><span>No results found</span></div>';
+                    $('.chat-window').hide();
                 }else{
+                    $('.chat-window').show();
+                    resultsHtml = response.html;
                 }
-                $('#conversationList').html(response.html);
+                $('#conversationList').html(resultsHtml);
             }
         });
     }
+
+    $('.search-drivers').on('input', function() {
+        var query = $(this).val().toLowerCase();
+        $.ajax({
+            url: '/api/v1/driver-profiles',
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${web_token}`,
+                'Accept': 'application/json'
+            },
+            data: { search: query },
+            success: function(response) {
+                console.log(response);
+                var resultsHtml = '';
+                if(response.data.profiles.length === 0) {
+                    resultsHtml = '<div class="search-item"><span>No results found</span></div>';
+                }else{
+                    response.data.profiles.forEach(function(driver) {
+                        resultsHtml += `
+                            <div class="driver-option" onclick="selectDriver('${driver.user.name}','${driver.user.id}')">
+                                <div class="avatar avatar-blue">
+                                    ${driver.user.name
+                                    .split(' ')
+                                    .map(name => name.charAt(0).toUpperCase())
+                                    .join('')}
+                                </div>
+                               <div>
+                                    <strong>${driver.user.name}</strong>
+                                    <span>Driver</span>
+                                </div>              
+                            </div>
+                        `;
+                    });         
+                }
+                $('.driver-selection').html(resultsHtml);
+            }
+        });   
+
+    });
 
     /* =========================================
     AUTO SCROLL
     ========================================= */
 
     document.addEventListener('DOMContentLoaded', function() {
-
+        const delivery = @json($delivery ?? null);
+        // console.log(delivery);
         const messagesArea =
             document.getElementById('messagesArea');
 
@@ -1547,7 +1567,25 @@
             messagesArea.scrollHeight;
 
         getConversations();
-
+        show_load_spinner('content','Loading conversations...','class');
+        setTimeout(function() {
+            if(delivery){
+                if($('#conversationList').children().length > 0) {
+                    $('#conversationList .conversation-item').each(function(){
+                        if($(this).attr('data-deliveryid') == delivery.id){
+                            $(this).trigger('click');
+                        }
+                    });
+                    // $('#conversationList').children().first().trigger('click');
+                }
+            }else{
+                if($('#conversationList').children().length > 0) {
+                    $('#conversationList').children().first().trigger('click');
+                }
+            }
+            hide_load_spinner('content','Loading conversations...','class');
+        }, 1000);
+        // hide_load_spinner('content','Loading conversations...','class');
     });
 
 
