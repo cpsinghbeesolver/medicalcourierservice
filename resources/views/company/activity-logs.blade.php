@@ -487,13 +487,29 @@
                 <div class="delivery-times">
                     <div class="time-item">
                         <i class="far fa-calendar"></i>
-                        <span class="time-label">Pickup</span>
-                        <span class="time-value">${delivery.pickup.scheduled_time ? new Date(delivery.pickup.scheduled_time).toLocaleString() : 'N/A'}</span>
+                        <span class="time-label">
+                            ${delivery.pickup.actual_time ? 'Actual Pickup' : 'Expected Pickup'}
+                        </span>
+                        <span class="time-value">
+                            ${delivery.pickup.actual_time
+                                ? new Date(delivery.pickup.actual_time).toLocaleString()
+                                : (delivery.pickup.scheduled_time
+                                    ? new Date(delivery.pickup.scheduled_time).toLocaleString()
+                                    : 'N/A')}
+                        </span>
                     </div>
                     <div class="time-item">
                         <i class="far fa-calendar"></i>
-                        <span class="time-label">Delivery</span>
-                        <span class="time-value">${delivery.delivery.scheduled_time ? new Date(delivery.delivery.scheduled_time).toLocaleString() : 'N/A'}</span>
+                        <span class="time-label">
+                            ${delivery.delivery.actual_time ? 'Actual Delivery' : 'Expected Delivery'}
+                        </span>
+                        <span class="time-value">
+                            ${delivery.delivery.actual_time
+                                ? new Date(delivery.delivery.actual_time).toLocaleString()
+                                : (delivery.delivery.scheduled_time
+                                    ? new Date(delivery.delivery.scheduled_time).toLocaleString()
+                                    : 'N/A')}
+                        </span>
                     </div>
                 </div>
             </div>

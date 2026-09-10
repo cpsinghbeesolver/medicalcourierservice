@@ -645,6 +645,11 @@
                                 <i class="fas fa-trash"></i> Delete
                             </button>
                             ` : ''}
+                            ${delivery.status === 'assigned' || delivery.status === 'accepted' || delivery.status === 'in_transit' || delivery.status === 'picked_up'  ? `
+                            <button class="btn-action" type="button" data-action="message" data-delivery-id="${delivery.id}">
+                                <i class="fas fa-message"></i>
+                            </button>
+                            ` : ''}
                         </td>
                     </tr>
                 `;
@@ -672,6 +677,9 @@
                 } 
                 else if (action === 'delete') {
                     button.addEventListener('click', () => deleteDelivery(id));
+                }
+                else if (action === 'message') {
+                    button.addEventListener('click', () => window.location.href = `/company/dashboard/chat/${id}`);
                 }
             });
         }

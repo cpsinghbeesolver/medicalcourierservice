@@ -4,10 +4,27 @@ namespace App\Http\Controllers\Api\Mobile;
 
 use Illuminate\Http\Request;
 use App\Models\ChatConversation;
+use App\Models\Delivery;
 use App\Http\Controllers\Controller;
 
 class ChatController extends Controller
 {
+    public function createJobConversation($id){
+        $delivery = Delivery::find($id);
+        if($delivery){
+            $companyId = auth()->id();
+            $conversation = ChatConversation::firstOrCreate(
+                [
+                    'company_id' => $companyId,
+                    'driver_id' => $delivery->driver_id,
+                    'delivery_id' => $delivery->id
+                ]
+            );
+            return view('company.chat',compact('delivery'));
+        }else{
+            return back()->with('error', 'Delivery not found');
+        }
+    }
     public function createConversation(Request $request)
     {
         $request->validate([
@@ -16,11 +33,37 @@ class ChatController extends Controller
 
         $driverId = $request->user()->id;
         $companyId = $request->company_id;
+        $delivery_id = $request->delivery_id;
 
         $conversation = ChatConversation::firstOrCreate(
             [
                 'company_id' => $companyId,
                 'driver_id' => $driverId,
+                'delivery_id' => $delivery_id
+            ]
+        );
+
+        return response()->json([
+            'success' => true,
+            'data' => $conversation,
+        ]);
+    }
+
+    public function createConversationCompany(Request $request)
+    {
+        $request->validate([
+            'driver_id' => 'required|exists:users,id',
+        ]);
+
+        $companyId = $request->user()->id;
+        $driverId = $request->driver_id;
+        $delivery_id = $request->delivery_id;
+
+        $conversation = ChatConversation::firstOrCreate(
+            [
+                'company_id' => $companyId,
+                'driver_id' => $driverId,
+                'delivery_id' => $delivery_id
             ]
         );
 
@@ -40,6 +83,7 @@ class ChatController extends Controller
             'company:id,name',
             'driver:id,name',
             'latestMessage.sender:id,name',
+            'delivery:id,delivery_number'
         ]);
         // dd($user->id);
         if ($user->role_id == 2) {
@@ -49,10 +93,11 @@ class ChatController extends Controller
             // Driver
             $query->where('driver_id', $user->id);
         }
-
+        
         $conversations = $query
             ->orderByDesc('last_message_at')
             ->get();
+        // dd($conversations);
         if ($user->role_id == 2) {
             $html = view('company.chat-conversations', compact('conversations'))->render();
             return response()->json([
@@ -71,7 +116,7 @@ class ChatController extends Controller
     public function messages(Request $request, ChatConversation $conversation)
     {
         $userId = $request->user()->id;
-
+        $user = $request->user();
         if (
             $conversation->company_id !== $userId &&
             $conversation->driver_id !== $userId
@@ -87,10 +132,19 @@ class ChatController extends Controller
             ->orderBy('created_at', 'asc')
             ->paginate(50);
 
-        return response()->json([
-            'success' => true,
-            'data' => $messages,
-        ]);
+        if ($user->role_id == 2) {
+            $html = view('company.chat-messages', compact('messages'))->render();
+            return response()->json([
+                'success' => true,
+                'html' => $html,
+                'data' => $messages,
+            ]);
+        }else{
+            return response()->json([
+                'success' => true,
+                'data' => $messages,
+            ]);
+        }
     }
 
     public function sendMessage(Request $request,ChatConversation $conversation) {

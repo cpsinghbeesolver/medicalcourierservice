@@ -179,7 +179,7 @@
                                                 <i class="fas fa-plus"></i>
                                         </button>
                                     </div>
-                                    <div class="">
+                                    <div class="div-hospital-search">
                                         <input type="text" name="items[{{$loop->index}}][search_hospital]" value="{{ optional($deliveryItem)->hospital->name ?? '' }}" class="search-hospital" placeholder="Search Hospital" autocomplete="off" {{ !$deliveryItem->hospital ? 'disabled' : '' }}>
                                         <input type="hidden" name="items[{{$loop->index}}][hospital_id]" class="hospital-id" value="{{ optional($deliveryItem)->hospital->id ?? '' }}">
                                         <div class="hospital-autocomplete-results"></div>
@@ -795,7 +795,7 @@
                                 <i class="fas fa-plus"></i>
                         </button>
                     </div>
-                    <div class="">
+                    <div class="div-hospital-search">
                         <input type="text" name="items[${itemIndex}][search_hospital]" class="search-hospital" placeholder="Search Hospital" autocomplete="off">
                         <input type="hidden" name="items[${itemIndex}][hospital_id]" class="hospital-id">
                         <div class="hospital-autocomplete-results"></div>

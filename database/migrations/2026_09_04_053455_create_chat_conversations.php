@@ -27,7 +27,7 @@ return new class extends Migration
             $table->timestamps();
 
             // One conversation between a company and driver
-            $table->unique(['company_id', 'driver_id']);
+            // $table->unique(['company_id', 'driver_id']);
         });
     }
 

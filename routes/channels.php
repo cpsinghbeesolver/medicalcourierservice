@@ -37,6 +37,6 @@ Broadcast::channel('driver-disconnected.{driver_id}', function ($user, $driver_i
     Log::emergency('Driver Disconnected');
     return true;
 });
-Broadcast::channel('new-delivery-added.{delivery_id}', function ($user, $delivery_id) {
+Broadcast::channel('new-delivery-added.{driver_id}', function ($user, $driver_id) {
     return true;
 });

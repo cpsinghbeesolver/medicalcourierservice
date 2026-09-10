@@ -134,7 +134,7 @@ class HospitalController extends Controller
     {
         $validated = $request->validate([
             'hospital_name' => 'required|string|max:255',
-            'hospital_registration' => 'required|string|max:255',
+            'hospital_registration' => 'required|unique:hospitals,registration_number|string|max:255',
             'hospital_email' => 'required|email|unique:users,email|max:255',
             'hospital_phone' => 'required|string|max:30',
 
@@ -224,6 +224,10 @@ class HospitalController extends Controller
 
         $hospitals = Hospital::query()
             ->select('id', 'name')
+            ->when(empty($search), function ($query) {
+                $query->where('created_by', auth()->id())
+                ->orderBy('created_at', 'desc');
+            })
             ->when($search, function ($query) use ($search) {
                 $query->where('name', 'like', "%{$search}%")
                     ->limit(20);
@@ -257,5 +261,15 @@ class HospitalController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function list()
+    {
+        $hospitals = Hospital::query()
+            ->select('id', 'name')
+            ->where('created_by', auth()->id())
+            ->latest()->paginate(15);
+
+        return view('company.hospitals',compact('hospitals'));
     }
 }
