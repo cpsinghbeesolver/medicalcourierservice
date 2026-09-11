@@ -296,6 +296,7 @@
         border: 2px solid white;
 
         border-radius: 50%;
+        display: none;
     }
 
 
@@ -435,13 +436,14 @@
         color: #89969a;
 
         font-size: 11px;
+        display: none;
     }
 
     .status-dot {
         width: 7px;
         height: 7px;
 
-        display: inline-block;
+        display: none;
 
         border-radius: 50%;
 
@@ -1024,7 +1026,6 @@
                 <div class="chat-user">
 
                     <div class="avatar avatar-blue large-avatar">
-                        JS
                         <span class="online-dot"></span>
                     </div>
 
@@ -1079,7 +1080,7 @@
 
                     <textarea
                         id="messageInput"
-                        rows="1"
+                        rows="1" maxlength="250"
                         placeholder="Type a message..."
                         onkeydown="handleMessageKey(event)"
                     ></textarea>
@@ -1219,10 +1220,11 @@
         $(e).addClass('active').siblings().removeClass('active');
 
         var name = $(e).data('name');
+        var initials = name.substring(0, 2).toUpperCase();
         document
             .getElementById('chatUserName')
             .textContent = name;
-
+        $('.chat-user .avatar-blue').html(initials);
 
         // Remove unread badge
         // const badge =
@@ -1247,15 +1249,26 @@
                 receiver_id: $(e).data('id')
             },
             success: function(response) {
-                console.log(response);
+                //console.log(response);
                 $('#messagesArea').html(response.html);
                 const messagesArea =
                     document.getElementById('messagesArea');
                 messagesArea.scrollTop =
                     messagesArea.scrollHeight;          
             }
-        });   
-
+        }); 
+        
+        $.ajax({
+            url: `/api/mobile/v1/chat/conversations/${conversation_id}/read`,
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${web_token}`,
+                'Accept': 'application/json'
+            },
+            success: function(response) {        
+            }
+        }); 
+        
     }
 
 
@@ -1505,11 +1518,41 @@
                 if(response.data.length === 0) {
                     resultsHtml = '<div class="search-item"><span>No results found</span></div>';
                     $('.chat-window').hide();
+                    $('#conversationList').html(resultsHtml); 
                 }else{
                     $('.chat-window').show();
                     resultsHtml = response.html;
+                    $('#conversationList').html(resultsHtml); 
+
+                    $('#conversationList .conversation-item').each(function(){
+                        var conversation_id = $(this).attr('data-id');
+                        Echo.private(`chat.${conversation_id}`)
+                        .listen('.message.sent', (event) => {
+                                //getConversations();
+                            if(conversation_id == event.conversation_id){
+                                $(this).trigger('click');
+                                // var index = $('#conversationList').children('.conversation-item').index($(this));
+                                // if(index > 0){
+                                //     getConversations();
+                                //     var index = $('#conversationList').children('.conversation-item').index($(this));
+                                //     setTimeout(() => {
+                                //         $(this).addClass('active');
+                                //     }, 1000);
+                                    
+                                // }
+                            }
+                            
+                            // console.log('New chat message:', event);
+
+                            // console.log('Message:', event.message);
+                            // console.log('Sender ID:', event.sender_id);
+                            // console.log('Conversation ID:', event.conversation_id);
+
+                            // Add message to your chat UI
+                        });
+                    });
                 }
-                $('#conversationList').html(resultsHtml); 
+                
             }
         });
     }
@@ -1525,7 +1568,7 @@
             },
             data: { search: query },
             success: function(response) {
-                console.log(response);
+                // console.log(response);
                 var resultsHtml = '';
                 if(response.data.profiles.length === 0) {
                     resultsHtml = '<div class="search-item"><span>No results found</span></div>';
@@ -1588,6 +1631,6 @@
         // hide_load_spinner('content','Loading conversations...','class');
     });
 
-
+    
 </script>
 @endsection

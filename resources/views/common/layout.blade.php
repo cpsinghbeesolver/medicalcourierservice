@@ -612,7 +612,7 @@
                                     response.notifications.data.forEach(function(notification) {
                                         const isUnread = !notification.is_read;
                                         resultsHtml += `
-                                            <div class="notification-item ${isUnread ? 'unread' : ''}" data-id="${notification.id || '#'}" data-delivery-id="${notification.data.delivery_id || '#'}" data-user-id="${notification.data.user_id || '#'}">
+                                            <div class="notification-item ${isUnread ? 'unread' : ''}" data-id="${notification.id || '#'}" data-delivery-id="${notification.data.delivery_id || '#'}" data-user-id="${notification.data.user_id || '#'}" data-conversation-id="${notification.data.conversation_id || '#'}">
                                                 <div class="notification-item-icon"><i class="fas fa-bell"></i></div>
                                                 <div class="notification-item-text">
                                                     <p>${notification.title}</p>
@@ -864,11 +864,16 @@
 
                 const deliveryId = $(this).data('delivery-id');
                 const userId = $(this).data('user-id');
+                const conversation_id = $(this).data('conversation-id');
 
-                if (deliveryId && deliveryId !== '#') {
+                if (deliveryId && deliveryId !== '#' && conversation_id == '#') {
                     window.location.href = `/company/dashboard/deliveries/${deliveryId}`;
                 } else if (userId && userId !== '#') {
                     window.location.href = `/company/dashboard/drivers/${userId}`;
+                } else if (conversation_id !== '#' && deliveryId !== '#'){
+                    window.location.href = `/company/dashboard/chat/${deliveryId}`;
+                }else if (conversation_id !== '#' && deliveryId == '#'){
+                    window.location.href = `/company/dashboard/chat/`;
                 }
             });
 

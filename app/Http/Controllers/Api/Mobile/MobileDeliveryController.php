@@ -8,6 +8,7 @@ use App\Models\DeliveryItem;
 use App\Models\DeliveryVerification;
 use App\Models\ActivityLog;
 use App\Models\User;
+use App\Models\ChatConversation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
@@ -1238,6 +1239,13 @@ class MobileDeliveryController extends Controller
             );
 
             event(new DeliveryStatusUpdated($delivery));
+
+            //Delete chat related with this delivery id
+            $conversation = ChatConversation::where('delivery_id', $delivery->id)->first();
+            if ($conversation) {
+                $conversation->messages()->delete();
+            }
+
             return response()->json([
                 'success' => true,
                 'message' => 'Delivery completed successfully',
@@ -1398,7 +1406,12 @@ class MobileDeliveryController extends Controller
                 );
 
                 event(new DeliveryStatusUpdated($delivery));
-
+                
+                //Delete chat related with this delivery id
+                $conversation = ChatConversation::where('delivery_id', $delivery->id)->first();
+                if ($conversation) {
+                    $conversation->messages()->delete();
+                }
                 return response()->json([
                     'success' => true,
                     'message' => 'Delivery Item failed successfully',

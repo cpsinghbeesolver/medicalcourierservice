@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\ChatConversation;
 use App\Models\Delivery;
 use App\Http\Controllers\Controller;
+use App\Events\ChatMessageSent;
+use App\Jobs\SendFirebaseNotificationJob;
+use App\Models\User;
 
 class ChatController extends Controller
 {
@@ -83,8 +86,15 @@ class ChatController extends Controller
             'company:id,name',
             'driver:id,name',
             'latestMessage.sender:id,name',
-            'delivery:id,delivery_number'
+            'delivery:id,delivery_number,status'
         ]);
+        // Only include conversations whose delivery is not delivered or failed
+        $query->where(function ($q) {
+            $q->whereNull('delivery_id')
+            ->orWhereHas('delivery', function ($q) {
+                $q->whereNotIn('status', ['delivered', 'failed']);
+            });
+        });
         // dd($user->id);
         if ($user->role_id == 2) {
             // Company
@@ -128,7 +138,7 @@ class ChatController extends Controller
         }
 
         $messages = $conversation->messages()
-            ->with('sender:id,name')
+            ->with('sender:id,name,profile_photo')
             ->orderBy('created_at', 'asc')
             ->paginate(50);
 
@@ -178,6 +188,51 @@ class ChatController extends Controller
         ]);
 
         $message->load('sender:id,name');
+        broadcast(new ChatMessageSent($message))->toOthers();
+        
+        $driver = User::find($conversation->driver_id);
+        $company = User::find($conversation->company_id);
+        if($request->user()->role_id == '2'){
+            //Send Notification to driver
+            
+            $title = "New message from Company";
+            $body = "You have received a new message from Company. Please check it.";
+            SendFirebaseNotificationJob::dispatch(
+                $driver->device_token,
+                $title,
+                $body,
+                'mobile',
+                $conversation->driver_id,
+                [
+                    'type' => 'chat',
+                    'company_id' => (string) $conversation->company_id,
+                    'driver_id' => (string) $conversation->driver_id,
+                    'conversation_id' => (string) $conversation->driver_id,
+                    'delivery_id' => (string) $conversation->delivery_id
+                ]
+            );
+        }
+
+        if($request->user()->role_id == '4'){
+            //Send Notification to Company
+            
+            $title = "New message from ".$driver->name;
+            $body = "You have received a new message from ".$driver->name.". Please check it.";
+            SendFirebaseNotificationJob::dispatch(
+                $company->device_token,
+                $title,
+                $body,
+                'web',
+                $conversation->company_id,
+                [
+                    'type' => 'chat',
+                    'company_id' => (string) $conversation->company_id,
+                    'driver_id' => (string) $conversation->driver_id,
+                    'conversation_id' => (string) $conversation->driver_id,
+                    'delivery_id' => (string) $conversation->delivery_id
+                ]
+            );
+        }
 
         return response()->json([
             'success' => true,
