@@ -36,8 +36,23 @@ class ChatController extends Controller
 
         $driverId = $request->user()->id;
         $companyId = $request->company_id;
-        $delivery_id = $request->delivery_id;
+        $company = User::find($companyId);
+        
+        if(!$company){
+            return response()->json([
+                'success' => false,
+                'message' => 'Company not found.',
+            ], 403);
+        }
 
+        $delivery_id = $request->delivery_id;
+        $driver = User::find($driverId);
+        if(!$driver){
+            return response()->json([
+                'success' => false,
+                'message' => 'Driver not found.',
+            ], 403);
+        }
         $conversation = ChatConversation::firstOrCreate(
             [
                 'company_id' => $companyId,
@@ -45,7 +60,8 @@ class ChatController extends Controller
                 'delivery_id' => $delivery_id
             ]
         );
-
+        $conversation->profile_photo = $company->profile_photo;
+        $conversation->company_name = $company->name;
         return response()->json([
             'success' => true,
             'data' => $conversation,
@@ -85,7 +101,7 @@ class ChatController extends Controller
         $query = ChatConversation::with([
             'company:id,name',
             'driver:id,name',
-            'latestMessage.sender:id,name',
+            'latestMessage.sender:id,name,profile_photo',
             'delivery:id,delivery_number,status'
         ]);
         // Only include conversations whose delivery is not delivered or failed
@@ -187,7 +203,7 @@ class ChatController extends Controller
             'last_message_at' => now(),
         ]);
 
-        $message->load('sender:id,name');
+        $message->load('sender:id,name,profile_photo');
         broadcast(new ChatMessageSent($message))->toOthers();
         
         $driver = User::find($conversation->driver_id);

@@ -94,6 +94,7 @@ class MobileDriverController extends Controller
             'model_type' => 'App\Models\DriverProfile',
             'model_id' => $driverProfile->id,
             'description' => "Driver location updated to ({$request->latitude}, {$request->longitude})",
+            'properties' => ['latitiude' => $request->latitude, 'longitude' => $request->longitude],
             'ip_address' => $request->ip(),
             'user_agent' => $request->userAgent()
         ]);
