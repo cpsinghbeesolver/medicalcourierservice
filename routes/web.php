@@ -13,6 +13,8 @@ use App\Http\Controllers\Company\TemperatureRequirementController;
 use App\Http\Controllers\Company\VehicleRequirementController;
 use App\Http\Controllers\Company\CompanyDashboardController;
 use App\Http\Controllers\Hospital\HospitalController;
+use App\Http\Controllers\Admin\HospitalController as AdminHospitalController;
+use App\Http\Controllers\Admin\CompanyController as AdminCompanyController;
 use App\Http\Controllers\Auth\CompanyAuthController;
 use App\Events\DriverLocationUpdated;
 use App\Models\TemperatureRequirement;
@@ -104,7 +106,7 @@ Route::get('/test-driver-location', function () {
     //     'pickup_latitude' => $lat,
     //     'pickup_longitude' => $lng,
     // ]);
-    
+
     event(new DriverDisconnected([
         'driver_id' => $driver_id
     ]));
@@ -184,7 +186,7 @@ Route::prefix('hospital')->middleware('hospital.auth','no.cache')->group(functio
 });
 Route::prefix('company/dashboard')->middleware('custom.auth','no.cache')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('company-dashboard');
-    
+
     Route::get('/create-job', [CompanyDashboardController::class, 'createJob'])->name('create-job');
 
     Route::get('/deliveries', function () {
@@ -216,7 +218,7 @@ Route::prefix('company/dashboard')->middleware('custom.auth','no.cache')->group(
     // Route::get('/drivers/{id}/edit', function ($id) {
     //     return view('company.driver-edit', ['id' => $id]);
     // });
-    
+
     Route::get('/activity-logs', function () {
         return view('company.activity-logs');
     });
@@ -250,6 +252,31 @@ Route::prefix('admin')->middleware('admin.auth','no.cache')->group(function () {
     Route::get('/profile/change-password', function () {
         return view('profile.change-password');
     });
+});
+
+Route::prefix('dashboard')->name('dashboard.')->group(function () {
+    Route::get('hospitals', [AdminHospitalController::class, 'index'])->name('hospitals');
+    Route::get('hospitals/create', [AdminHospitalController::class, 'create'])->name('hospitals.create');
+    Route::post('hospitals', [AdminHospitalController::class, 'store'])->name('hospitals.store');
+    Route::get('hospitals/{id}', [AdminHospitalController::class, 'show'])->name('hospitals.show');
+    Route::get('hospitals/{id}/edit', [AdminHospitalController::class, 'edit'])->name('hospitals.edit');
+    Route::put('hospitals/{id}', [AdminHospitalController::class, 'update'])->name('hospitals.update');
+    Route::delete('hospitals/{id}', [AdminHospitalController::class, 'destroy'])->name('hospitals.destroy');
+
+    Route::get('companies', [AdminCompanyController::class, 'index'])->name('companies');
+
+    Route::get('companies/create', [AdminCompanyController::class, 'create'])->name('companies.create');
+
+    Route::post('companies', [AdminCompanyController::class, 'store'])->name('companies.store');
+
+    Route::get('companies/{id}', [AdminCompanyController::class, 'show'])->name('companies.show');
+
+    Route::get('companies/{id}/edit', [AdminCompanyController::class, 'edit'])->name('companies.edit');
+
+    Route::put('companies/{id}', [AdminCompanyController::class, 'update'])->name('companies.update');
+
+    Route::delete('companies/{id}', [AdminCompanyController::class, 'destroy'])->name('companies.destroy');
+
 });
 
 Route::prefix('company')->middleware('custom.auth','no.cache')->group(function () {

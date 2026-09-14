@@ -47,14 +47,13 @@ class HospitalController extends Controller
                             'current_longitude' => $driver->current_longitude,
                             'availability_status' => $driver->availability_status
                         ]);
-                    }); 
+                    });
                     // dd($driver_profile[0]);
                     $drivers[] = $driver_profile[0];
                 }
                 $i++;
             }
         }
-        // dd($hospital);
         return view('hospital.maps',compact('hospital','items','drivers'));
     }
 
@@ -101,11 +100,11 @@ class HospitalController extends Controller
             $user->update(['last_login_at' => now()]);
             $deviceName = 'web_app';
             $token = $user->createToken($deviceName)->plainTextToken;
-            
+
             // Login user
             //Auth::login($user);
             $request->session()->regenerate();
-            
+
             // Delete all previous sessions for this user
             DB::table('sessions')
                 ->where('user_id', $user->id)
@@ -173,7 +172,7 @@ class HospitalController extends Controller
             'role_id' => '3',  //For hospital
             'status' => 'active',
         ]);
-        
+
         $hospital = Hospital::create([
             'name' => $validated['hospital_name'],
             'registration_number' => $validated['hospital_registration'] ?? null,

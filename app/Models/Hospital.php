@@ -26,4 +26,9 @@ class Hospital extends Model
     {
         return $this->hasMany(DeliveryItem::class, 'hospital_id', 'id');
     }
+
+    public function createdByUser()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
 }

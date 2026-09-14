@@ -40,8 +40,13 @@ class DriverProfileController extends Controller
      * )
      */
     public function index(Request $request)
-    {
-        $query = DriverProfile::with('user')->where('created_by', $request->user()->id);
+    {   $user = auth()->user();
+
+        if($user->role_id == 1){
+            $query = DriverProfile::with('user');
+        }else{
+            $query = DriverProfile::with('user')->where('created_by', $request->user()->id);
+        }
         // dd($query->get());
         // Filter by availability status
         if ($request->has('availability_status')) {

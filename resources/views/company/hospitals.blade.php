@@ -66,9 +66,9 @@
                         <td colspan="9" style="text-align: center; padding: 60px;">No Specimen Type found.</td>
                     </tr>
                 @endif
-                
+
             </tbody>
-            
+
         </table>
     </div>
 </div>
@@ -77,7 +77,7 @@
 <div class="specimen_type_modal" id="addHospitalModal">
     <div class="specimen_type_modal-content">
             <div class="specimen_type_modal-header">
-                <h3>Add Hopital</h3>
+                <h3>Add Hospital</h3>
             </div>
             <form method="POST" id="add_hospital" action="" style="display: contents;">
             <div class="specimen_type_modal-body">
@@ -127,7 +127,7 @@
                         </div>
                     </div>
                     <div id="driversList"></div>
-                
+
             </div>
             <div class="specimen_type_modal-footer">
                 <button class="btn-modal btn-modal-cancel" type="button" onclick="closeModalHospital()">Cancel</button>
@@ -144,7 +144,7 @@
     function addHospital(thisButton){
         var index = $(thisButton).parents('.item-card').attr('data-item-index');
         $('form#add_hospital')[0].reset();
-        document.getElementById('addHospitalModal').classList.add('show');  
+        document.getElementById('addHospitalModal').classList.add('show');
     }
     function closeModalHospital(){
         document.getElementById('addHospitalModal').classList.remove('show');
@@ -161,7 +161,7 @@
         return useShortName ? component.short_name : component.long_name;
     }
     // Initialize autocomplete for delivery locations
-    function initHospitalAutocomplete() { 
+    function initHospitalAutocomplete() {
         const deliveryInputs = document.querySelectorAll('.hospital-location');
         deliveryInputs.forEach(input => {
             // Skip if already initialized
@@ -178,7 +178,7 @@
                     const wrapper = input.closest('#add_hospital');
                     wrapper.querySelector('#hospital_lat').value = place.geometry.location.lat();
                     wrapper.querySelector('#hospital_long').value = place.geometry.location.lng();
-                    
+
                     const country = getAddressComponent(place, 'country');
                     const city = getAddressComponent(place, 'locality');
                     const state = getAddressComponent(place, 'administrative_area_level_1');
@@ -188,7 +188,7 @@
                     wrapper.querySelector('#hospital_state').value = state;
                     wrapper.querySelector('#hospital_zip').value = zipCode;
                     wrapper.querySelector('#hospital_country').value = country;
-                    
+
                 }
             });
 

@@ -798,7 +798,7 @@ color: #000000;
         font-weight: 600;
         transition: background 0.3s;
     }
-    
+
     .btn-create {
         padding: 12px 30px;
         background: #a8b456;
@@ -843,7 +843,7 @@ color: #000000;
     }
 
     .loading-spinner{
-        display: none;  
+        display: none;
         text-align: center;
         padding: 60px;
         color: #7f8c8d;
@@ -1101,7 +1101,7 @@ color: #000000;
         gap: 6px;
     }
     .btn-action.edit,.btn-edit {
-        color: #f39c12;
+        color: #282624;
     }
 
     .btn-action.edit:hover {
