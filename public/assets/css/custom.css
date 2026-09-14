@@ -65,6 +65,10 @@
 
 .sidebar-menu {
     list-style: none;
+    padding-left: 0px;
+}
+.table-container{
+    max-width: 1070px;
 }
 
 .sidebar-menu li {

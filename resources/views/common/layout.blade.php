@@ -308,12 +308,12 @@
                     </a></li>
                 @endif
                 @if(auth()->user()->isAdmin())
-                    <li><a href="/admin/dashboard/tenants" class="{{ request()->is('admin/dashboard/tenants*') ? 'active' : '' }}">
+                    <!-- <li><a href="/admin/dashboard/tenants" class="{{ request()->is('admin/dashboard/tenants*') ? 'active' : '' }}">
                         <i class="fa-solid fa-building-user"></i> Tenant Management
                     </a></li>
                     <li><a href="/admin/dashboard/users" class="{{ request()->is('admin/dashboard/users*') ? 'active' : '' }}">
                         <i class="fas fa-users"></i> User Management
-                    </a></li>
+                    </a></li> -->
                     <li><a href="/dashboard/hospitals" class="{{ request()->is('dashboard/hospitals*') ? 'active' : '' }}">
                         <i class="fas fa-hospital"></i> Hospital Management
                     </a></li>

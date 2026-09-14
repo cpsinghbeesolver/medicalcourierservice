@@ -1531,6 +1531,7 @@
                                 //getConversations();
                             if(conversation_id == event.conversation_id){
                                 $(this).trigger('click');
+                                markConversationAsRead(event.conversation_id);
                                 // var index = $('#conversationList').children('.conversation-item').index($(this));
                                 // if(index > 0){
                                 //     getConversations();
@@ -1557,6 +1558,18 @@
         });
     }
 
+    function markConversationAsRead(){
+        $.ajax({
+            url: `/api/mobile/v1/chat/conversations/${conversation_id}/read`,
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${web_token}`,
+                'Accept': 'application/json'
+            },
+            success: function(response) {        
+            }
+        }); 
+    }
     $('.search-drivers').on('input', function() {
         var query = $(this).val().toLowerCase();
         $.ajax({

@@ -745,8 +745,8 @@
                 'Accept': 'application/json'
             },
             success: function(response) {
-                // console.log(response); 
-                if (!response.data.logs) {
+                console.log(response); 
+                if (!response.data.logs || response.data.logs == '') {
                     mapElement.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #7f8c8d;"><i class="fas fa-map-marker-alt" style="margin-right: 10px;"></i> Location coordinates not available</div>';
                     return;
                 }
@@ -904,34 +904,6 @@
         });
     }
 
-    async function getDeliveryCoordinates(driverId, deliveryId) {
-        var web_token = "{{ session('web_token') }}";
-        let cords = {};
-
-        try {
-            cords = await $.ajax({
-                url: '/api/v1/delivery-cordinates',
-                method: 'POST',
-                data: {
-                    driver_id: driverId,
-                    delivery_id: deliveryId
-                },
-                headers: {
-                    'Authorization': `Bearer ${web_token}`,
-                    'Accept': 'application/json'
-                }
-            });
-
-            //console.log(cords);
-
-            // Use cords here
-            return cords;
-
-        } catch (error) {
-            console.error('Error:', error);
-        }
-        return cords;
-    }
 
     async function drawRoute(map, pickupLat, pickupLng, cords) {
         console.log(cords);

@@ -1339,8 +1339,8 @@
         }
       }
     },
-    "/chat/conversations/{conversation}/read": {
-      "put": {
+    "/api/mobile/v1/chat/conversations/{conversation}/read": {
+      "post": {
         "tags": ["Mobile - Chat Module"],
         "summary": "Mark Messages as Read",
         "description": "",
