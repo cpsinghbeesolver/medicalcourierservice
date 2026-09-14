@@ -31,6 +31,20 @@ class VehicleRequirementController extends Controller
      */
     public function store(StoreSpecimenTempVehicleRequest $request)
     {
+        $name = trim($request->name);
+
+        $exists = VehicleRequirement::get()
+            ->contains(function ($requirement) use ($name) {
+                return strtolower(trim($requirement->name)) === strtolower($name);
+            });
+
+        if ($exists) {
+            return back()
+                ->withInput()
+                ->withErrors([
+                    'name' => 'This temperature requirement already exists.',
+                ]);
+        }
         VehicleRequirement::create($request->validated());
 
         return redirect()

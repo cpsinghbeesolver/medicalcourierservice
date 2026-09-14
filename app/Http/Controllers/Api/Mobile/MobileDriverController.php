@@ -74,8 +74,7 @@ class MobileDriverController extends Controller
             ], 422);
         }
 
-        $driverProfile = DriverProfile::where('user_id', $user->id)->first();
-
+        $driverProfile = DriverProfile::with('inTransitDelivery')->where('user_id', $user->id)->first();
         if (!$driverProfile) {
             return response()->json([
                 'success' => false,
@@ -94,7 +93,11 @@ class MobileDriverController extends Controller
             'model_type' => 'App\Models\DriverProfile',
             'model_id' => $driverProfile->id,
             'description' => "Driver location updated to ({$request->latitude}, {$request->longitude})",
-            'properties' => ['latitiude' => $request->latitude, 'longitude' => $request->longitude],
+            'properties' => array_filter([
+                'latitude' => $request->latitude,
+                'longitude' => $request->longitude,
+                'delivery_id' => $driverProfile->inTransitDelivery->id ?? null,
+            ]),
             'ip_address' => $request->ip(),
             'user_agent' => $request->userAgent()
         ]);

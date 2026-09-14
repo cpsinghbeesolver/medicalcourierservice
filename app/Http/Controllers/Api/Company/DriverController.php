@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Company;
 
 use App\Http\Controllers\Controller;
 use App\Models\Delivery;
+use App\Models\User;
 use App\Models\DriverProfile;
 use App\Models\ActivityLog;
 use App\Http\Resources\DeliveryResource;
@@ -661,5 +662,39 @@ class DriverController extends Controller
         $distance = $earthRadius * $c;
 
         return round($distance, 2);
+    }
+
+    public function deliveryCordinates(Request $request){
+        $driver_id = $request->driver_id;
+        // $driver_id = 110;
+        $delivery_id = $request->delivery_id;
+        // $delivery_id = 94;
+        $logs = ActivityLog::where('action','location_updated')
+        ->where('user_id',$driver_id)
+        // ->where('properties', 'like', '%"delivery_id":' . $delivery_id . '%')
+        ->whereNotNull('properties')
+        ->pluck('properties')
+        ->map(function ($property) {
+            return [
+                'lat' => isset($property['latitude'])
+                    ? (float) $property['latitude']
+                    : null,
+
+                'lng' => isset($property['longitude'])
+                    ? (float) $property['longitude']
+                    : null,
+            ];
+        })
+        ->filter(function ($item) {
+            return $item['lat'] !== null && $item['lng'] !== null;
+        })
+        ->values();
+        return response()->json([
+                'success' => true,
+                'message' => 'Fetched cordinates successfully',
+                'data' => [
+                    'logs' => $logs
+                ]
+            ]);
     }
 }

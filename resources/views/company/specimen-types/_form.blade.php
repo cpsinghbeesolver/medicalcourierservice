@@ -2,7 +2,7 @@
     <div class="form-row">
         <div class="form-group">
             <label>Name</label>
-            <input type="text" name="name" id="name" placeholder="Enter name" value="{{ old('name', $specimenType->name ?? '') }}">
+            <input type="text" name="name" id="name" maxlength="100" placeholder="Enter name" value="{{ old('name', $specimenType->name ?? '') }}">
             @error('name')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror

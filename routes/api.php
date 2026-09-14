@@ -92,6 +92,8 @@ Route::prefix('v1')->middleware('auth:sanctum')->group(function () {
     Route::post('/driver/clock-in', [DriverController::class, 'clockIn']);
     Route::post('/driver/clock-out', [DriverController::class, 'clockOut']);
     Route::get('/driver/clock-status', [DriverController::class, 'clockStatus']);
+    Route::post('/delivery-cordinates', [DriverController::class, 'deliveryCordinates']);
+    
 
     // Driver Profile routes
     Route::apiResource('driver-profiles', DriverProfileController::class);

@@ -532,6 +532,19 @@ class MobileDeliveryController extends Controller
             'ip_address' => $request->ip(),
             'user_agent' => $request->userAgent()
         ]);
+
+        // Log location update
+        ActivityLog::create([
+            'user_id' => $user->id,
+            'action' => 'location_updated',
+            'model_type' => 'App\Models\DriverProfile',
+            'model_id' => $delivery->driver_id,
+            'description' => "Driver location updated to ({$request->latitude}, {$request->longitude})",
+            'properties' => ['latitiude' => $request->latitude, 'longitude' => $request->longitude, 'delivery_id' => $delivery->id],
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent()
+        ]);
+
         $delivery->refresh();
         return response()->json([
             'success' => true,
@@ -748,6 +761,18 @@ class MobileDeliveryController extends Controller
             'model_type' => 'App\Models\Delivery',
             'model_id' => $delivery->id,
             'description' => "Driver started delivery {$delivery->delivery_number}",
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent()
+        ]);
+
+        // Log location update
+        ActivityLog::create([
+            'user_id' => $user->id,
+            'action' => 'location_updated',
+            'model_type' => 'App\Models\DriverProfile',
+            'model_id' => $delivery->driver_id,
+            'description' => "Driver location updated to ({$request->latitude}, {$request->longitude})",
+            'properties' => ['latitiude' => $request->latitude, 'longitude' => $request->longitude, 'delivery_id' => $delivery->id],
             'ip_address' => $request->ip(),
             'user_agent' => $request->userAgent()
         ]);
@@ -1033,6 +1058,18 @@ class MobileDeliveryController extends Controller
                 'user_agent' => $request->userAgent()
             ]);
 
+            // Log location update
+            ActivityLog::create([
+                'user_id' => $user->id,
+                'action' => 'location_updated',
+                'model_type' => 'App\Models\DriverProfile',
+                'model_id' => $delivery->driver_id,
+                'description' => "Driver location updated to ({$request->latitude}, {$request->longitude})",
+                'properties' => ['latitiude' => $request->latitude, 'longitude' => $request->longitude, 'delivery_id' => $delivery->id],
+                'ip_address' => $request->ip(),
+                'user_agent' => $request->userAgent()
+            ]);
+
             DB::commit();
 
             //Send Notification to company
@@ -1064,6 +1101,7 @@ class MobileDeliveryController extends Controller
                     'total_items' => $delivery->items->count()
                 ]
             ]);
+            
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json([
@@ -1215,6 +1253,18 @@ class MobileDeliveryController extends Controller
                 'model_type' => 'App\Models\Delivery',
                 'model_id' => $delivery->id,
                 'description' => "Delivery {$delivery->delivery_number} completed",
+                'ip_address' => $request->ip(),
+                'user_agent' => $request->userAgent()
+            ]);
+
+            // Log location update
+            ActivityLog::create([
+                'user_id' => $user->id,
+                'action' => 'location_updated',
+                'model_type' => 'App\Models\DriverProfile',
+                'model_id' => $delivery->driver_id,
+                'description' => "Driver location updated to ({$request->latitude}, {$request->longitude})",
+                'properties' => ['latitiude' => $request->latitude, 'longitude' => $request->longitude, 'delivery_id' => $delivery->id],
                 'ip_address' => $request->ip(),
                 'user_agent' => $request->userAgent()
             ]);
@@ -1386,6 +1436,19 @@ class MobileDeliveryController extends Controller
                     'ip_address' => $request->ip(),
                     'user_agent' => $request->userAgent()
                 ]);
+
+                // Log location update
+                ActivityLog::create([
+                    'user_id' => $user->id,
+                    'action' => 'location_updated',
+                    'model_type' => 'App\Models\DriverProfile',
+                    'model_id' => $delivery->driver_id,
+                    'description' => "Driver location updated to ({$request->latitude}, {$request->longitude})",
+                    'properties' => ['latitiude' => $request->latitude, 'longitude' => $request->longitude, 'delivery_id' => $delivery->id],
+                    'ip_address' => $request->ip(),
+                    'user_agent' => $request->userAgent()
+                ]);
+                
                 DB::commit();
 
                 //Send Notification to company

@@ -130,6 +130,11 @@ class DriverProfile extends Model
         return $this->belongsTo(User::class, 'created_by', 'id');
     }
 
+    public function inTransitDelivery()
+    {
+        return $this->belongsTo(Delivery::class, 'user_id', 'driver_id')->where('status', 'in_transit');
+    }
+
     public static function boot()
     {
         parent::boot();

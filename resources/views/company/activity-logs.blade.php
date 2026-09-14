@@ -10,7 +10,7 @@
     .filter-card {
         background: #ffffff;
         border-radius: 12px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         padding: 30px;
         max-width: 800px;
     }
@@ -180,12 +180,13 @@
         margin-bottom: 15px;
         transition: all 0.3s;
     }
-    .item-card .item-sub-card{
+
+    .item-card .item-sub-card {
         cursor: pointer;
     }
 
     .item-card:hover {
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         border-color: #a8b456;
     }
 
@@ -302,37 +303,40 @@
         padding: 40px;
         color: #7f8c8d;
     }
-    .small-text{
+
+    .small-text {
         font-size: 12px;
         color: #7f8c8d;
     }
 
     .calendar-input-wrapper {
-    position: relative;
-}
+        position: relative;
+    }
 
-.calendar-icon {
-    position: absolute;
-    left: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #a8b456;
-    font-size: 16px;
-    pointer-events: none;
-}
+    .calendar-icon {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #a8b456;
+        font-size: 16px;
+        pointer-events: none;
+    }
 
-.calendar-input-wrapper input[type="text"] {
-    padding-left: 38px !important;
-}
-.gm-ui-hover-effect{
-    height: 28px !important;
-}
-.section-line{
-    border: 1px solid #ccc;
-    border-radius: 9px;
-    padding: 0px;
-    margin-bottom: 27px;
-}
+    .calendar-input-wrapper input[type="text"] {
+        padding-left: 38px !important;
+    }
+
+    .gm-ui-hover-effect {
+        height: 28px !important;
+    }
+
+    .section-line {
+        border: 1px solid #ccc;
+        border-radius: 9px;
+        padding: 0px;
+        margin-bottom: 27px;
+    }
 </style>
 @endsection
 
@@ -345,13 +349,14 @@
                 <option value="">Select driver</option>
             </select>
         </div>
-         <div class="form-group">
-                  <label>Choose Date & Time <span class="small-text">(optional)</span></label>
-                    <div class="calendar-input-wrapper">
-                       <i class="fas fa-calendar-alt calendar-icon"></i>
-            
-            <input type="datetime-local" id="dateTime" placeholder="Select date and time">
-        </div></div>
+        <div class="form-group">
+            <label>Choose Date & Time <span class="small-text">(optional)</span></label>
+            <div class="calendar-input-wrapper">
+                <i class="fas fa-calendar-alt calendar-icon"></i>
+
+                <input type="datetime-local" id="dateTime" placeholder="Select date and time">
+            </div>
+        </div>
         <button type="submit" class="btn-done">Submit</button>
         <button type="button" class="btn-done" id="clearButton">Clear</button>
     </form>
@@ -410,7 +415,7 @@
     });
 
     async function searchDeliveries(driverId, dateTime) {
-        show_load_spinner('content', 'Loading deliveries...','class');
+        show_load_spinner('content', 'Loading deliveries...', 'class');
         try {
             // Build query parameters
             let url = '/api/v1/deliveries?per_page=100';
@@ -443,7 +448,7 @@
 
                 if (deliveries.length === 0) {
                     resultsContent.innerHTML = '<div class="no-results">No deliveries found for the selected criteria</div>';
-                    hide_load_spinner('content','class');
+                    hide_load_spinner('content', 'class');
                     return;
                 }
 
@@ -455,9 +460,9 @@
                 resultsSection.style.display = 'block';
                 resultsContent.innerHTML = '<div class="no-results">No deliveries available</div>';
             }
-            hide_load_spinner('content','class');
+            hide_load_spinner('content', 'class');
         } catch (error) {
-            hide_load_spinner('content','class');
+            hide_load_spinner('content', 'class');
             console.error('Error loading deliveries:', error);
             const resultsSection = document.getElementById('resultsSection');
             const resultsContent = document.getElementById('resultsContent');
@@ -576,7 +581,8 @@
                             </div>
                             <div class="map-container">
                                 <div class="map-canvas" id="map-${deliveryId}-${index}"
-                                     data-pickup-lat="${delivery.pickup.location.latitude || ''}"
+                                    data-delivery-id="${deliveryId || ''}" 
+                                    data-pickup-lat="${delivery.pickup.location.latitude || ''}"
                                      data-pickup-lng="${delivery.pickup.location.longitude || ''}"
                                      data-delivery-lat="${item.hospital
                                         ? (item.hospital.latitude || '')
@@ -703,92 +709,130 @@
         }
     }
 
+
+
+
     function initializeMap(mapElement) {
         const pickupLat = parseFloat(mapElement.dataset.pickupLat);
         const pickupLng = parseFloat(mapElement.dataset.pickupLng);
-        const deliveryLat = parseFloat(mapElement.dataset.deliveryLat);
-        const deliveryLng = parseFloat(mapElement.dataset.deliveryLng);
-        // const pickupLat = parseFloat('30.705918');
-        // const pickupLng = parseFloat('76.692532');
-        // const deliveryLat = parseFloat('30.7068');
-        // const deliveryLng = parseFloat('76.8459');
+        var deliveryLat = parseFloat(mapElement.dataset.deliveryLat);
+        var deliveryLng = parseFloat(mapElement.dataset.deliveryLng);
         const pickupAddress = mapElement.dataset.pickupAddress;
         const deliveryAddress = mapElement.dataset.deliveryAddress;
+        const deliveryId = mapElement.dataset.deliveryId;
+        const driverId = document.getElementById('driverName').value;
         // alert(pickupLat + ' ' + pickupLng + ' ' + deliveryLat + ' ' + deliveryLng);
         // Check if coordinates are valid
-        if (!pickupLat || !pickupLng || !deliveryLat || !deliveryLng) {
+        if (!deliveryLat || !deliveryLng) {
             mapElement.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #7f8c8d;"><i class="fas fa-map-marker-alt" style="margin-right: 10px;"></i> Location coordinates not available</div>';
             return;
         }
 
-        // Mark as initialized
-        mapElement.dataset.initialized = 'true';
 
-        // Create map centered between pickup and delivery
-        const centerLat = (pickupLat + deliveryLat) / 2;
-        const centerLng = (pickupLng + deliveryLng) / 2;
-
-        const map = new google.maps.Map(mapElement, {
-            zoom: 12,
-            center: { lat: centerLat, lng: centerLng },
-            mapTypeControl: true,
-            streetViewControl: false,
-            fullscreenControl: true,
-            zoomControl: true,
-            styles: [
-                {
-                    featureType: "poi",
-                    elementType: "labels",
-                    stylers: [{ visibility: "off" }]
+        //Get delivery lat long
+        var cords = {};
+        var web_token = "{{ session('web_token') }}";
+        $.ajax({
+            url: '/api/v1/delivery-cordinates',
+            method: 'POST',
+            data: {
+                'driver_id': driverId,
+                'delivery_id': deliveryId
+            },
+            async: true,
+            headers: {
+                'Authorization': `Bearer ${web_token}`,
+                'Accept': 'application/json'
+            },
+            success: function(response) {
+                // console.log(response); 
+                if (!response.data.logs) {
+                    mapElement.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #7f8c8d;"><i class="fas fa-map-marker-alt" style="margin-right: 10px;"></i> Location coordinates not available</div>';
+                    return;
                 }
-            ]
-        });
+                cords = response.data.logs;
+                const lastCord = cords.at(-1);
+                deliveryLat = lastCord.lat;
+                deliveryLng = lastCord.lng;
+                // console.log(cords); return false;
 
-        // Pickup marker (Green - Source)
-        const pickupMarker = new google.maps.Marker({
-            position: { lat: pickupLat, lng: pickupLng },
-            map: map,
-            title: 'Pickup Location',
-            icon: {
-                path: google.maps.SymbolPath.CIRCLE,
-                scale: 12,
-                fillColor: '#10B981',
-                fillOpacity: 1,
-                strokeColor: '#FFFFFF',
-                strokeWeight: 3
-            },
-            label: {
-                text: 'P',
-                color: '#FFFFFF',
-                fontSize: '12px',
-                fontWeight: 'bold'
-            }
-        });
+                // Mark as initialized
+                mapElement.dataset.initialized = 'true';
 
-        // Delivery marker (Red - Destination)
-        const deliveryMarker = new google.maps.Marker({
-            position: { lat: deliveryLat, lng: deliveryLng },
-            map: map,
-            title: 'Delivery Location',
-            icon: {
-                path: google.maps.SymbolPath.CIRCLE,
-                scale: 12,
-                fillColor: '#EF4444',
-                fillOpacity: 1,
-                strokeColor: '#FFFFFF',
-                strokeWeight: 3
-            },
-            label: {
-                text: 'D',
-                color: '#FFFFFF',
-                fontSize: '12px',
-                fontWeight: 'bold'
-            }
-        });
+                // Create map centered between pickup and delivery
+                const centerLat = (pickupLat + deliveryLat) / 2;
+                const centerLng = (pickupLng + deliveryLng) / 2;
 
-        // Pickup Info Window
-        const pickupInfoWindow = new google.maps.InfoWindow({
-            content: `
+                const map = new google.maps.Map(mapElement, {
+                    zoom: 12,
+                    center: {
+                        lat: centerLat,
+                        lng: centerLng
+                    },
+                    mapTypeControl: true,
+                    streetViewControl: false,
+                    fullscreenControl: true,
+                    zoomControl: true,
+                    styles: [{
+                        featureType: "poi",
+                        elementType: "labels",
+                        stylers: [{
+                            visibility: "off"
+                        }]
+                    }]
+                });
+
+                // Pickup marker (Green - Source)
+                const pickupMarker = new google.maps.Marker({
+                    position: {
+                        lat: pickupLat,
+                        lng: pickupLng
+                    },
+                    map: map,
+                    title: 'Pickup Location',
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 12,
+                        fillColor: '#10B981',
+                        fillOpacity: 1,
+                        strokeColor: '#FFFFFF',
+                        strokeWeight: 3
+                    },
+                    label: {
+                        text: 'P',
+                        color: '#FFFFFF',
+                        fontSize: '12px',
+                        fontWeight: 'bold'
+                    }
+                });
+
+                // Delivery marker (Red - Destination)
+                const deliveryMarker = new google.maps.Marker({
+                    position: {
+                        lat: deliveryLat,
+                        lng: deliveryLng
+                    },
+                    map: map,
+                    title: 'Delivery Location',
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 12,
+                        fillColor: '#EF4444',
+                        fillOpacity: 1,
+                        strokeColor: '#FFFFFF',
+                        strokeWeight: 3
+                    },
+                    label: {
+                        text: 'D',
+                        color: '#FFFFFF',
+                        fontSize: '12px',
+                        fontWeight: 'bold'
+                    }
+                });
+
+                // Pickup Info Window
+                const pickupInfoWindow = new google.maps.InfoWindow({
+                    content: `
                 <div style="padding: 10px; max-width: 250px;">
                     <h4 style="margin: 0 0 8px 0; color: #10B981; font-size: 14px; font-weight: 600;">
                         <i class="fas fa-map-marker-alt"></i> Pickup Location
@@ -796,11 +840,11 @@
                     <p style="margin: 0; font-size: 13px; color: #2c3e50;">${pickupAddress}</p>
                 </div>
             `
-        });
+                });
 
-        // Delivery Info Window
-        const deliveryInfoWindow = new google.maps.InfoWindow({
-            content: `
+                // Delivery Info Window
+                const deliveryInfoWindow = new google.maps.InfoWindow({
+                    content: `
                 <div style="padding: 10px; max-width: 250px;">
                     <h4 style="margin: 0 0 8px 0; color: #EF4444; font-size: 14px; font-weight: 600;">
                         <i class="fas fa-flag-checkered"></i> Delivery Location
@@ -808,83 +852,203 @@
                     <p style="margin: 0; font-size: 13px; color: #2c3e50;">${deliveryAddress}</p>
                 </div>
             `
-        });
+                });
 
-        // Add click listeners for markers
-        pickupMarker.addListener('click', () => {
-            deliveryInfoWindow.close();
-            pickupInfoWindow.open(map, pickupMarker);
-        });
+                // Add click listeners for markers
+                pickupMarker.addListener('click', () => {
+                    deliveryInfoWindow.close();
+                    pickupInfoWindow.open(map, pickupMarker);
+                });
 
-        deliveryMarker.addListener('click', () => {
-            pickupInfoWindow.close();
-            deliveryInfoWindow.open(map, deliveryMarker);
-        });
+                deliveryMarker.addListener('click', () => {
+                    pickupInfoWindow.close();
+                    deliveryInfoWindow.open(map, deliveryMarker);
+                });
 
-        // Draw route line between pickup and delivery (Uber-style)
-        // const routePath = new google.maps.Polyline({
-        //     path: [
-        //         { lat: pickupLat, lng: pickupLng },
-        //         { lat: deliveryLat, lng: deliveryLng }
-        //     ],
-        //     geodesic: true,
-        //     strokeColor: '#3B82F6',
-        //     strokeOpacity: 0.8,
-        //     strokeWeight: 4,
-        //     map: map
-        // });
-        drawRoute(map,pickupLat, pickupLng, deliveryLat, deliveryLng);
+                // Draw route line between pickup and delivery (Uber-style)
+                // const routePath = new google.maps.Polyline({
+                //     path: [
+                //         { lat: pickupLat, lng: pickupLng },
+                //         { lat: deliveryLat, lng: deliveryLng }
+                //     ],
+                //     geodesic: true,
+                //     strokeColor: '#3B82F6',
+                //     strokeOpacity: 0.8,
+                //     strokeWeight: 4,
+                //     map: map
+                // });
 
-        // Fit bounds to show both markers
-        const bounds = new google.maps.LatLngBounds();
-        bounds.extend({ lat: pickupLat, lng: pickupLng });
-        bounds.extend({ lat: deliveryLat, lng: deliveryLng });
-        map.fitBounds(bounds);
 
-        // Add padding to bounds
-        google.maps.event.addListenerOnce(map, 'bounds_changed', () => {
-            const currentZoom = map.getZoom();
-            if (currentZoom > 15) {
-                map.setZoom(15);
+                drawRoute(map, pickupLat, pickupLng, cords);
+
+                // Fit bounds to show both markers
+                const bounds = new google.maps.LatLngBounds();
+                bounds.extend({
+                    lat: pickupLat,
+                    lng: pickupLng
+                });
+                bounds.extend({
+                    lat: deliveryLat,
+                    lng: deliveryLng
+                });
+                map.fitBounds(bounds);
+
+                // Add padding to bounds
+                google.maps.event.addListenerOnce(map, 'bounds_changed', () => {
+                    const currentZoom = map.getZoom();
+                    if (currentZoom > 15) {
+                        map.setZoom(15);
+                    }
+                });
             }
         });
     }
 
-    async function drawRoute(map,pickupLat, pickupLng, deliveryLat, deliveryLng) {
-
-        const { Route } = await google.maps.importLibrary("routes");
+    async function getDeliveryCoordinates(driverId, deliveryId) {
+        var web_token = "{{ session('web_token') }}";
+        let cords = {};
 
         try {
-
-            const { routes } = await Route.computeRoutes({
-                origin: {
-                    lat: Number(pickupLat),
-                    lng: Number(pickupLng)
+            cords = await $.ajax({
+                url: '/api/v1/delivery-cordinates',
+                method: 'POST',
+                data: {
+                    driver_id: driverId,
+                    delivery_id: deliveryId
                 },
-                destination: {
-                    lat: Number(deliveryLat),
-                    lng: Number(deliveryLng)
-                },
-                travelMode: "DRIVING",
-                fields: ["path"]
-            });
-
-            if (!routes?.length) {
-                console.warn('No route found');
-                return;
-            }
-
-            const polylines = routes[0].createPolylines({
-                polylineOptions: {
-                    strokeColor: '#3B82F6',
-                    strokeOpacity: 0.8,
-                    strokeWeight: 4
+                headers: {
+                    'Authorization': `Bearer ${web_token}`,
+                    'Accept': 'application/json'
                 }
             });
 
-            polylines.forEach(polyline => {
-                polyline.setMap(map);
-            });
+            //console.log(cords);
+
+            // Use cords here
+            return cords;
+
+        } catch (error) {
+            console.error('Error:', error);
+        }
+        return cords;
+    }
+
+    async function drawRoute(map, pickupLat, pickupLng, cords) {
+        console.log(cords);
+        // var deliveryLatLngArr = [{
+        //         lat: 30.741482,
+        //         lng: 76.768066
+        //     }, // Chandigarh
+        //     {
+        //         lat: 30.735500,
+        //         lng: 76.780500
+        //     },
+        //     {
+        //         lat: 30.730000,
+        //         lng: 76.795000
+        //     },
+        //     {
+        //         lat: 30.7446,
+        //         lng: 76.6525
+        //     },
+        //     {
+        //         lat: 30.720000,
+        //         lng: 76.825000
+        //     },
+        //     {
+        //         lat: 30.717446,
+        //         lng: 76.849198
+        //     }, // Mansa Devi area
+        //     {
+        //         lat: 30.705000,
+        //         lng: 76.852000
+        //     },
+        //     {
+        //         lat: 30.699558,
+        //         lng: 76.855633
+        //     }, // Panchkula
+        // ];
+        const lastCord = cords.at(-1);
+        deliveryLat = lastCord.lat;
+        deliveryLng = lastCord.lng;
+        const {
+            Route
+        } = await google.maps.importLibrary("routes");
+
+        try {
+
+            const origin = {
+                lat: Number(pickupLat),
+                lng: Number(pickupLng)
+            };
+
+            const destination = {
+                lat: Number(deliveryLat),
+                lng: Number(deliveryLng)
+            };
+
+            // Google allows max 25 intermediate waypoints
+            const chunkSize = 25;
+
+            // Remove invalid coordinates
+            const validCords = cords.filter(coord =>
+                Number.isFinite(Number(coord.lat)) &&
+                Number.isFinite(Number(coord.lng))
+            );
+
+            let currentOrigin = origin;
+
+            for (let i = 0; i < validCords.length; i += chunkSize) {
+
+                const chunk = validCords.slice(i, i + chunkSize);
+
+                // Last chunk should end at the final destination
+                const isLastChunk = i + chunkSize >= validCords.length;
+
+                const currentDestination = isLastChunk ?
+                    destination :
+                    chunk[chunk.length - 1];
+
+                // Don't use the last point as an intermediate waypoint
+                // because it is being used as the destination.
+                const intermediates = isLastChunk ?
+                    chunk :
+                    chunk.slice(0, -1);
+
+                const {
+                    routes
+                } = await Route.computeRoutes({
+                    origin: currentOrigin,
+
+                    destination: currentDestination,
+
+                    intermediates: intermediates,
+
+                    travelMode: "DRIVING",
+
+                    fields: ["path"]
+                });
+
+                if (!routes?.length) {
+                    console.warn('No route found for chunk:', i);
+                    continue;
+                }
+
+                const polylines = routes[0].createPolylines({
+                    polylineOptions: {
+                        strokeColor: '#3B82F6',
+                        strokeOpacity: 0.8,
+                        strokeWeight: 4
+                    }
+                });
+
+                polylines.forEach(polyline => {
+                    polyline.setMap(map);
+                });
+
+                // Next route starts where this route ended
+                currentOrigin = currentDestination;
+            }
 
         } catch (error) {
             console.error('Route error:', error);
@@ -893,8 +1057,8 @@
 
     loadDrivers();
 
-    $('#clearButton').click(function(){
-        if(confirm('Are you sure you want to clear the filters?')) {
+    $('#clearButton').click(function() {
+        if (confirm('Are you sure you want to clear the filters?')) {
             $('#driverName').val('');
             $('#dateTime').val('');
             $('#resultsSection').hide();
