@@ -671,7 +671,11 @@ class DriverController extends Controller
         // $delivery_id = 94;
         $logs = ActivityLog::where('action','location_updated')
         ->where('user_id',$driver_id)
-        ->where('properties', 'like', '%"delivery_id":' . $delivery_id . '%')
+        // ->where(function ($query) use ($delivery_id) {
+        //     $query->where('properties', 'like', '%"delivery_id":' . $delivery_id . '%')
+        //         ->orWhere('properties', 'like', '%"delivery_id":' . $delivery_id . ' %');
+        // })
+        ->where('properties->delivery_id', $delivery_id)
         ->whereNotNull('properties')
         ->pluck('properties')
         ->map(function ($property) {

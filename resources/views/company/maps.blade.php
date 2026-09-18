@@ -1048,7 +1048,7 @@
                         ${truncateText(delivery.pickup.address, 30)}
                         <i class="fas fa-arrow-right"></i>
                         <i class="fas fa-circle" style="color: #EF4444;"></i>
-                        ${delivery.delivery.city}
+                        ${delivery.delivery.city ?? delivery.hospital?.city}
                     </div>
                     <div class="live-badge" style="background: ${statusColor};">
                         <span class="pulse"></span>

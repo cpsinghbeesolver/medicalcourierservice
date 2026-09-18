@@ -6,16 +6,18 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="api-token" content="{{ session('web_token') }}">
     <title>@yield('title', 'Admin Dashboard') - {{ env('APP_NAME') }}</title>
+    <!-- <link rel="stylesheet" href="{{ asset('assets/css/font-awesome.css') }}"> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/libphonenumber-js@1.11.13/bundle/libphonenumber-max.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.css') }}">
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"> -->
     <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
     <script src="{{ asset('assets/js/jquery-4.0.0.js') }}"></script>
     <script src="{{ asset('assets/js/custom.js') }}"></script>
     <link rel="icon" type="image/png" href="/assets/img/fav.png">
     <link rel="stylesheet" href="{{ asset('assets/css/flatpickr.min.css') }}">
     <script src="{{ asset('assets/js/flatpickr.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/just-validate@latest/dist/just-validate.production.min.js"></script>
+    <script src="{{ asset('assets/js/just-validate.production.min.js') }}"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         .sidebar-menu .job-management-menu {
@@ -400,7 +402,7 @@
                     <div class="divider"></div>
                     <div class="user-menu">
                         <div class="user-avatar" id="userAvatar" onclick="toggleUserDropdown()">
-                            <span class="user-avatar-text" id="userAvatarText">A</span>
+                            <span class="user-avatar-text" id="userAvatarText"></span>
                         </div>
                         <div class="user-dropdown" id="userDropdown" onclick="toggleUserDropdown()">
                             @if(auth()->user()->isDispatcher())

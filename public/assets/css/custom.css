@@ -25,6 +25,7 @@
     overflow-y: auto;
     border-right: 2px solid #e9ecef;
     padding: 6px 0px 20px 0px;
+    z-index: 99;
 }
 
 .sidebar-logo {
@@ -67,9 +68,9 @@
     list-style: none;
     padding-left: 0px;
 }
-.table-container{
-    max-width: 1070px;
-}
+.content .invalid-feedback{
+        display: block;
+    }
 
 .sidebar-menu li {
     margin: 0;
@@ -128,13 +129,12 @@
 .top-header {
     background: #ffffff;
     padding: 15px 30px;
-    //box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     display: block;
     justify-content: space-between;
     align-items: center;
     position: sticky;
     top: 0;
-    z-index: 100;
+    z-index: 9;
 }
 
 .header-search {

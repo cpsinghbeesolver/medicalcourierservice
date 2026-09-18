@@ -1106,7 +1106,7 @@
                     success: function (result) {
                         hide_load_spinner();
                         if (result.success) {
-                            showDialog('Job dispatched successfully!', 'success', 'Success', function() {
+                            showDialog('Job created successfully!', 'success', 'Success', function() {
                                 window.location.href = '/company/dashboard/deliveries';
                             });
                         } 

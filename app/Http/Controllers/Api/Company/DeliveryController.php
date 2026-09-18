@@ -87,7 +87,10 @@ class DeliveryController extends Controller
                 'driver',
                 'creator',
                 'items' => function ($query) {
-                    $query->with('specimenType:id,name');
+                    $query->with([
+                        'specimenType:id,name',
+                        'hospital:id,name,address,city',
+                    ]);
                 },
                 'vehicleRequirement'
             ]);

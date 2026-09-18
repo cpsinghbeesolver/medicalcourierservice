@@ -72,9 +72,12 @@ class HospitalController extends Controller
             //return $this->errorResponse('Validation error', 422, $validator->errors());
         }
 
-        $user = User::where('email', $request->email)->first();
+        $user = User::with('hospital')->where('email', $request->email)->first();
         if(!$user){
             return redirect()->back()->with('error', 'Invalid email or password');
+        }
+        if(!$user->hospital){
+            return redirect()->back()->with('error', 'Something went wrong');
         }
         if ($user->role_id != '3') {
             return redirect()->back()->with('error', 'User not allowed to login here');

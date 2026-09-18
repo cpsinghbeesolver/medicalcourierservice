@@ -20,8 +20,9 @@
     <div class="data-card-header">
         <h3>All Enquiries</h3>
     </div>
-    <div class="table-container">
-        <table class="data-table" id="driversTable">
+
+    <div class="table-responsive">
+        <table class="table" id="driversTable">
             <thead>
                 <tr>
                     <th>Sr No.</th>

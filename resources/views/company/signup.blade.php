@@ -6,7 +6,8 @@
     <title>{{ env('APP_NAME') }} - Login</title>
     <link rel="icon" type="image/png" href="/assets/img/fav.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/just-validate@latest/dist/just-validate.production.min.js"></script>
+    <script src="{{ asset('assets/js/just-validate.production.min.js') }}"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/just-validate@latest/dist/just-validate.production.min.js"></script> -->
     <style>
         * {
             margin: 0;

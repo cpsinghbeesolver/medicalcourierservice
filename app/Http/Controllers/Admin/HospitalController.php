@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Hospital;
+use App\Models\User;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class HospitalController extends Controller
@@ -48,11 +51,12 @@ class HospitalController extends Controller
         return [
             'name' => 'required|string|max:255',
             'registration_number' => 'required|string|max:255|unique:hospitals,registration_number' . ($id ? ",{$id}" : ''),
-            'phone' => 'required|string|max:20',
+            'phone' => 'required|string|max:20|unique:hospitals,phone',
+            'email' => 'required|email',
             'address' => 'required|string|max:500',
-            'city' => 'required|string|max:100',
-            'state' => 'required|string|max:100',
-            'zip' => 'required|string|max:20',
+            'city' => 'string|max:100',
+            'state' => 'string|max:100',
+            'zip' => 'max:20',
             'country' => 'required|string|max:100',
             'latitude' => 'nullable|numeric|between:-90,90',
             'longitude' => 'nullable|numeric|between:-180,180',
@@ -71,21 +75,95 @@ class HospitalController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        Hospital::create([
-            'name' => $request->input('name'),
-            'hospital_id' => $this->generateHospitalId(),
-            'registration_number' => $request->input('registration_number'),
-            'phone' => $request->input('phone'),
-            'address' => $request->input('address'),
-            'city' => $request->input('city'),
-            'state' => $request->input('state'),
-            'zip' => $request->input('zip'),
-            'country' => $request->input('country'),
-            'latitude' => $request->input('latitude'),
-            'longitude' => $request->input('longitude'),
-            'contact_person' => $request->input('contact_person'),
-            'created_by' => auth()->id(),
+        // Hospital::create([
+        //     'name' => $request->input('name'),
+        //     'hospital_id' => $this->generateHospitalId(),
+        //     'registration_number' => $request->input('registration_number'),
+        //     'phone' => $request->input('phone'),
+        //     'address' => $request->input('address'),
+        //     'city' => $request->input('city'),
+        //     'state' => $request->input('state'),
+        //     'zip' => $request->input('zip'),
+        //     'country' => $request->input('country'),
+        //     'latitude' => $request->input('latitude'),
+        //     'longitude' => $request->input('longitude'),
+        //     'contact_person' => $request->input('contact_person'),
+        //     'created_by' => auth()->id(),
+        // ]);
+
+
+        
+
+
+        // $validated = $request->validate([
+        //     'hospital_name' => 'required|string|max:255',
+        //     'hospital_registration' => 'required|unique:hospitals,registration_number|string|max:255',
+        //     'hospital_email' => 'required|email|unique:users,email|max:255',
+        //     'hospital_phone' => 'required|string|max:30',
+
+        //     'hospital_address' => 'required|string',
+        //     'hospital_city' => 'nullable|string|max:100',
+        //     'hospital_state' => 'nullable|string|max:100',
+        //     'hospital_zip' => 'nullable|string|max:20',
+        //     'hospital_country' => 'nullable|string|max:100',
+
+        //     'hospital_lat' => 'nullable|numeric|between:-90,90',
+        //     'hospital_long' => 'nullable|numeric|between:-180,180',
+
+        //     'hospital_contact_person' => 'required|string|max:255',
+        // ]);
+
+        $phoneExists = User::whereNotNull('phone')
+            ->get(['id', 'phone'])
+            ->contains(function ($user) use ($request) {
+                return $user->phone === $request->phone;
+            });
+
+        if ($phoneExists) {
+            return back()
+                ->withErrors(['phone' => 'The phone number has already been taken.'])
+                ->withInput();
+        }
+
+        // Generate a random password
+        $password = str_shuffle(
+            Str::random(11) . rand(0, 9)
+        );
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($password),
+            'role_id' => '3',  //For hospital
+            'status' => 'active',
         ]);
+
+        $hospital = Hospital::create([
+            'name' => $request->name,
+            'registration_number' => $request->registration_number ?? null,
+            'hospital_id' => $user->id,
+            'phone' => $request->phone ?? null,
+
+            'address' => $request->address,
+            'city' => $request->city ?? null,
+            'state' => $request->state ?? null,
+            'zip' => $request->zip ?? null,
+            'country' => $request->country ?? null,
+
+            'latitude' => $request->latitude ?? null,
+            'longitude' => $request->longitude ?? null,
+
+            'contact_person' => $request->contact_person ?? null,
+
+            'created_by' => '1',
+        ]);
+
+        //send an email to the hospital with their credentials
+        try {
+            // print_r($submission);die;
+            Mail::to($user->email)->send(new HospitalCreated($request->hospital_email,$password,$request->hospital_name));
+        } catch (\Exception $e) {
+            Log::error('Failed to send waitlist auto-responder: ' . $e->getMessage());
+        }
 
         return redirect()->route('dashboard.hospitals')->with('success', 'Hospital created successfully.');
     }

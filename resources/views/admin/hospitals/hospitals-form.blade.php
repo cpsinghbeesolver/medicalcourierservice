@@ -9,19 +9,26 @@
         </div>
 
         <div class="form-group">
+            <label>Hospital Email <span class="astrik">*</span></label>
+            <input type="text" name="email" value="{{ old('email', $hospital->email ?? '') }}">
+            @error('email') <div class="just-validate-error-label" style="color:#e74c3c;">{{ $message }}</div> @enderror
+        </div>
+
+        <div class="form-group">
             <label>Registration Number <span class="astrik">*</span></label>
             <input type="text" name="registration_number" value="{{ old('registration_number', $hospital->registration_number ?? '') }}">
             @error('registration_number') <div class="just-validate-error-label" style="color:#e74c3c;">{{ $message }}</div> @enderror
         </div>
 
+        
+    </div>
+
+    <div class="form-row two-col">
         <div class="form-group">
             <label>Contact Person</label>
             <input type="text" name="contact_person" value="{{ old('contact_person', $hospital->contact_person ?? '') }}">
             @error('contact_person') <div class="just-validate-error-label" style="color:#e74c3c;">{{ $message }}</div> @enderror
         </div>
-    </div>
-
-    <div class="form-row one-col">
         <div class="form-group">
             <label>Phone</label>
             <input type="text" name="phone" class="numbers-only" value="{{ old('phone', $hospital->phone ?? '') }}">
