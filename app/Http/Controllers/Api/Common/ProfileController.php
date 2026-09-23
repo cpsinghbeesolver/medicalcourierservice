@@ -63,7 +63,7 @@ class ProfileController extends Controller
         $user->load([
             'subscription.features',
             'subscription.usage' => function ($query) {
-                $query->where('period_date', now()->format('Y-m-d'));
+                $query->where('period_date', now()->format('m-d-Y'));
             },
             'driverProfile'
         ]);

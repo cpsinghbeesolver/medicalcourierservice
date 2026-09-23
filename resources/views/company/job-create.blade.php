@@ -344,7 +344,7 @@
         </div>
         <div class="specimen_type_modal-body">
             <div class="type-search">
-                <input type="text" id="specimenTypeText" placeholder="Please enter specimen type">
+                <input type="text" id="specimenTypeText" maxlength="50" placeholder="Please enter specimen type">
             </div>
             <div id="driversList"></div>
         </div>
@@ -363,7 +363,7 @@
         </div>
         <div class="specimen_type_modal-body">
             <div class="type-search">
-                <input type="text" id="temperatureRequirementText" placeholder="Please add temperature">
+                <input type="text" id="temperatureRequirementText" maxlength="50" placeholder="Please add temperature">
             </div>
             <div id="driversList"></div>
         </div>
@@ -444,7 +444,7 @@
         </div>
         <div class="specimen_type_modal-body">
             <div class="type-search">
-                <input type="text" id="vehicleRequirementText" placeholder="Please enter vehicle name">
+                <input type="text" id="vehicleRequirementText" maxlength="50" placeholder="Please enter vehicle name">
             </div>
             <div id="driversList"></div>
         </div>

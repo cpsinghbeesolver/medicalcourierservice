@@ -21,6 +21,7 @@ use App\Models\User;
 use App\Models\CompanyHospital;
 use App\Jobs\SendFirebaseNotificationJob;
 use App\Events\NewDeliveryAdded;
+use Carbon\Carbon;
 
 class DeliveryController extends Controller
 {
@@ -601,6 +602,19 @@ class DeliveryController extends Controller
             $oldDriverId = $delivery->driver_id;
 
             $status = $request->driver_id ? 'assigned' : 'pending';
+
+            // $pickupScheduledTime = $request->filled('scheduled_time_window_start')
+            //     ? Carbon::parse(
+            //         $request->scheduled_time_window_start,
+            //         config('app.timezone')
+            //     )->utc()->format('Y-m-d H:i:s')
+            //     : null;
+            // $deliveryScheduledTime = $request->filled('scheduled_time_window_end')
+            //     ? Carbon::parse(
+            //         $request->scheduled_time_window_end,
+            //         config('app.timezone')
+            //     )->utc()->format('Y-m-d H:i:s')
+            //     : null;
 
             $delivery->update([
 

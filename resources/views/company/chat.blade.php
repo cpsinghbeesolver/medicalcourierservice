@@ -1253,10 +1253,28 @@
                 $('#messagesArea').html(response.html);
                 const messagesArea =
                     document.getElementById('messagesArea');
-                messagesArea.scrollTop =
-                    messagesArea.scrollHeight;          
+                // document.getElementById('messagesArea')?.scrollTo({
+                //     top: document.getElementById('messagesArea').scrollHeight + 500,
+                //     behavior: 'smooth'
+                // });
+                scrollMessagesToBottom();
+                convertChatDateTime();             
             }
         }); 
+
+        function scrollMessagesToBottom() {
+            const messagesArea = document.getElementById('messagesArea');
+
+            if (!messagesArea) return;
+
+            requestAnimationFrame(() => {
+                messagesArea.scrollTop = messagesArea.scrollHeight;
+
+                setTimeout(() => {
+                    messagesArea.scrollTop = messagesArea.scrollHeight;
+                }, 100);
+            });
+        }
         
         $.ajax({
             url: `/api/mobile/v1/chat/conversations/${conversation_id}/read`,
@@ -1531,6 +1549,7 @@
                                 //getConversations();
                             if(conversation_id == event.conversation_id){
                                 $(this).trigger('click');
+                                $(this).find('.last-message').html(event.message);
                                 markConversationAsRead(event.conversation_id);
                                 // var index = $('#conversationList').children('.conversation-item').index($(this));
                                 // if(index > 0){
@@ -1640,7 +1659,7 @@
                 }
             }
             hide_load_spinner('content','Loading conversations...','class');
-        }, 1000);
+        }, 3000);
         // hide_load_spinner('content','Loading conversations...','class');
     });
 

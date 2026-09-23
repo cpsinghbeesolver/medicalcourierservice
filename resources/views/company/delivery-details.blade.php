@@ -540,24 +540,7 @@
         return value ? 'Yes' : 'No';
     }
 
-    function formatDate(value) {
-        if (!value) return 'N/A';
-
-        const date = new Date(value);
-
-        return isNaN(date.getTime())
-            ? 'N/A'
-            : date.toLocaleString('en-US', {
-                timeZone: 'UTC',
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                hour12: true,
-            });
-    }
+    
 
     function formatLocation(location) {
         if (!location) return 'N/A';
@@ -721,7 +704,7 @@
                                 <i class="fas fa-play-circle"></i> Resume Delivery
                             </button>
                             `
-                            : delivery.status !== 'delivered'
+                            : delivery.status == 'assigned' || delivery.status == 'accepted' || delivery.status == 'picked_up'
                             ? `
                             <button onclick="cancelDelivery(${delivery.id})" class="btn-action-danger">
                                 <i class="fas fa-times-circle"></i> Cancel Job
@@ -791,11 +774,11 @@
                     <h4>Schedule & Time Window</h4>
                     <div class="info-row">
                         <div class="info-label">Pickup Window Start:</div>
-                        <div class="info-value">${formatDate(delivery.scheduled_time_window_start)}</div>
+                        <div class="info-value">${datTimeFormat(delivery.scheduled_time_window_start)}</div>
                     </div>
                     <div class="info-row">
                         <div class="info-label">Delivery Deadline:</div>
-                        <div class="info-value">${formatDate(delivery.scheduled_time_window_end)}</div>
+                        <div class="info-value">${datTimeFormat(delivery.scheduled_time_window_end)}</div>
                     </div>
                 </div>
                 <div class="info-section">

@@ -533,18 +533,6 @@ class MobileDeliveryController extends Controller
             'user_agent' => $request->userAgent()
         ]);
 
-        // Log location update
-        ActivityLog::create([
-            'user_id' => $user->id,
-            'action' => 'location_updated',
-            'model_type' => 'App\Models\DriverProfile',
-            'model_id' => $delivery->driver_id,
-            'description' => "Driver location updated to ({$request->latitude}, {$request->longitude})",
-            'properties' => ['latitiude' => $request->latitude, 'longitude' => $request->longitude, 'delivery_id' => $delivery->id],
-            'ip_address' => $request->ip(),
-            'user_agent' => $request->userAgent()
-        ]);
-
         $delivery->refresh();
         return response()->json([
             'success' => true,

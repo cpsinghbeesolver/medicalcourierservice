@@ -67,9 +67,9 @@ class DriverProfileSeeder extends Seeder
             DriverProfile::create([
                 'user_id' => $driver->id,
                 'license_number' => 'DL' . str_pad($index + 1000000, 9, '0', STR_PAD_LEFT),
-                'license_expiry_date' => now()->addYears(rand(1, 3))->format('Y-m-d'),
+                'license_expiry_date' => now()->addYears(rand(1, 3))->format('m-d-Y'),
                 'license_state' => $states[$index % count($states)],
-                'date_of_birth' => now()->subYears(rand(25, 55))->format('Y-m-d'),
+                'date_of_birth' => now()->subYears(rand(25, 55))->format('m-d-Y'),
                 'vehicle_type' => $vehicleTypes[$vehicleIndex],
                 'vehicle_plate_number' => $plates[$vehicleIndex],
                 'address' => $addresses[$addressIndex]['street'],
@@ -79,15 +79,15 @@ class DriverProfileSeeder extends Seeder
 
                 // Medical Compliance Fields
                 'insurance_policy_number' => 'INS-' . str_pad($index + 100000, 8, '0', STR_PAD_LEFT),
-                'insurance_expiry_date' => now()->addMonths(rand(6, 18))->format('Y-m-d'),
-                'hipaa_certification_date' => now()->subMonths(rand(1, 11))->format('Y-m-d'),
+                'insurance_expiry_date' => now()->addMonths(rand(6, 18))->format('m-d-Y'),
+                'hipaa_certification_date' => now()->subMonths(rand(1, 11))->format('m-d-Y'),
                 'hipaa_certification_file' => $index < 4 ? 'certificates/hipaa_cert_' . ($index + 1) . '.pdf' : null,
-                'bloodborne_pathogen_training_date' => now()->subMonths(rand(1, 11))->format('Y-m-d'),
+                'bloodborne_pathogen_training_date' => now()->subMonths(rand(1, 11))->format('m-d-Y'),
                 'bloodborne_pathogen_file' => $index < 3 ? 'certificates/bbp_cert_' . ($index + 1) . '.pdf' : null,
-                'specimen_handling_certification_date' => now()->subMonths(rand(1, 6))->format('Y-m-d'),
+                'specimen_handling_certification_date' => now()->subMonths(rand(1, 6))->format('m-d-Y'),
                 'specimen_handling_confirmed' => true,
                 'background_check_status' => $backgroundStatuses[$index % count($backgroundStatuses)],
-                'drug_screen_expiry' => now()->addMonths(rand(3, 12))->format('Y-m-d'),
+                'drug_screen_expiry' => now()->addMonths(rand(3, 12))->format('m-d-Y'),
 
                 'emergency_contact_name' => $emergencyContacts[$addressIndex]['name'],
                 'emergency_contact_phone' => $emergencyContacts[$addressIndex]['phone'],

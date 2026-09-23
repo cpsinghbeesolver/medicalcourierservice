@@ -510,7 +510,7 @@
                 hide_load_spinner();
             }
         }
-
+        var get_status_filter = false;
         async function loadDeliveries(page = 1) {
             currentPage = page;
             const params = new URLSearchParams();
@@ -518,9 +518,11 @@
             params.set('per_page', itemsPerPage);
             const urlParams = new URLSearchParams(window.location.search);
             const get_status = urlParams.get('status');
-            if(get_status){
+            
+            if(get_status && !get_status_filter){
                 $('#deliveriesFilterStatus').val(get_status);
                 params.set('status', get_status);
+                get_status_filter = true;
             }
             if (elements.status.value) {
                 params.set('status', elements.status.value);
@@ -789,7 +791,7 @@
         loadStatistics();
 
 
-        const current_company_id = '{{ auth()->id() }}';
+        var current_company_id = '{{ auth()->id() }}';
         document.addEventListener('DOMContentLoaded', () => {
             window.Echo.private('deliveries')
                 .listen('DeliveryStatusUpdated', (e) => {

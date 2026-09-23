@@ -268,10 +268,10 @@ class HospitalController extends Controller
     public function list()
     {
         $hospitals = Hospital::query()
-            ->select('id', 'name')
+            ->select('id', 'name', 'address','contact_person')
             ->where('created_by', auth()->id())
             ->latest()->paginate(15);
-
+        // dd($hospitals);
         return view('company.hospitals',compact('hospitals'));
     }
 }

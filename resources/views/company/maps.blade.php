@@ -508,6 +508,13 @@
                     $('.driver-status').addClass('off_duty');
                     $('#driverStatus').html('<span class="status-indicator"></span><span id="driverStatusText">OFF DUTY</span>');
                 }
+                const channelName = 'driver-locations.' + window.authUserId+'.'+e.driver_id;
+                window.Echo.leave(channelName);
+                const selectedDriver = window.live_drivers_locations.find(
+                    item => item.driver_id == e.driver_id
+                );
+                listenSocket(driver_id);
+                // changeLocation(selectedDriver);
             });
     }
 
@@ -523,7 +530,7 @@
         Echo.leave(channelName);
 
         driverLocationChannel = Echo.private(channelName);
-
+    
         driverLocationChannel
             .subscribed(() => {
                 console.log('Subscribed to:', channelName);
@@ -1018,7 +1025,7 @@
         );
 
         const pendingDeliveries = deliveries.filter(d =>
-            ['pending', 'assigned'].includes(d.status)
+            ['pending', 'assigned','picked_up'].includes(d.status)
         );
 
         const completedDeliveries = deliveries.filter(d =>
@@ -1042,13 +1049,20 @@
                 const statusColor = delivery.status === 'in_transit' ? '#3B82F6' : '#10B981';
                 return `
                 <div class="delivery-list-item live" data-delivery-id="${delivery.id}" onclick="focusDelivery(${delivery.id})">
-                    <div class="delivery-number">${delivery.delivery_number}</div>
+                    <div class="delivery-number">
+                        <a target="_blank" href="/company/dashboard/deliveries/${delivery.id}">${delivery.delivery_number}</a>
+                    </div>
                     <div class="delivery-route">
                         <i class="fas fa-circle" style="color: #10B981;"></i>
                         ${truncateText(delivery.pickup.address, 30)}
                         <i class="fas fa-arrow-right"></i>
                         <i class="fas fa-circle" style="color: #EF4444;"></i>
-                        ${delivery.delivery.city ?? delivery.hospital?.city}
+                        ${truncateText(
+                            delivery.items[0].hospital?.address ??
+                            delivery.items[0].dropoff_address ??
+                            '',
+                            20
+                        )}
                     </div>
                     <div class="live-badge" style="background: ${statusColor};">
                         <span class="pulse"></span>
@@ -1066,15 +1080,23 @@
             pendingList.innerHTML = pendingDeliveries.map(delivery => {
                 const statusText = delivery.status === 'assigned' ? 'Assigned' : 'Pending';
                 const statusColor = delivery.status === 'assigned' ? '#F59E0B' : '#94A3B8';
+                console.log(delivery);
                 return `
                 <div class="delivery-list-item" data-delivery-id="${delivery.id}" onclick="focusDelivery(${delivery.id})" style="border-color: ${statusColor};">
-                    <div class="delivery-number">${delivery.delivery_number}</div>
+                    <div class="delivery-number">
+                        <a target="_blank" href="/company/dashboard/deliveries/${delivery.id}">${delivery.delivery_number}</a>
+                    </div>
                     <div class="delivery-route">
                         <i class="fas fa-circle" style="color: ${statusColor};"></i>
-                        ${truncateText(delivery.pickup.address, 30)}
+                        ${truncateText(delivery.pickup.address, 20)}
                         <i class="fas fa-arrow-right"></i>
                         <i class="fas fa-circle" style="color: ${statusColor};"></i>
-                        ${delivery.delivery.city}
+                        ${truncateText(
+                            delivery.items[0].hospital?.address ??
+                            delivery.items[0].dropoff_address ??
+                            '',
+                            20
+                        )}
                     </div>
                     <div style="display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; background: ${statusColor}; color: white; border-radius: 12px; font-size: 11px; font-weight: 600; margin-top: 5px;">
                         ${statusText}
@@ -1090,13 +1112,20 @@
             completedSection.style.display = 'block';
             completedList.innerHTML = completedDeliveries.map(delivery => `
                 <div class="delivery-list-item" data-delivery-id="${delivery.id}" onclick="focusDelivery(${delivery.id})">
-                    <div class="delivery-number">${delivery.delivery_number}</div>
+                    <div class="delivery-number">
+                        <a target="_blank" href="/company/dashboard/deliveries/${delivery.id}">${delivery.delivery_number}</a>
+                    </div>
                     <div class="delivery-route">
                         <i class="fas fa-circle" style="color: #6B7280;"></i>
                         ${truncateText(delivery.pickup.address, 30)}
                         <i class="fas fa-arrow-right"></i>
                         <i class="fas fa-circle" style="color: #6B7280;"></i>
-                        ${delivery.delivery.city}
+                        ${truncateText(
+                            delivery.items[0].hospital?.address ??
+                            delivery.items[0].dropoff_address ??
+                            '',
+                            20
+                        )}
                     </div>
                     <div style="display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; background: #6B7280; color: white; border-radius: 12px; font-size: 11px; font-weight: 600; margin-top: 5px;">
                         <i class="fas fa-check"></i> Completed

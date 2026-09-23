@@ -53,3 +53,11 @@ Broadcast::channel('chat.{conversation}', function ($user, $conversationId) {
     return $conversation->company_id === $user->id ||
            $conversation->driver_id === $user->id;
 });
+
+Broadcast::channel('notifications', function ($user) {
+    return true;
+});
+
+Broadcast::channel('device-logout', function ($user) {
+    return true;
+});

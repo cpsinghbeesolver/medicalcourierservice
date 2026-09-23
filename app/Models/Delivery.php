@@ -11,6 +11,7 @@ use App\Traits\BelongsToTenant;
 use App\Traits\EncryptsPhiData;
 use App\Services\HipaaAuditLogger;
 use App\Events\DeliveryStatusUpdated;
+use Carbon\Carbon;
 
 class Delivery extends Model
 {
@@ -121,6 +122,11 @@ class Delivery extends Model
                 $delivery->delivery_number = 'DLV-' . strtoupper(uniqid());
             }
         });
+        
+        static::saving(function ($delivery) {
+            // Convert all datetime fields to UTC before INSERT
+            //$delivery->convertDateTimesToUtc();
+        });
 
         // HIPAA audit logging
         static::created(function ($delivery) {
@@ -187,5 +193,29 @@ class Delivery extends Model
     public function scopeCompleted($query)
     {
         return $query->where('status', 'delivered');
+    }
+
+    protected function convertDateTimesToUtc(): void
+    {
+        $datetimeFields = [
+            'pickup_scheduled_time',
+            'pickup_actual_time',
+            'delivery_scheduled_time',
+            'delivery_actual_time',
+            'scheduled_time_window_start',
+            'scheduled_time_window_end',
+            'dispatched_at',
+            'accepted_by_driver_at',
+        ];
+        foreach ($datetimeFields as $field) {
+
+            if (!empty($this->{$field})) {
+
+                $this->{$field} = Carbon::parse(
+                    $this->{$field},
+                    config('app.timezone')
+                )->utc();
+            }
+        }
     }
 }

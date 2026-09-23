@@ -466,7 +466,7 @@ class MobileDriverController extends Controller
                 'license_expiry_date' => $driverProfile->license_expiry_date,
                 'vehicle_type' => $driverProfile->vehicle_type,
                 'vehicle_plate_number' => $driverProfile->vehicle_plate_number,
-                'date_of_birth' => $driverProfile->date_of_birth?->format('Y-m-d'),
+                'date_of_birth' => $driverProfile->date_of_birth?->format('m-d-Y'),
                 'address' => $driverProfile->address,
                 'city' => $driverProfile->city,
                 'state' => $driverProfile->state,

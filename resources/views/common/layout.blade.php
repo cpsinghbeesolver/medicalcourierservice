@@ -510,9 +510,9 @@
                     }else{
                         response.data.forEach(function(user) {
                             if(user.type === 'Driver') {
-                                resultsHtml += '<div class="search-item"><a href="/company/dashboard/drivers/' + user.id + '"><span>' + user.title + '</span></a><span class="small">'+ user.type +'</span></div>';
+                                resultsHtml += '<div class="search-item"><a href="/company/dashboard/drivers/' + user.id + '"><span>' + user.title + '</span></a><a href="/company/dashboard/drivers/' + user.id + '"><span class="small">'+ user.type +'</span></a></div>';
                             }else{
-                                resultsHtml += '<div class="search-item"><a href="/company/dashboard/deliveries/' + user.id + '"><span>' + user.title + '</span></a><span class="small">'+ user.type +'</span></div>';
+                                resultsHtml += '<div class="search-item"><a href="/company/dashboard/deliveries/' + user.id + '"><span>' + user.title + '</span></a><a href="/company/dashboard/deliveries/' + user.id + '"><span class="small">'+ user.type +'</span></a></div>';
                             }
                         });
                     }
@@ -791,7 +791,7 @@
             return false;
         }
 
-        function show_load_spinner(hide_class,text='',hide_type='id'){
+        function show_load_spinner(hide_class='main-content',text='',hide_type='class'){
             $('.loading-spinner .loading-text').html(text);
             $('.loading-spinner').show();
             if(hide_type === 'id') {
@@ -800,7 +800,7 @@
                 $('.'+hide_class).css('opacity','0.3');
             }
         }
-        function hide_load_spinner(hide_class,hide_type='id'){
+        function hide_load_spinner(hide_class='main-content',hide_type='class'){
             $('.loading-spinner .loading-text').html('');
             $('.loading-spinner').hide();
             if(hide_type === 'id') {
@@ -891,17 +891,7 @@
                 }
             });
 
-            const current_company_id = '{{ auth()->id() }}';
-
-            document.addEventListener('DOMContentLoaded', () => {
-                window.Echo.private('deliveries')
-                    .listen('DeliveryStatusUpdated', (e) => {
-                        console.log('DeliveryStatusUpdated', e);
-                        if(current_company_id  == e.created_by){
-                            $('#notificationIcon .badge-div').html('<span class="notification-badge"></span>');
-                        }
-                    });
-            });
+            
 
             $(document).on('input', '.numbers-only', function () {
                 $(this).val($(this).val().replace(/\D/g, ''));
@@ -913,6 +903,18 @@
 
 
 
+        });
+
+        var current_company_id = window.current_company_id ?? '{{ auth()->id() }}';
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            window.Echo.private('notifications')
+                .listen('NotificationReceived', (e) => {
+                    console.log('DeliveryStatusUpdated', e);
+                    if(current_company_id  == e.company_id){
+                        $('#notificationIcon .badge-div').html('<span class="notification-badge"></span>');
+                    }
+                });
         });
         function isValidEmail(email) {
             const regex = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/;
@@ -1137,19 +1139,113 @@
             }
         });
 
-        function datTimeFormat(datetime = ''){
-            const date = new Date(datetime);
-            const formatted = date.toLocaleString('en-IN', {
-                day: '2-digit',
-                month: 'short',
+        function datTimeFormat(datetime = '') {
+
+            if (!datetime) return '';
+
+            const match = datetime.match(
+                /^(\d{4})-(\d{2})-(\d{2})[T\s](\d{2}):(\d{2})(?::(\d{2}))?/
+            );
+
+            if (!match) return '';
+
+            const [, year, month, day, hour, minute, second = '00'] = match;
+
+            const date = new Date(
+                Number(year),
+                Number(month) - 1,
+                Number(day),
+                Number(hour),
+                Number(minute),
+                Number(second)
+            );
+
+            return date.toLocaleString('en-US', {
+                month: 'long',
+                day: 'numeric',
                 year: 'numeric',
                 hour: '2-digit',
                 minute: '2-digit',
                 hour12: true
             });
-            return formatted;
+        }
+        function formatDate(value) {
+            if (!value) return 'N/A';
+
+            // Add seconds and UTC offset if missing
+            if (!/[+-]\d{2}:\d{2}$|Z$/.test(value)) {
+                value = value.replace(' ', 'T');
+
+                // Add seconds if missing
+                if (/T\d{2}:\d{2}$/.test(value)) {
+                    value += ':00';
+                }
+
+                // Add UTC timezone
+                value += '+00:00';
+            }
+
+            const date = new Date(value);
+
+            return isNaN(date.getTime())
+                ? 'N/A'
+                : date.toLocaleString('en-US', {
+                    month: '2-digit',
+                    day: '2-digit',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    hour12: true,
+                });
         }
 
+        function formatDateEdit(value) {
+            
+            if (!value) return 'N/A';
+            // Add seconds and UTC offset if missing
+            if (!/[+-]\d{2}:\d{2}$|Z$/.test(value)) {
+                value = value.replace(' ', 'T');
+
+                // Add seconds if missing
+                if (/T\d{2}:\d{2}$/.test(value)) {
+                    value += ':00';
+                }
+
+                // Add UTC timezone
+                value += '+00:00';
+            }
+
+             // Convert MM-DD-YYYY to YYYY-MM-DD
+            const match = value.match(
+                /^(\d{2})-(\d{2})-(\d{4})T(.+)$/
+            );
+
+            if (match) {
+                const [, month, day, year, time] = match;
+                value = `${year}-${month}-${day}T${time}`;
+            }
+            const date = new Date(value);
+            if (isNaN(date.getTime())) return 'N/A';
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            const seconds = String(date.getSeconds()).padStart(2, '0');
+            return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        }
+        
+        function convertChatDateTime(){
+            document.querySelectorAll('.formatted-message-date').forEach(function (element) {
+                $(element).show();
+                console.log(element.dataset.datetime);
+                element.textContent = formatDate(element.dataset.datetime);
+            });
+        }
+        setTimeout(() => {
+            convertChatDateTime();
+        }, 3000);
     </script>
     @yield('scripts')
 </body>

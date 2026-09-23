@@ -26,6 +26,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Mail\DriverCreated;
 use App\Events\NewDeliveryAdded;
+use App\Events\NotificationReceived;
+use App\Events\DriverLogout;
 use App\Http\Controllers\Api\Mobile\ChatController;
 
 
@@ -304,7 +306,7 @@ Route::get('/welcome', function () {
 Route::get('/test-url', function () {
     ///Auth::loginUsingId(1);
     // dd(auth()->user());
-    event(new NewDeliveryAdded('88','105'));
+    event(new DriverLogout('eTeTCLscRja2TTyzy7lOE_:APA91bHa32RVh-7OX_w0ut-qCeD_UXIiBJrtqcmcDqPqaQHPGLtgA2hJ5IhplIHbC4H-5BnWiSfgW6zdFhDSyj3i1cQp-V_5OONf9KFlwCt2uoqz3PNJy84'));
     return 'Mail sent';
 });
 

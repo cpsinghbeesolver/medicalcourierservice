@@ -263,7 +263,7 @@
                 <strong>Submission ID:</strong> #{{ $submission->id }}<br>
                 <strong>IP Address:</strong> {{ $submission->ip_address }}<br>
                 <strong>User Agent:</strong> {{ Str::limit($submission->user_agent, 60) }}<br>
-                <strong>Submission Time:</strong> {{ $submission->created_at->format('Y-m-d H:i:s T') }}<br>
+                <strong>Submission Time:</strong> {{ $submission->created_at->format('m-d-Y H:i:s T') }}<br>
                 <strong>Reference:</strong> #CT{{ str_pad($submission->id, 4, '0', STR_PAD_LEFT) }}
             </div>
 

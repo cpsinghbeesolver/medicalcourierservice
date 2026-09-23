@@ -454,7 +454,7 @@
     fetchStatistics();
     fetchDriverStatistics();
     //redirect to jobs page when total active jobs card is clicked
-    $('#totalActiveJobsCard, #pendingPickupsCard, #completedDeliveriesCard, #inTransitOrdersCard').click(function() {
+    $('#totalActiveJobsCard').click(function() {
         window.location.href = '/company/dashboard/deliveries';
     });
     $('#completedDeliveriesCard').click(function() {

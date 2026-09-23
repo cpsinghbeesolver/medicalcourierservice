@@ -113,7 +113,7 @@ class GenerateHipaaReport extends Command
         $recentAccess = $logs->take(20)->map(function ($log) {
             $user = User::find($log->user_id);
             return [
-                'Date/Time' => $log->created_at->format('Y-m-d H:i:s'),
+                'Date/Time' => $log->created_at->format('m-d-Y H:i:s'),
                 'User' => $user?->name ?? 'Unknown',
                 'Action' => $log->action,
                 'Entity' => $log->entity_type . ' #' . $log->entity_id,

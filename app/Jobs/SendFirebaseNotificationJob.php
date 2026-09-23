@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Services\FirebaseService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use App\Events\NotificationReceived;
 
 class SendFirebaseNotificationJob implements ShouldQueue
 {
@@ -29,5 +30,6 @@ class SendFirebaseNotificationJob implements ShouldQueue
             $this->user_id,
             $this->data
         );
+        event(new NotificationReceived($this->data['company_id']));
     }
 }

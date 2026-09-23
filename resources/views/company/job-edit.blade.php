@@ -355,7 +355,7 @@
         </div>
         <div class="specimen_type_modal-body">
             <div class="type-search">
-                <input type="text" id="specimenTypeText" placeholder="Add specimen type">
+                <input type="text" id="specimenTypeText" maxlength="50" placeholder="Add specimen type">
             </div>
             <div id="driversList"></div>
         </div>
@@ -374,7 +374,7 @@
         </div>
         <div class="specimen_type_modal-body">
             <div class="type-search">
-                <input type="text" id="temperatureRequirementText" placeholder="Add Temperature Requirement">
+                <input type="text" id="temperatureRequirementText" maxlength="50" placeholder="Add Temperature Requirement">
             </div>
             <div id="driversList"></div>
         </div>
@@ -455,7 +455,7 @@
         </div>
         <div class="specimen_type_modal-body">
             <div class="type-search">
-                <input type="text" id="vehicleRequirementText" placeholder="Add Vehicle Requirement">
+                <input type="text" id="vehicleRequirementText" maxlength="50" placeholder="Add Vehicle Requirement">
             </div>
             <div id="driversList"></div>
         </div>
@@ -1145,17 +1145,30 @@
 
     const dateTimeInput = document.getElementById('timeWindowEnd');
 
-    dateTimeInput.addEventListener('click', function () {
-        if (this.showPicker) {
-            this.showPicker();
-        }
-    });
-    const timeWindowStart = document.getElementById('timeWindowStart');
-    timeWindowStart.addEventListener('click', function () {
-        if (this.showPicker) {
-            this.showPicker();
-        }
-    });
+    // dateTimeInput.addEventListener('click', function () {
+    //     if (this.showPicker) {
+    //         this.showPicker();
+    //     }
+    // });
+    // const timeWindowStart = document.getElementById('timeWindowStart');
+    // timeWindowStart.addEventListener('click', function () {
+    //     if (this.showPicker) {
+    //         this.showPicker();
+    //     }
+    // });
+
+    // show_load_spinner();
+    // setTimeout(() => {
+    //     var timeWindowStart = '{{ $pickupStartValue }}';
+    //     var timeWindowEnd = '{{ $pickupEndValue }}';
+    //     if(timeWindowStart){
+    //         $('#timeWindowStart').val(formatDateEdit(timeWindowStart));
+    //     }
+    //     if(timeWindowEnd){
+    //         $('#timeWindowEnd').val(formatDateEdit(timeWindowEnd));
+    //     }   
+    //     hide_load_spinner();
+    // }, 1000);
 </script>
 
 <!-- Google Maps API -->

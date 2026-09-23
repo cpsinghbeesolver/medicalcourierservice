@@ -22,8 +22,8 @@
                 <tr>
                     <th>Sr No.</th>
                     <th>Name</th>
-                    <!-- <th>Status</th>
-                    <th>Actions</th> -->
+                    <th>Address</th>
+                    <th>Contact Person</th>
                 </tr>
             </thead>
             <tbody>
@@ -40,6 +40,7 @@
                                     <span class="badge inactive">In-Active</span>
                                 @endif
                             </td>
+                            
                             <td>
                                 <div class="action-buttons">
                                     <button class="btn-action btn-edit" onclick="window.location.href='{{ route('specimen-types.edit', $specimenType->id) }}'">
@@ -59,6 +60,8 @@
                                 </div>
                             </td>
                             @endif
+                            <td>{{ $hospital->address }}</td>
+                            <td>{{ $hospital->contact_person }}</td>
                         </tr>
                     @endforeach
                 @else

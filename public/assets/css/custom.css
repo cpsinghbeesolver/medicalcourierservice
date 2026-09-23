@@ -15,6 +15,14 @@
     display: flex;
     min-height: 100vh;
 }
+a{
+    color: inherit;
+    text-decoration: none;
+}
+
+.formatted-message-date{
+    display: none;
+}
 
 /* Sidebar */
 .sidebar {
@@ -853,7 +861,7 @@ color: #000000;
         color: #7f8c8d;
         position: fixed;
         top: 40%;
-        left: 50%;
+        left: 47%;
         z-index: 999;
     }
 

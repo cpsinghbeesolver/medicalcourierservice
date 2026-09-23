@@ -2,7 +2,7 @@ const validators = new Map();
 
 function validateForm() {
 
-    document.querySelectorAll('form#jobCreateForm, #add_temperature_requirement, #add_vehicle_requirement, #add_speciment_type,#jobEditForm, #loginForm, #createDriverForm, #profileForm, #changePasswordForm').forEach((form) => {
+    document.querySelectorAll('form#jobCreateForm,#jobEditForm, #loginForm, #createDriverForm, #profileForm, #changePasswordForm').forEach((form) => {
 
         // Destroy existing validator for this form
         if (validators.has(form)) {
@@ -390,6 +390,41 @@ function validateForm() {
             // else{
             //     event.currentTarget.submit();
             // }        
+        });
+    });
+
+
+    document.querySelectorAll('#add_temperature_requirement, #add_vehicle_requirement, #add_speciment_type').forEach((form) => {
+        // Create fresh validator
+        const validator = new JustValidate(form);
+
+        // Store it
+        // validators.set(form, validator);
+        const name = document.querySelector('#name');
+        if (name) {
+            validator.addField(document.querySelector('#name'), [
+                {
+                    rule: 'required',
+                    errorMessage: 'Name is required',
+                },
+                {
+                    rule: 'minLength',
+                    value: 2,
+                    errorMessage: 'Name must be at least 2 characters',
+                },
+                {
+                    rule: 'maxLength',
+                    value: 50,
+                    errorMessage: 'Name cannot exceed 50 characters',
+                }
+            ])
+        }
+        validator
+        .onSuccess((event) => {
+            if(document.getElementById('add_temperature_requirement') || document.getElementById('add_vehicle_requirement') || document.getElementById('add_speciment_type')){
+                show_load_spinner();
+                event.currentTarget.submit();
+            }    
         });
     });
 }

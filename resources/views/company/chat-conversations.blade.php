@@ -19,12 +19,12 @@
             <div class="conversation-info">
                 <div class="conversation-top">
                     <strong>{{ $conversation->driver->name }}</strong>
-                    <span class="message-time">
+                    <span class="message-time formatted-message-date" data-datetime="{{ $conversation->latestMessage ? $conversation->latestMessage->created_at->format('Y-m-d\TH:i:s') : ''; }}">
                         @if($conversation->latestMessage)
                             @if($conversation->latestMessage->created_at->isToday())
                                 {{ $conversation->latestMessage->created_at->format('h:i A') }}
                             @else       
-                                {{ $conversation->latestMessage->created_at->format('Y-m-d h:i A') }}
+                                {{ $conversation->latestMessage->created_at->format('m-d-Y h:i A') }}
                             @endif
                         @endif
                     </span>

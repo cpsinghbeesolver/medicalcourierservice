@@ -545,6 +545,12 @@
                                     <span class="detail-label">Vehicle</span>
                                     <span class="detail-value">${delivery.vehicle_requirement?.name || 'N/A'}</span>
                                 </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Expected Delivery Address</span>
+                                    <span class="detail-value">${item.hospital
+                                        ? (item.hospital.address || '')
+                                        : (item.dropoff_address || '')}</span>
+                                </div>
                             </div>
                         </div>
                         <div class="item-more-details" id="details-item-${deliveryId}-${index}">
@@ -629,6 +635,13 @@
                                     <span class="detail-label">Vehicle</span>
                                     <span class="detail-value">${delivery.vehicle_requirement?.name || 'N/A'}</span>
                                 </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Expected Delivery Address</span>
+                                    <span class="detail-value">${item.hospital
+                                        ? (item.hospital.address || '')
+                                        : (item.dropoff_address || '')}</span>
+                                </div>
+                                
                             </div>
                         </div>
 
@@ -713,8 +726,8 @@
 
 
     function initializeMap(mapElement) {
-        const pickupLat = parseFloat(mapElement.dataset.pickupLat);
-        const pickupLng = parseFloat(mapElement.dataset.pickupLng);
+        var pickupLat = parseFloat(mapElement.dataset.pickupLat);
+        var pickupLng = parseFloat(mapElement.dataset.pickupLng);
         var deliveryLat = parseFloat(mapElement.dataset.deliveryLat);
         var deliveryLng = parseFloat(mapElement.dataset.deliveryLng);
         const pickupAddress = mapElement.dataset.pickupAddress;
@@ -751,6 +764,30 @@
                     return;
                 }
                 cords = response.data.logs;
+                if(cords == ''){
+                    mapElement.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #7f8c8d;"><i class="fas fa-map-marker-alt" style="margin-right: 10px;"></i> Location coordinates not available</div>';
+                    return;
+                }
+                const firstCord = cords.at(0);
+                pickupLat = firstCord.lat;
+                pickupLng = firstCord.lng;
+
+                //Get address from lat long
+                const geocoder = new google.maps.Geocoder();
+                geocoder.geocode(
+                    {
+                        location: {
+                            lat: pickupLat,
+                            lng: pickupLng
+                        }
+                    },
+                    (results, status) => {
+                        if (status === 'OK' && results[0]) {
+                            alert(results[0].formatted_address);
+                        }
+                    }
+                );
+
                 const lastCord = cords.at(-1);
                 deliveryLat = lastCord.lat;
                 deliveryLng = lastCord.lng;

@@ -13,11 +13,11 @@
                         {{ $message->message }}
                     </div>
 
-                    <span class="message-meta">
+                    <span class="message-meta formatted-message-date" data-datetime="{{ $message->created_at ? $message->created_at->format('Y-m-d\TH:i:s') : ''; }}">
                         @if($message->created_at->isToday())
                             {{ $message->created_at->format('h:i A') }}
                         @else       
-                            {{ $message->created_at->format('Y-m-d h:i A') }}
+                            {{ $message->created_at->format('m-d-Y h:i A') }}
                         @endif
                         <span class="message-check">✓✓</span>
                     </span>
@@ -39,11 +39,11 @@
                         {{ $message->message }}
                     </div>
 
-                    <span class="message-meta">
+                   <span class="message-time formatted-message-date" data-datetime="{{ $message->created_at ? $message->created_at->format('Y-m-d\TH:i:s') : ''; }}">
                         @if($message->created_at->isToday())
                             {{ $message->created_at->format('h:i A') }}
                         @else       
-                            {{ $message->created_at->format('Y-m-d h:i A') }}
+                            {{ $message->created_at->format('m-d-Y h:i A') }}
                         @endif
                     </span>
 

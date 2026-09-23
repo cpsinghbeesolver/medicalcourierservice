@@ -190,7 +190,7 @@
                 <strong>ID:</strong> #{{ $submission->id }}<br>
                 <strong>IP Address:</strong> {{ $submission->ip_address }}<br>
                 <strong>User Agent:</strong> {{ Str::limit($submission->user_agent, 60) }}<br>
-                <strong>Submission Time:</strong> {{ $submission->created_at->format('Y-m-d H:i:s T') }}
+                <strong>Submission Time:</strong> {{ $submission->created_at->format('m-d-Y H:i:s T') }}
             </div> -->
 
             <!--div style="margin-top: 30px; padding: 15px; background-color: #e7f3ff; border-radius: 5px;">

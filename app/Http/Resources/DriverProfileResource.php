@@ -27,11 +27,11 @@ class DriverProfileResource extends JsonResource
                 ];
             }),
             'license_number' => $this->license_number,
-            'license_expiry_date' => $this->license_expiry_date?->format('Y-m-d'),
+            'license_expiry_date' => $this->license_expiry_date?->format('m-d-Y'),
             'license_expired' => $this->isLicenseExpired(),
             'vehicle_type' => $this->vehicle_type,
             'vehicle_plate_number' => $this->vehicle_plate_number,
-            'date_of_birth' => $this->date_of_birth?->format('Y-m-d'),
+            'date_of_birth' => $this->date_of_birth?->format('m-d-Y'),
             'address' => $this->address,
             'city' => $this->city,
             'state' => $this->state,
@@ -44,14 +44,14 @@ class DriverProfileResource extends JsonResource
                 'longitude' => $this->current_longitude,
             ],
             'insurance_policy_number' => $this->insurance_policy_number,
-            'insurance_expiry_date' => $this->insurance_expiry_date?->format('Y-m-d'),
-            'hipaa_certification_date' => $this->hipaa_certification_date?->format('Y-m-d'),
+            'insurance_expiry_date' => $this->insurance_expiry_date?->format('m-d-Y'),
+            'hipaa_certification_date' => $this->hipaa_certification_date?->format('m-d-Y'),
             'hipaa_certification_file' => $this->hipaa_certification_file,
             'background_check_status' => $this->background_check_status,
-            'drug_screen_expiry' => $this->drug_screen_expiry?->format('Y-m-d'),
-            'specimen_handling_certification_date' => $this->specimen_handling_certification_date?->format('Y-m-d'),
+            'drug_screen_expiry' => $this->drug_screen_expiry?->format('m-d-Y'),
+            'specimen_handling_certification_date' => $this->specimen_handling_certification_date?->format('m-d-Y'),
             'specimen_handling_confirmed' => $this->specimen_handling_confirmed,
-            'bloodborne_pathogen_training_date' => $this->bloodborne_pathogen_training_date?->format('Y-m-d'),
+            'bloodborne_pathogen_training_date' => $this->bloodborne_pathogen_training_date?->format('m-d-Y'),
             'bloodborne_pathogen_file' => $this->bloodborne_pathogen_file
         ];
     }

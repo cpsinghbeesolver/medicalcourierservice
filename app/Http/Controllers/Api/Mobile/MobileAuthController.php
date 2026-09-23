@@ -12,6 +12,7 @@ use Illuminate\Validation\ValidationException;
 use App\Models\RefreshToken;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use App\Events\DriverDisconnected;
 
 class MobileAuthController extends Controller
 {
@@ -90,6 +91,13 @@ class MobileAuthController extends Controller
             ], 403);
         }
 
+        // if ($user->tokens()->exists()) {
+        //     return response()->json([
+        //         'success' => false,
+        //         'message' => 'You are already logged in on another device. Please log out from the other device before logging in here.'
+        //     ], 409);
+        // }
+
         //Update Device Token
         $user->update(['device_token' => $request->fcm_token,'device_type' => $request->device_type]);
         $user->refresh();
@@ -99,6 +107,11 @@ class MobileAuthController extends Controller
         // Remove all previous tokens
         $user->tokens()->delete();
         $token = $user->createToken($deviceName)->plainTextToken;
+        
+        //Disconnect all previous
+        event(new DriverDisconnected([
+            'driver_id' => $user->id
+        ]));
 
         // Load driver profile if user is a driver
         $userData = [
@@ -107,7 +120,7 @@ class MobileAuthController extends Controller
             'email' => $user->email,
             'role' => $user->role,
             'phone' => $user->phone,
-            'dob' => $user->dob?->format('Y-m-d'),
+            'dob' => $user->dob?->format('m-d-Y'),
             'address' => $user->address,
             'profile_photo' => $user->profile_photo,
             'status' => $user->status
@@ -134,7 +147,7 @@ class MobileAuthController extends Controller
                     'license_number' => $driverProfile->license_number,
                     'vehicle_type' => $driverProfile->vehicle_type,
                     'vehicle_plate_number' => $driverProfile->vehicle_plate_number,
-                    'date_of_birth' => $driverProfile->date_of_birth?->format('Y-m-d'),
+                    'date_of_birth' => $driverProfile->date_of_birth?->format('m-d-Y'),
                     'address' => $driverProfile->address,
                     'availability_status' => $driverProfile->availability_status,
                     'current_location' => [
@@ -321,7 +334,14 @@ class MobileAuthController extends Controller
      */
     public function logout(Request $request)
     {
-        $request->user()->currentAccessToken()->delete();
+        $user = $request->user();
+        // Revoke current access token
+        $user->currentAccessToken()->delete();
+
+        // Clear device token
+        $user->update([
+            'device_token' => null,
+        ]);
         // revoke all refresh tokens of user
         RefreshToken::where('user_id', $request->user()->id)
                     ->update(['revoked' => true]);
@@ -364,11 +384,14 @@ class MobileAuthController extends Controller
             'address' => $user->address,
             'profile_photo' => $user->profile_photo,
             'status' => $user->status,
-            'created_at' => $user->created_at
+            'created_at' => $user->created_at,
         ];
 
         if ($user->role === 'driver') {
             $driverProfile = DriverProfile::where('user_id', $user->id)->first();
+            $driverProfile->date_of_birth = $driverProfile->date_of_birth?->format('Y-m-d');
+            $driverProfile->phone = $user->phone;
+            $userData['company_id'] = $driverProfile->created_by;
             $userData['driver_profile'] = $driverProfile;
         }
 
@@ -441,6 +464,7 @@ class MobileAuthController extends Controller
             'iso_code'     => $request->iso_code,
             'country_code' => $request->country_code,
             'country_flag' => $request->country_flag,
+            'date_of_birth' => $request->dob
         ]);
         $driverProfile->refresh();
         
@@ -453,7 +477,6 @@ class MobileAuthController extends Controller
                 'email' => $updatedUser->email,
                 'role' => $updatedUser->role,
                 'phone' => $updatedUser->phone,
-                
                 'address' => $updatedUser->address,
                 'profile_photo' => $updatedUser->profile_photo,
                 'status' => $updatedUser->status,
@@ -462,7 +485,7 @@ class MobileAuthController extends Controller
                 'country_code' => $driverProfile->country_code,
                 'country_flag' => $driverProfile->country_flag,
                 'driver_profile' => $driverProfile ? [
-                    'date_of_birth' => $driverProfile->date_of_birth?->format('Y-m-d')
+                    'date_of_birth' => $updatedUser->dob?->format('m-d-Y')
                 ] : null
             ]
         ]);

@@ -507,7 +507,7 @@
 
     loadDrivers();
 
-    const current_company_id = '{{ auth()->id() }}';
+    var current_company_id = '{{ auth()->id() }}';
     document.addEventListener('DOMContentLoaded', () => {
         Echo.channel('drivers')
             .subscribed(() => {
