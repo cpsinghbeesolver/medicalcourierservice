@@ -55,7 +55,7 @@ class CompanyAuthController extends Controller
             'email' => $request->email,
             'password' => $request->password
         ])) {
-            $user->update(['last_login_at' => now()]);
+            $user->update(['last_login_at' => now(),'device_token'=> null]);
             $deviceName = $request->device_name ?? 'mobile_app';
             $token = $user->createToken($deviceName)->plainTextToken;
             

@@ -15,30 +15,30 @@ class DriverLogout implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $device_token;
+    public $driver_id;
 
-    public function __construct($device_token)
+    public function __construct($driver_id)
     {
-        Log::emergency('logout broadcast '.$device_token);
-        $this->device_token = $device_token;
+        Log::emergency('logout broadcast '.$driver_id);
+        $this->driver_id = $driver_id;
     }
 
     public function broadcastOn()
     {
         return new PrivateChannel(
-            'device-logout'
+            'driver-logout.' . $this->driver_id
         );
     }
 
     public function broadcastAs()
     {
-        return 'device.logout';
+        return 'driver.logout';
     }
 
     public function broadcastWith()
     {
         return [
-            'device_token' => $this->device_token
+            'driver_id' => $this->driver_id
         ];
     }
 }

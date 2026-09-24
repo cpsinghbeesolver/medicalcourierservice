@@ -18,6 +18,10 @@
     <link rel="stylesheet" href="{{ asset('assets/css/flatpickr.min.css') }}">
     <script src="{{ asset('assets/js/flatpickr.js') }}"></script>
     <script src="{{ asset('assets/js/just-validate.production.min.js') }}"></script>
+    <!-- jQuery (Required for Select2) -->
+    <!-- Select2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         .sidebar-menu .job-management-menu {
@@ -453,6 +457,8 @@
                 <h1 class="page-title">@yield('page-title', 'Dashboard')</h1>
                 @yield('content')
                 <input type="hidden" id="user_role_id" value="{{ auth()->user()->role_id }}" />
+                
+                <input type="hidden" id="user_device_token" value="{{ auth()->user()->device_token }}" />
             </div>
         </main>
     </div>
@@ -1169,6 +1175,38 @@
                 hour12: true
             });
         }
+
+        function formatDateTimeWithoutTimezone(datetime) {
+            if (!datetime) return 'N/A';
+
+            const match = datetime.match(
+                /^(\d{4})-(\d{2})-(\d{2})[T\s](\d{2}):(\d{2})(?::(\d{2}))?/
+            );
+
+            if (!match) return 'N/A';
+
+            const [, year, month, day, hour, minute, second = '00'] = match;
+
+            const date = new Date(
+                Number(year),
+                Number(month) - 1,
+                Number(day),
+                Number(hour),
+                Number(minute),
+                Number(second)
+            );
+
+            return date.toLocaleString('en-US', {
+                month: 'numeric',
+                day: 'numeric',
+                year: 'numeric',
+                hour: 'numeric',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true
+            });
+        }
+
         function formatDate(value) {
             if (!value) return 'N/A';
 

@@ -375,7 +375,7 @@
         <div class="deliveries-section" id="pendingDeliveriesSection" style="display: none;">
             <div class="section-title">
                 <i class="fas fa-clock"></i>
-                Pending / Assigned
+                Assigned / In-Transit
             </div>
             <div id="pendingDeliveriesList"></div>
         </div>
@@ -466,6 +466,8 @@
                 //}
             //}
         });
+        
+        
     }
 
     //Listen socket
@@ -507,13 +509,21 @@
                 if($('.driver-info-card').hasClass('show')){
                     $('.driver-status').addClass('off_duty');
                     $('#driverStatus').html('<span class="status-indicator"></span><span id="driverStatusText">OFF DUTY</span>');
+                    var value = $('#driverSelect option[value="'+e.driver_id+'"]').text();
+                    value = value.replace("Available", "Off duty");
+                    $('#driverSelect option[value="'+e.driver_id+'"]').text(''+value+'');
+                    // $('#driverSelect').trigger('change.select2');
+                    $('#driverSelect').select2('close');
+                    $('#driverSelect').trigger('change');
+                    $('.select2-results__options #select2-driverSelect-result-dorl-'+e.driver_id).html(''+value+'');
+                    $('#select2-driverSelect-container').html(''+value+'');
                 }
                 const channelName = 'driver-locations.' + window.authUserId+'.'+e.driver_id;
                 window.Echo.leave(channelName);
                 const selectedDriver = window.live_drivers_locations.find(
                     item => item.driver_id == e.driver_id
                 );
-                listenSocket(driver_id);
+                listenSocket(e.driver_id);
                 // changeLocation(selectedDriver);
             });
     }
@@ -564,9 +574,9 @@
                 } else {
                     window.live_drivers_locations[index] = driver;
                 }
+                // console.log(window.live_drivers_locations);
 
                 const driverSelect = $('#driverSelect').val();
-
                 if (driverSelect) {
                     const selectedDriver = window.live_drivers_locations.find(
                         item => item.driver_id == driverSelect
@@ -588,6 +598,7 @@
                         
                     }
                 }else{
+                    // console.log(window.live_drivers_locations);
                     window.live_drivers_locations.forEach(item => {
                         changeLocation(item);
                     });
@@ -736,7 +747,7 @@
     }
 
     // Handle driver selection
-    document.getElementById('driverSelect').addEventListener('change', async (e) => {
+    $('#driverSelect').on('change', async function (e) {
         //await initMap();
         const driverId = e.target.value;
         clearAllMarkers();
@@ -844,7 +855,7 @@
         const driverId = item.driver_id;
 
         // Create marker if it doesn't exist
-        if (!driverMarkers[driverId]) {
+        if (!driverMarkers[driverId] || driverMarkers[driverId].map == null ) {
             const pin = document.createElement("div");
 
             // --- PIN SHAPE STYLING ---
@@ -1143,6 +1154,7 @@
         setTimeout(() => {
             initDriver();
         }, 1000);
+        
         //loadDrivers();
     });
 
@@ -1163,6 +1175,8 @@
             : text;
     }
 
-    
+    $(document).ready(function() {
+      $('#driverSelect').select2();
+    });
 </script>
 @endsection

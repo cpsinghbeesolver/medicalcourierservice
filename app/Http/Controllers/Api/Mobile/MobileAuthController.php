@@ -13,6 +13,7 @@ use App\Models\RefreshToken;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 use App\Events\DriverDisconnected;
+use App\Events\DriverLogout;
 
 class MobileAuthController extends Controller
 {
@@ -112,6 +113,9 @@ class MobileAuthController extends Controller
         event(new DriverDisconnected([
             'driver_id' => $user->id
         ]));
+
+        //Logout warning
+        event(new DriverLogout($user->id));
 
         // Load driver profile if user is a driver
         $userData = [

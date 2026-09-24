@@ -385,7 +385,7 @@
         <div class="deliveries-section" id="pendingDeliveriesSection" style="display: none;">
             <div class="section-title">
                 <i class="fas fa-clock"></i>
-                Pending / Assigned
+                Assigned / In-Transit
             </div>
             <div id="pendingDeliveriesList"></div>
         </div>

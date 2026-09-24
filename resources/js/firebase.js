@@ -39,7 +39,8 @@ export async function generateFCMToken() {
     .getAttribute('content');
 
     const savedToken = localStorage.getItem('fcm_token');
-    if (savedToken !== fcm_token) {
+    var deviceToken = $('#user_device_token').val();
+    if (savedToken !== fcm_token || deviceToken == '' || deviceToken == 'null') {
         $.ajax({
                 url: '/api/v1/save-fcm-token',
                 method: 'POST',

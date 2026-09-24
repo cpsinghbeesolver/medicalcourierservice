@@ -543,6 +543,26 @@ class DeliveryController extends Controller
             'items.*.hospital_id.required_if' => 'Please select a Hospital when Dropoff type is Hospital.',
         ]);
 
+        if (
+            $request->filled('scheduled_time_window_start') &&
+            Carbon::parse($request->scheduled_time_window_start)->lt(now())
+        ) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Scheduled time cannot be in the past.',
+            ], 422);
+        }
+
+        if (
+            $request->filled('scheduled_time_window_end') &&
+            Carbon::parse($request->scheduled_time_window_end)->lt(now())
+        ) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Delivery Deadline cannot be in the past.',
+            ], 422);
+        }
+
         //Check if Proof of Pickup is selected
         $validator->after(function ($validator) use ($request) {
 
@@ -970,6 +990,20 @@ class DeliveryController extends Controller
 
         if (!$delivery) {
             return $this->errorResponse('Delivery not found', 200);
+        }
+
+        if (
+            $delivery->scheduled_time_window_start &&
+            Carbon::parse($delivery->scheduled_time_window_start)->lt(now())
+        ) {
+            return $this->errorResponse('Scheduled time cannot be in the past.', 400);
+        }
+
+        if (
+            $delivery->scheduled_time_window_end &&
+            Carbon::parse($delivery->scheduled_time_window_end)->lt(now())
+        ) {
+            return $this->errorResponse('Delivery Deadline cannot be in the past.', 400);
         }
 
         // Only allow assignment for pending or assigned deliveries (for re-assignment)

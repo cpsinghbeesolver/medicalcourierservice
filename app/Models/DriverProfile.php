@@ -147,11 +147,11 @@ class DriverProfile extends Model
         });
     }
 
-    protected function getAvailabilityStatusAttribute($value)
-    {
+    // protected function getAvailabilityStatusAttribute($value)
+    // {
 
-        return $value
-        ? strtoupper(str_replace('_', ' ', $value))
-        : $value;
-    }
+    //     return $value
+    //     ? strtoupper(str_replace('_', ' ', $value))
+    //     : $value;
+    // }
 }

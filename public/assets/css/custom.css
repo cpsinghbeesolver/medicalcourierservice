@@ -24,6 +24,20 @@ a{
     display: none;
 }
 
+#searchInputHeader{
+    border: 0px;
+}
+
+.select2-container--default .select2-selection--single{
+    height: 42px !important;
+}
+.select2-container--default .select2-selection--single .select2-selection__rendered{
+    margin-top: 4px !important;
+}
+.select2-container--default .select2-selection--single .select2-selection__arrow{
+    top: 6px !important;
+}
+
 /* Sidebar */
 .sidebar {
     width: 266px;

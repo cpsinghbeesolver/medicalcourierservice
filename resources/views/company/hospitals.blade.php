@@ -24,6 +24,7 @@
                     <th>Name</th>
                     <th>Address</th>
                     <th>Contact Person</th>
+                    <th>Contact Person Phone</th>
                 </tr>
             </thead>
             <tbody>
@@ -62,6 +63,7 @@
                             @endif
                             <td>{{ $hospital->address }}</td>
                             <td>{{ $hospital->contact_person }}</td>
+                            <td>{{ $hospital->phone }}</td>
                         </tr>
                     @endforeach
                 @else

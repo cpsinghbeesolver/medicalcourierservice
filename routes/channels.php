@@ -58,6 +58,6 @@ Broadcast::channel('notifications', function ($user) {
     return true;
 });
 
-Broadcast::channel('device-logout', function ($user) {
+Broadcast::channel('driver-logout.{driver_id}', function ($user, $driver_id) {
     return true;
 });

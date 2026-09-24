@@ -268,7 +268,7 @@ class HospitalController extends Controller
     public function list()
     {
         $hospitals = Hospital::query()
-            ->select('id', 'name', 'address','contact_person')
+            ->select('id', 'name', 'address','contact_person','phone')
             ->where('created_by', auth()->id())
             ->latest()->paginate(15);
         // dd($hospitals);

@@ -629,10 +629,19 @@
                             <div class="info-label">Status:</div>
                             <div class="info-value">${formatValue(item.status)}</div>
                         </div>
+                        
                         ${item.signature_image ? `
                         <div class="info-row">
                             <div class="info-label">Signature Image:</div>
                             <div class="info-value"><img class="signature_image" src="${item.signature_image}" /></div>
+                        </div>
+                        
+                        
+                        ` : ''}
+                        ${item.photo_proof ? `
+                        <div class="info-row">
+                            <div class="info-label">Photo Proof:</div>
+                            <div class="info-value"><img class="signature_image" src="${item.photo_proof}" /></div>
                         </div>
                         ` : ''}
                         ${item.barcode ? `

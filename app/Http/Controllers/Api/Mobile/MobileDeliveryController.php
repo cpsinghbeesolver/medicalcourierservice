@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use App\Jobs\SendFirebaseNotificationJob;
 use App\Events\DeliveryStatusUpdated;
+use Carbon\Carbon;
 
 class MobileDeliveryController extends Controller
 {
@@ -119,7 +120,13 @@ class MobileDeliveryController extends Controller
         // Filter by user role
         $user = $request->user();
         $driverProfile = $user->driverProfile;
-        $query = Delivery::query()->where('status','assigned')->where('created_by', $driverProfile->created_by);
+        $query = Delivery::query()
+        ->where('status', 'assigned')
+        ->where('created_by', $driverProfile->created_by)
+        ->where(function ($q) {
+            $q->where('scheduled_time_window_start', '>', now())
+            ->orWhere('scheduled_time_window_end', '>', now());
+        });
         
         if ($user->role === 'driver') {
             $query->where('driver_id', $user->id);
@@ -296,6 +303,20 @@ class MobileDeliveryController extends Controller
         }
 
         $delivery = $query->find($id);
+
+        $isexpired = false;
+        if (
+            $delivery->status === 'assigned' &&
+            (
+                ($delivery->scheduled_time_window_start &&
+                    Carbon::parse($delivery->scheduled_time_window_start)->lt(now()))
+                ||
+                ($delivery->scheduled_time_window_end &&
+                    Carbon::parse($delivery->scheduled_time_window_end)->lt(now()))
+            )
+        ) {
+            $isexpired = true;
+        }
         if (!$delivery) {
             return response()->json([
                 'success' => false,
@@ -411,6 +432,7 @@ class MobileDeliveryController extends Controller
                     'id' => $delivery->creator->id,
                     'name' => $delivery->creator->name
                 ] : null,
+                'is_expired' => $isexpired,
                 'created_at' => $delivery->created_at->toIso8601String(),
                 'updated_at' => $delivery->updated_at->toIso8601String()
             ]
@@ -496,6 +518,17 @@ class MobileDeliveryController extends Controller
                 'success' => false,
                 'message' => 'Delivery cannot be accepted from current status: ' . $delivery->status
             ], 400);
+        }
+
+        if (
+            $delivery->scheduled_time_window_start &&
+            Carbon::parse($delivery->scheduled_time_window_start)->lt(now()) || $delivery->scheduled_time_window_end &&
+            Carbon::parse($delivery->scheduled_time_window_end)->lt(now())
+        ) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Delivery Expired'
+            ], 404);
         }
 
         $delivery->status = 'accepted';
@@ -713,12 +746,33 @@ class MobileDeliveryController extends Controller
         if (!$driverProfile) {
             return $this->errorResponse('Driver profile not found', 404);
         }
+        
         $delivery = Delivery::where('id', $id)
                            ->where('driver_id', $user->id)
                            ->with('items.specimenType','items.tempratureRequirement','items.hospital')
                            ->with('vehicleRequirement')
                            ->first();
-            
+
+        if (
+            $delivery->scheduled_time_window_start &&
+            Carbon::parse($delivery->scheduled_time_window_start)->lt(now())
+        ) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Delivery Expired'
+            ], 404);
+        }
+
+        if (
+            $delivery->scheduled_time_window_end &&
+            Carbon::parse($delivery->scheduled_time_window_end)->lt(now())
+        ) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Delivery Expired'
+            ], 404);
+        }
+
         if (!$delivery) {
             return response()->json([
                 'success' => false,
@@ -959,6 +1013,26 @@ class MobileDeliveryController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Delivery not found or not assigned to you'
+            ], 404);
+        }
+        
+        if (
+            $delivery->scheduled_time_window_start &&
+            Carbon::parse($delivery->scheduled_time_window_start)->lt(now())
+        ) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Delivery Expired'
+            ], 404);
+        }
+
+        if (
+            $delivery->scheduled_time_window_end &&
+            Carbon::parse($delivery->scheduled_time_window_end)->lt(now())
+        ) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Delivery Expired'
             ], 404);
         }
 
@@ -1550,6 +1624,10 @@ class MobileDeliveryController extends Controller
         ])
         ->where('driver_id', $user->id)
         ->where('created_by', $driverProfile->created_by)
+        ->where(function ($q) {
+            $q->where('scheduled_time_window_start', '>', now())
+            ->orWhere('scheduled_time_window_end', '>', now());
+        })
         ->whereIn('status', ['in_transit', 'accepted', 'picked_up'])
         ->withCount('items')
         ->orderBy('pickup_scheduled_time')
@@ -1646,12 +1724,35 @@ class MobileDeliveryController extends Controller
             $query->where('driver_id', $user->id)->where('created_by', $driverProfile->created_by);
         }
 
-        $deliveries = $query->whereIn('status', ['delivered', 'cancelled', 'failed'])
-                            ->with('items:id,delivery_id,item_type,quantity')
-                            ->orderBy('updated_at', 'desc')
-                            ->paginate($perPage);
+        $deliveries = $query
+        ->where(function ($q) {
+            $q->whereIn('status', ['delivered', 'cancelled', 'failed'])
+            ->orWhere(function ($q) {
+                $q->where('status', 'assigned')
+                    ->where(function ($q) {
+                        $q->where('scheduled_time_window_start', '<', now())
+                        ->orWhere('scheduled_time_window_end', '<', now());
+                    });
+            });
+        })
+        ->with('items:id,delivery_id,item_type,quantity')
+        ->orderBy('updated_at', 'desc')
+        ->paginate($perPage);
 
         $transformedDeliveries = $deliveries->map(function($delivery) {
+            $isexpired = false;
+            if (
+                $delivery->status === 'assigned' &&
+                (
+                    ($delivery->scheduled_time_window_start &&
+                        Carbon::parse($delivery->scheduled_time_window_start)->lt(now()))
+                    ||
+                    ($delivery->scheduled_time_window_end &&
+                        Carbon::parse($delivery->scheduled_time_window_end)->lt(now()))
+                )
+            ) {
+                $isexpired = true;
+            }
             return [
                 'id' => $delivery->id,
                 'delivery_number' => $delivery->delivery_number,
@@ -1689,7 +1790,8 @@ class MobileDeliveryController extends Controller
                 'item_count' => $delivery->items->count(),
                 'distance_km' => $delivery->distance_km,
                 'estimated_duration_minutes' => $delivery->estimated_duration_minutes,
-                'special_instructions' => $delivery->special_instructions
+                'special_instructions' => $delivery->special_instructions,
+                'is_expired' => $isexpired
             ];
         });
 

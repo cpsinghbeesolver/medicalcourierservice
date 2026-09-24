@@ -497,9 +497,9 @@
                         </span>
                         <span class="time-value">
                             ${delivery.pickup.actual_time
-                                ? new Date(delivery.pickup.actual_time).toLocaleString()
+                                ? formatDate(delivery.pickup.actual_time)
                                 : (delivery.pickup.scheduled_time
-                                    ? new Date(delivery.pickup.scheduled_time).toLocaleString()
+                                    ? formatDateTimeWithoutTimezone(delivery.pickup.scheduled_time)
                                     : 'N/A')}
                         </span>
                     </div>
@@ -510,10 +510,10 @@
                         </span>
                         <span class="time-value">
                             ${delivery.delivery.actual_time
-                                ? new Date(delivery.delivery.actual_time).toLocaleString()
+                                ? formatDate(delivery.delivery.actual_time)
                                 : (delivery.delivery.scheduled_time
-                                    ? new Date(delivery.delivery.scheduled_time).toLocaleString()
-                                    : 'N/A')}
+                                    ? formatDateTimeWithoutTimezone(delivery.delivery.scheduled_time)
+                                    : 'N/A')}        
                         </span>
                     </div>
                 </div>
@@ -1073,6 +1073,10 @@
             $('#resultsSection').hide();
             $('#resultsContent').html('');
         }
+    });
+    
+    $(document).ready(function() {
+      $('#driverName').select2();
     });
 </script>
 @endsection
