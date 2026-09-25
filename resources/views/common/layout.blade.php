@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="api-token" content="{{ session('web_token') }}">
-    <title>@yield('title', 'Admin Dashboard') - {{ env('APP_NAME') }}</title>
+    <title>@yield('title', 'Admin Dashboard') - {{ config('app.name') }}</title>
     <!-- <link rel="stylesheet" href="{{ asset('assets/css/font-awesome.css') }}"> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/libphonenumber-js@1.11.13/bundle/libphonenumber-max.js"></script>
@@ -245,7 +245,7 @@
                     @elseif(auth()->user()->isHospital())
                         <a href="/hospital/dashboard">
                     @endif
-                    <img src="/assets/img/logo.png" class="logo-image" alt="{{ env('APP_NAME') }} Logo"></a>
+                    <img src="/assets/img/logo.png" class="logo-image" alt="{{ config('app.name') }} Logo"></a>
                 </div>
             </div>
 
@@ -301,7 +301,7 @@
                         <i class="fas fa-user-tie"></i> Driver Management
                     </a></li>
                     <li><a href="/company/dashboard/hospitals" class="{{ request()->is('company/dashboard/hospitals') || (request()->is('company/dashboard/hospitals/*') || request()->is('company/dashboard/hospitals/create')) ? 'active' : '' }}">
-                        <i class="fas fa-user-tie"></i> Hospital Management
+                        <i class="fas fa-hospital-user"></i> Hospital Management
                     </a></li>
                     <li><a href="/company/dashboard/activity-logs" class="{{ request()->is('company/dashboard/activity-logs*') ? 'active' : '' }}">
                         <i class="fas fa-file-lines"></i> Audit
@@ -1010,6 +1010,7 @@
 
         //add hospital
         $('#addHospitalModal').on('submit', function(e) {
+            const pageName = @json(Route::currentRouteName());
             e.preventDefault();
             show_load_spinner();
             // return false;
@@ -1036,6 +1037,9 @@
                         showDialog('Hospital added successfully! Please search for it.', 'success');
                         $('#add_hospital')[0].reset();
                         document.getElementById('addHospitalModal').classList.remove('show');
+                        if(pageName == 'hospitals-list'){
+                            location.reload();
+                        }
                     }
 
                 },

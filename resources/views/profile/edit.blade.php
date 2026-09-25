@@ -406,31 +406,31 @@
             <!-- Profile Form -->
             <form id="profileForm">
                 <div class="row">
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md-12 mb-3">
                         <label for="name" class="form-label">Full Name <span class="astrik">*</span></label>
                         <input type="text" class="form-control" id="name" name="name" placeholder="Enter full name" required>
                         <div class="invalid-feedback" id="name-error"></div>
                     </div>
 
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md-12 mb-3">
                         <label for="email" class="form-label">Email Address</label>
                         <input type="email" class="form-control" id="email" name="email" disabled placeholder="Email cannot be changed">
                     </div>
 
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md-12 mb-3">
                         <label for="phone" class="form-label">Phone Number</label>
                         <input type="tel" class="form-control numbers-only" id="profile_phone" name="phone" placeholder="+1 (555) 123-4567">
                         <div class="invalid-feedback" id="phone-error"></div>
                     </div>
 
                     @if(auth()->user()->isHospital())
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-12 mb-3">
                             <label for="address" class="form-label">Address</label>
                             <input type="text" class="form-control" id="address" name="address">
                             <div class="invalid-feedback" id="address-error"></div>
                         </div>
                     @else
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md-12 mb-3">
                         <label for="dob" class="form-label">Date of Birth</label>
                         <div class="location-input-wrapper">
                             <i class="fas fa-calendar-alt location-icon"></i>

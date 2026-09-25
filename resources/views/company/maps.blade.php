@@ -556,13 +556,15 @@
                 window.live_driver_id = e.driver_id;
                 window.live_driver_lat = parseFloat(e.latitude);
                 window.live_driver_long = parseFloat(e.longitude);
-                window.live_driver_name = e.driver_name;
+                var db_driver_name = $('#driverSelect option[value="'+e.driver_id+'"]').text();
+                db_driver_name = db_driver_name.split(' - ')[0];
+                window.live_driver_name = db_driver_name;
 
                 const driver = {
                     driver_id: e.driver_id,
                     driver_lat: parseFloat(e.latitude),
                     driver_long: parseFloat(e.longitude),
-                    driver_name: e.driver_name
+                    driver_name: db_driver_name
                 };
 
                 const index = window.live_drivers_locations.findIndex(

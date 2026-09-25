@@ -516,6 +516,17 @@
                                     : 'N/A')}        
                         </span>
                     </div>
+                    <div class="time-item">
+                        <i class="far fa-user"></i>
+                        <span class="time-label">
+                            Driver Name
+                        </span>
+                        <span class="time-value">
+                            ${delivery.driver.name
+                                ? delivery.driver.name
+                                : 'N/A'}        
+                        </span>
+                    </div>
                 </div>
             </div>
 
@@ -599,7 +610,9 @@
                                     data-pickup-address="${delivery.pickup.address || ''}"
                                     data-delivery-address="${item.hospital
                                         ? (item.hospital.address || '')
-                                        : (item.dropoff_address || '')}">
+                                        : (item.dropoff_address || '')}"
+                                    data-status="${delivery.status || ''}"    
+                                        >
                                 </div>
                             </div>
                         </div>
@@ -685,7 +698,8 @@
                                      data-delivery-lat="${delivery.delivery.location.latitude || ''}"
                                      data-delivery-lng="${delivery.delivery.location.longitude || ''}"
                                      data-pickup-address="${delivery.pickup.address || ''}"
-                                     data-delivery-address="${delivery.delivery.address || ''}">
+                                     data-delivery-address="${delivery.delivery.address || ''}"
+                                     data-status="${delivery.status || ''}">
                                 </div>
                             </div>
                         </div>
@@ -726,17 +740,19 @@
 
 
     function initializeMap(mapElement) {
+        console.log(mapElement.dataset.status);
         var pickupLat = parseFloat(mapElement.dataset.pickupLat);
         var pickupLng = parseFloat(mapElement.dataset.pickupLng);
         var deliveryLat = parseFloat(mapElement.dataset.deliveryLat);
         var deliveryLng = parseFloat(mapElement.dataset.deliveryLng);
+        var deliveryStatus = mapElement.dataset.status;
         const pickupAddress = mapElement.dataset.pickupAddress;
         const deliveryAddress = mapElement.dataset.deliveryAddress;
         const deliveryId = mapElement.dataset.deliveryId;
         const driverId = document.getElementById('driverName').value;
         // alert(pickupLat + ' ' + pickupLng + ' ' + deliveryLat + ' ' + deliveryLng);
         // Check if coordinates are valid
-        if (!deliveryLat || !deliveryLng) {
+        if (deliveryStatus != 'delivered') {
             mapElement.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #7f8c8d;"><i class="fas fa-map-marker-alt" style="margin-right: 10px;"></i> Location coordinates not available</div>';
             return;
         }

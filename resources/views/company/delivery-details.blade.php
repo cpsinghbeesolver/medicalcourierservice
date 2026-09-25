@@ -1042,7 +1042,7 @@
     }
 
     function resumeDelivery() {
-        showConfirmDialog('Are you sure you want to cancel this job?', 'warning', 'Confirm Cancel', function() {
+        showConfirmDialog('Are you sure you want to resume this job?', 'warning', 'Confirm Resume', function() {
             fetch(`/api/v1/deliveries/${deliveryId}/resume`, {
                 method: 'POST',
                 headers: {

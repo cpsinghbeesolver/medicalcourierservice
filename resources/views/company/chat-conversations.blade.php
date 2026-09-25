@@ -34,7 +34,7 @@
                 <div class="conversation-bottom">
                     @if($conversation->latestMessage)
                         <span class="last-message">
-                            {{ $conversation->latestMessage->message }}
+                            {{ Str::limit($conversation->latestMessage->message, 40, '...') }}
                         </span>
                     @endif
                     @if($conversation->delivery?->delivery_number)

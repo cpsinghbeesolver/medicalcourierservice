@@ -507,6 +507,17 @@ class MobileDeliveryController extends Controller
                            ->with('vehicleRequirement')
                            ->first();
 
+        if (
+            $delivery->scheduled_time_window_start &&
+            Carbon::parse($delivery->scheduled_time_window_start)->lt(now()) || $delivery->scheduled_time_window_end &&
+            Carbon::parse($delivery->scheduled_time_window_end)->lt(now())
+        ) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Delivery Expired'
+            ], 400);
+        }
+
         if (!$delivery) {
             return response()->json([
                 'success' => false,
@@ -528,7 +539,7 @@ class MobileDeliveryController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Delivery Expired'
-            ], 404);
+            ], 400);
         }
 
         $delivery->status = 'accepted';
@@ -760,7 +771,7 @@ class MobileDeliveryController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Delivery Expired'
-            ], 404);
+            ], 400);
         }
 
         if (
@@ -770,7 +781,7 @@ class MobileDeliveryController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Delivery Expired'
-            ], 404);
+            ], 400);
         }
 
         if (!$delivery) {
@@ -814,7 +825,7 @@ class MobileDeliveryController extends Controller
             'model_type' => 'App\Models\DriverProfile',
             'model_id' => $delivery->driver_id,
             'description' => "Driver location updated to ({$request->latitude}, {$request->longitude})",
-            'properties' => ['latitiude' => $request->latitude, 'longitude' => $request->longitude, 'delivery_id' => $delivery->id],
+            'properties' => ['latitude' => $request->latitude, 'longitude' => $request->longitude, 'delivery_id' => $delivery->id],
             'ip_address' => $request->ip(),
             'user_agent' => $request->userAgent()
         ]);
@@ -1023,7 +1034,7 @@ class MobileDeliveryController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Delivery Expired'
-            ], 404);
+            ], 400);
         }
 
         if (
@@ -1033,7 +1044,7 @@ class MobileDeliveryController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Delivery Expired'
-            ], 404);
+            ], 400);
         }
 
         $validator = Validator::make($request->all(), [
@@ -1127,7 +1138,7 @@ class MobileDeliveryController extends Controller
                 'model_type' => 'App\Models\DriverProfile',
                 'model_id' => $delivery->driver_id,
                 'description' => "Driver location updated to ({$request->latitude}, {$request->longitude})",
-                'properties' => ['latitiude' => $request->latitude, 'longitude' => $request->longitude, 'delivery_id' => $delivery->id],
+                'properties' => ['latitude' => $request->latitude, 'longitude' => $request->longitude, 'delivery_id' => $delivery->id],
                 'ip_address' => $request->ip(),
                 'user_agent' => $request->userAgent()
             ]);
@@ -1216,6 +1227,8 @@ class MobileDeliveryController extends Controller
         $user = $request->user();
         $driverProfile = $user->driverProfile;
 
+        $request->latitude = 30.7525;
+        $request->longitude = 76.8101;
         if (!$driverProfile) {
             return $this->errorResponse('Driver profile not found', 404);
         }
@@ -1325,8 +1338,8 @@ class MobileDeliveryController extends Controller
                 'action' => 'location_updated',
                 'model_type' => 'App\Models\DriverProfile',
                 'model_id' => $delivery->driver_id,
-                'description' => "Driver location updated to ({$request->latitude}, {$request->longitude})",
-                'properties' => ['latitiude' => $request->latitude, 'longitude' => $request->longitude, 'delivery_id' => $delivery->id],
+                'description' => "Driver location completed to ({$request->latitude}, {$request->longitude})",
+                'properties' => ['latitude' => $request->latitude, 'longitude' => $request->longitude, 'delivery_id' => $delivery->id],
                 'ip_address' => $request->ip(),
                 'user_agent' => $request->userAgent()
             ]);
@@ -1506,7 +1519,7 @@ class MobileDeliveryController extends Controller
                     'model_type' => 'App\Models\DriverProfile',
                     'model_id' => $delivery->driver_id,
                     'description' => "Driver location updated to ({$request->latitude}, {$request->longitude})",
-                    'properties' => ['latitiude' => $request->latitude, 'longitude' => $request->longitude, 'delivery_id' => $delivery->id],
+                    'properties' => ['latitude' => $request->latitude, 'longitude' => $request->longitude, 'delivery_id' => $delivery->id],
                     'ip_address' => $request->ip(),
                     'user_agent' => $request->userAgent()
                 ]);

@@ -22,6 +22,9 @@ class SendFirebaseNotificationJob implements ShouldQueue
 
     public function handle(FirebaseService $firebaseService): void
     {
+        if($this->type == 'web'){
+            event(new NotificationReceived($this->user_id));
+        }
         $firebaseService->sendToToken(
             $this->token,
             $this->title,
@@ -30,6 +33,6 @@ class SendFirebaseNotificationJob implements ShouldQueue
             $this->user_id,
             $this->data
         );
-        event(new NotificationReceived($this->data['company_id']));
+        
     }
 }

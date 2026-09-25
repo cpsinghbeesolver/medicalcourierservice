@@ -579,6 +579,7 @@
         color: #43535d;
 
         border-bottom-left-radius: 3px;
+        overflow-wrap: anywhere;
     }
 
     .sent .message-bubble {

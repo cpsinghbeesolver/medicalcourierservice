@@ -89,17 +89,25 @@ class DriverProfileController extends Controller
         }
         $query->orderBy('created_at', 'desc');
 
-        $profiles = $query->paginate($request->get('per_page', 15));
+        if ($request->has('type') && $request->type == 'job') {
+            $profiles = $query->get();
+            return $this->successResponse([
+                'profiles' => DriverProfileResource::collection($profiles),
+            ], 'Driver profiles retrieved successfully');
+        }else{
+            $profiles = $query->paginate($request->get('per_page', 15));
+            return $this->successResponse([
+                'profiles' => DriverProfileResource::collection($profiles),
+                'pagination' => [
+                    'total' => $profiles->total(),
+                    'per_page' => $profiles->perPage(),
+                    'current_page' => $profiles->currentPage(),
+                    'last_page' => $profiles->lastPage(),
+                ]
+            ], 'Driver profiles retrieved successfully');
+        }
         // $profiles = $query->get();
-        return $this->successResponse([
-            'profiles' => DriverProfileResource::collection($profiles),
-            'pagination' => [
-                'total' => $profiles->total(),
-                'per_page' => $profiles->perPage(),
-                'current_page' => $profiles->currentPage(),
-                'last_page' => $profiles->lastPage(),
-            ]
-        ], 'Driver profiles retrieved successfully');
+        
     }
 
     /**

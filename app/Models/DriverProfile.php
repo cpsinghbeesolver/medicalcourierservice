@@ -82,7 +82,7 @@ class DriverProfile extends Model
         'last_location_update' => 'datetime',
     ];
 
-    protected $appends = ['availability_status'];
+    // protected $appends = ['availability_status'];
 
     public function user(): BelongsTo
     {

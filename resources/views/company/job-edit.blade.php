@@ -402,13 +402,13 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label>Email</label>
-                            <input type="email" id="hospital_email" name="hospital_email" maxlength="254" placeholder="Please add email" autocomplete="off">
+                            <input type="email" id="hospital_email" name="hospital_email" maxlength="100" placeholder="Please add email" autocomplete="off">
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
                             <label>Registration Number</label>
-                            <input type="text" id="hospital_registration" name="hospital_registration" maxlength="254" placeholder="Please add registration number" autocomplete="off">
+                            <input type="text" id="hospital_registration" name="hospital_registration" maxlength="100" placeholder="Please add registration number" autocomplete="off">
                         </div>
                     </div>
                     <div class="form-row">
@@ -429,7 +429,7 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label>Contact Person</label>
-                            <input type="text" id="hospital_contact_person" name="hospital_contact_person" placeholder="Please add contact Person" autocomplete="off">
+                            <input type="text" id="hospital_contact_person" name="hospital_contact_person" maxlength="100" placeholder="Please add contact Person" autocomplete="off">
                         </div>
                     </div>
                     <div class="form-row">
@@ -610,7 +610,7 @@
     // Load available drivers
     async function loadDrivers() {
         try {
-            const response = await fetch('/api/v1/driver-profiles', {
+            const response = await fetch('/api/v1/driver-profiles?type=job', {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Accept': 'application/json'
@@ -1144,7 +1144,9 @@
     });
 
     const dateTimeInput = document.getElementById('timeWindowEnd');
-
+    $(document).ready(function() {
+      $('#driverId').select2();
+    });
     // dateTimeInput.addEventListener('click', function () {
     //     if (this.showPicker) {
     //         this.showPicker();

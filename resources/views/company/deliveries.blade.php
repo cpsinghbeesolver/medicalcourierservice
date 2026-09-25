@@ -380,6 +380,7 @@
             <option value="">All Status</option>
             <option value="pending">Pending</option>
             <option value="assigned">Assigned</option>
+            <option value="accepted">Accepted</option>
             <option value="in_transit">In Transit</option>
             <option value="picked_up">Picked Up</option>
             <option value="delivered">Delivered</option>
