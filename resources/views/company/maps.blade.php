@@ -352,10 +352,10 @@
                     <span style="font-size: 13px; font-weight: 600; color: #2c3e50;" id="pendingDeliveries">0</span>
                 </div>
                 <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                    <span style="font-size: 12px; color: #7f8c8d;">In Progress:</span>
+                    <span style="font-size: 12px; color: #7f8c8d;">In Transit:</span>
                     <span style="font-size: 13px; font-weight: 600; color: #10B981;" id="inProgressCount">0</span>
                 </div>
-                <div style="display: flex; justify-content: space-between;">
+                <div style="display: none; justify-content: space-between;">
                     <span style="font-size: 12px; color: #7f8c8d;">Completed:</span>
                     <span style="font-size: 13px; font-weight: 600; color: #6B7280;" id="completedCount">0</span>
                 </div>
@@ -375,7 +375,7 @@
         <div class="deliveries-section" id="pendingDeliveriesSection" style="display: none;">
             <div class="section-title">
                 <i class="fas fa-clock"></i>
-                Assigned / In-Transit
+                Assigned
             </div>
             <div id="pendingDeliveriesList"></div>
         </div>
@@ -968,7 +968,7 @@
             }
 
             // Load driver deliveries
-            const deliveriesResponse = await fetch(`/api/v1/deliveries?driver_id=${driverId}&per_page=50`, {
+            const deliveriesResponse = await fetch(`/api/v1/deliveries?type=maps&driver_id=${driverId}&per_page=50`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Accept': 'application/json'
@@ -1034,11 +1034,11 @@
 
         // Filter deliveries into categories
         const inProgressDeliveries = deliveries.filter(d =>
-            ['in_transit', 'picked_up'].includes(d.status)
+            ['in_transit'].includes(d.status)
         );
 
         const pendingDeliveries = deliveries.filter(d =>
-            ['pending', 'assigned','picked_up'].includes(d.status)
+            ['pending', 'assigned','picked_up','accepted'].includes(d.status)
         );
 
         const completedDeliveries = deliveries.filter(d =>
@@ -1079,7 +1079,7 @@
                     </div>
                     <div class="live-badge" style="background: ${statusColor};">
                         <span class="pulse"></span>
-                        ${statusText}
+                        ${delivery.status}
                     </div>
                 </div>
             `}).join('');
@@ -1112,7 +1112,7 @@
                         )}
                     </div>
                     <div style="display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; background: ${statusColor}; color: white; border-radius: 12px; font-size: 11px; font-weight: 600; margin-top: 5px;">
-                        ${statusText}
+                        ${delivery.status}
                     </div>
                 </div>
             `}).join('');
@@ -1177,6 +1177,18 @@
             : text;
     }
 
+    var current_company_id = '{{ auth()->id() }}';
+    document.addEventListener('DOMContentLoaded', () => {
+        window.Echo.private('deliveries')
+            .listen('DeliveryStatusUpdated', (e) => {
+                console.log('DeliveryStatusUpdated', e);
+                if(current_company_id  == e.created_by){
+                    var current_value = $('#driverSelect').val();
+                    $('#driverSelect').val('').trigger('change');
+                    $('#driverSelect').val(current_value).trigger('change');
+                }
+            });
+    });
     $(document).ready(function() {
       $('#driverSelect').select2();
     });

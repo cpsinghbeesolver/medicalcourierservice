@@ -205,6 +205,9 @@ Route::prefix('company/dashboard')->middleware('custom.auth','no.cache')->group(
         return view('company.drivers');
     });
     Route::get('/hospitals', [HospitalController::class, 'list'])->name('hospitals-list');
+    
+    Route::post('/request-admin', [HospitalController::class, 'requestAdmin'])->name('request.admin');
+    Route::post('/update-request-admin', [HospitalController::class, 'requestUpateAdmin'])->name('update.request.admin');
 
     Route::get('/drivers/create', function () {
         return view('company.driver-create');

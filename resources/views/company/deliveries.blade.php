@@ -632,7 +632,19 @@
                         <td>${rowNumber}</td>
                         <td><strong>${delivery.delivery_number || 'N/A'}</strong></td>
                         <td>${delivery.driver ? delivery.driver.name : '<span style="color: #95a5a6;">Not Assigned</span>'}</td>
-                        <td><span class="badge ${getStatusClass(delivery.status)}">${formatStatus(delivery.status)}</span></td>
+                        <td>
+                            <span class="badge ${
+                                delivery.is_expired && delivery.status === 'assigned'
+                                    ? getStatusClass('failed')
+                                    : getStatusClass(delivery.status)
+                            }">
+                                ${
+                                    delivery.is_expired && delivery.status === 'assigned'
+                                        ? 'Expired'
+                                        : formatStatus(delivery.status)
+                                }
+                            </span>
+                        </td>
                         <td><span class="badge ${priorityText}">${priorityText.charAt(0).toUpperCase() + priorityText.slice(1)}</span></td>
                         <td style="white-space: nowrap;">
                             <button class="btn-action" type="button" data-action="view" data-delivery-id="${delivery.id}">

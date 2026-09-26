@@ -100,6 +100,17 @@ class DeliveryController extends Controller
         if(Auth::user()->isAdmin()){
             $query->where('created_by', Auth::id());
         }
+        
+        //only non-expired jobs
+        if($request->has('type') && $request->type == 'maps'){
+            $query->where(function ($q) {
+                $q->whereNull('scheduled_time_window_start')
+                ->orWhere('scheduled_time_window_start', '>=', now());
+            })->where(function ($q) {
+                $q->whereNull('scheduled_time_window_end')
+                ->orWhere('scheduled_time_window_end', '>=', now());
+            });
+        }
         // Apply filters
         if ($request->has('status')) {
             $query->where('status', $request->status);
@@ -131,13 +142,12 @@ class DeliveryController extends Controller
         $sortBy = $request->get('sort_by', 'created_at');
         $sortOrder = $request->get('sort_order', 'desc');
         $query->orderBy($sortBy, $sortOrder);
-
+        
         // Paginate
         $perPage = $request->get('per_page');
         if ($request->has('page') || $perPage) {
             $perPage = $perPage ? (int) $perPage : 15;
             $deliveries = $query->paginate($perPage);
-            // dd($deliveries->toArray());
             return $this->successResponse([
                 'deliveries' => DeliveryResource::collection($deliveries),
                 'pagination' => [
@@ -152,7 +162,7 @@ class DeliveryController extends Controller
         }
 
         $deliveries = $query->get();
-
+        
         return $this->successResponse([
             'deliveries' => DeliveryResource::collection($deliveries),
         ], 'Deliveries retrieved successfully');

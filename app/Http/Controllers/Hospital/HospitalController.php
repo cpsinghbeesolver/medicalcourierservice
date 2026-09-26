@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Hospital;
 use App\Models\DeliveryItem;
 use App\Models\User;
+use App\Models\HospitalRequest;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\HospitalCreated;
@@ -246,7 +247,22 @@ class HospitalController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $hospitalRequest = HospitalRequest::query()
+            ->select('id', 'hospital_id', 'message', 'status')
+            ->where('id', $id)
+            ->first();
+
+        if (!$hospitalRequest) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Hospital request not found.',
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => $hospitalRequest,
+        ]);
     }
 
     /**
@@ -274,4 +290,34 @@ class HospitalController extends Controller
         // dd($hospitals);
         return view('company.hospitals',compact('hospitals'));
     }
+
+    public function requestAdmin(Request $request){
+        if($request->has('hospital_id') && $request->has('message')){
+            HospitalRequest::create([
+                'hospital_id' => $request->hospital_id,
+                'message' => $request->message,
+                'status' => 'pending',
+            ]);
+            return back()->with('success', 'Hospital request submitted successfully.');
+        }
+    }
+
+    public function requestUpateAdmin(Request $request){
+        if($request->has('hospital_id') && $request->has('message')){
+            $hospitalRequest = HospitalRequest::find($request->hospital_id);
+            if (!$hospitalRequest) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Hospital request not found.',
+                ], 404);
+            }
+
+            $hospitalRequest->update([
+                'status' => 'completed',
+            ]);
+
+            return back()->with('success', 'Hospital request marked as completed.');
+        }
+    }
+    
 }

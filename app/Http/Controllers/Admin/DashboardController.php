@@ -117,6 +117,7 @@ class DashboardController extends Controller
     {
         $drivers = \App\Models\DriverProfile::with('user')
             ->where('created_by', auth()->id())
+            ->orderByRaw("CASE WHEN availability_status = 'available' THEN 0 ELSE 1 END")
             ->get()
             ->map(function ($driver) {
                 return collect([

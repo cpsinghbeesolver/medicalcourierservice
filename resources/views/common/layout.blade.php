@@ -669,7 +669,7 @@
             if (notificationDropdown && (!notificationWrapper || !notificationWrapper.contains(event.target))) {
                 notificationDropdown.classList.remove('show');
             }
-            if(!searchInputHeader.contains(event.target)){
+            if (searchInputHeader && !searchInputHeader.contains(event.target)) {
                 $('#searchResults').hide();
             }
         }
@@ -1120,6 +1120,7 @@
                 });
 
                 results.on('click', '.hospital-autocomplete-option', function () {
+                    alert('fdd');
                     const hospital = $(this).data('hospital');
                     input.val(hospital.name);
                     input.siblings('.hospital-id').val(hospital.id);

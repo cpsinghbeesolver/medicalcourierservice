@@ -139,7 +139,7 @@
     }
 
     .section-header {
-        display: flex;
+        display: inline-flex;
         align-items: center;
         gap: 10px;
         margin: 30px 0 15px;

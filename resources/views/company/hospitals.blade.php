@@ -25,12 +25,13 @@
                     <th>Address</th>
                     <th>Contact Person</th>
                     <th>Contact Person Phone</th>
+                    <th>Request Admin</th>
                 </tr>
             </thead>
             <tbody>
                 @if($hospitals)
                     @foreach($hospitals as $hospital)
-                        <tr>
+                        <tr data-id="{{ $hospital->id }}">
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $hospital->name }}</td>
                             @if(1 == 0)
@@ -64,6 +65,7 @@
                             <td>{{ $hospital->address }}</td>
                             <td>{{ $hospital->contact_person }}</td>
                             <td>{{ $hospital->phone }}</td>
+                            <td><span title="Request Admin to change" class="badge available request_admin">Request</span></td>
                         </tr>
                     @endforeach
                 @else
@@ -141,6 +143,31 @@
             </form>
     </div>
 </div>
+
+<div class="specimen_type_modal" id="addRequestAdminModal" method="POST" action="{{route('request.admin')}}">
+    <div class="specimen_type_modal-content">
+            <div class="specimen_type_modal-header">
+                <h3>Request Admin For Changes</h3>
+            </div>
+            <form method="POST" id="request_admin" action="{{route('request.admin')}}" style="display: contents;">
+                @csrf
+                <input type="hidden" name="hospital_id" id="hospital_id">
+                <div class="specimen_type_modal-body">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Message</label>
+                                <textarea id="hospital_name" maxlength="200" name="message" placeholder="Please add message" autocomplete="off" required></textarea>
+                            </div>
+                        </div>
+
+                </div>
+                <div class="specimen_type_modal-footer">
+                    <button class="btn-modal btn-modal-cancel" type="button" onclick="closeModalAdmin()">Cancel</button>
+                    <button class="btn-modal btn-modal-assign" id="btnAddMessage" type="submit">Add Message</button>
+                </div>
+            </form>
+    </div>
+</div>
 {{ $hospitals->links() }}
 @endsection
 @section('scripts')
@@ -153,6 +180,9 @@
     }
     function closeModalHospital(){
         document.getElementById('addHospitalModal').classList.remove('show');
+    }
+    function closeModalAdmin(){
+        document.getElementById('addRequestAdminModal').classList.remove('show');
     }
     let autocompleteInstances = [];
     // initHospitalAutocomplete();
@@ -201,6 +231,11 @@
             autocompleteInstances.push(autocomplete);
         });
     }
+    $('.request_admin').click(function(){
+        var hospital_id = $(this).parents('tr').attr('data-id');
+        $('form#request_admin #hospital_id').val(hospital_id);
+        document.getElementById('addRequestAdminModal').classList.add('show');
+    });
 </script>
 
 <!-- Google Maps API -->

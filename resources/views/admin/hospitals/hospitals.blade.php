@@ -41,8 +41,23 @@
                 </thead>
                 <tbody>
                     @forelse ($hospitals as $hospital)
-                        <tr>
-                            <td>{{ $hospital->name }}</td>
+                        @php
+                            $pending_id = '';
+                            if($hospital->pendingRequests->isNotEmpty()){
+                                $pendingRequests = $hospital->pendingRequests->toArray();
+                                $pending_id = $pendingRequests[0]['id'];
+                            }   
+                        @endphp
+                        <tr data-id="{{ $pending_id }}" class="{{ $hospital->pendingRequests->isNotEmpty() ? 'table-warning' : '' }}">
+                            <td>
+                                {{ $hospital->name }}
+
+                                @if ($hospital->pendingRequests->isNotEmpty())
+                                    <span class="badge bg-warning text-dark ms-2 request_button">
+                                        Request
+                                    </span>
+                                @endif
+                            </td>
                             <td>{{ $hospital->registration_number }}</td>
                             <td>{{ $hospital->contact_person }}</td>
                             <td>{{ $hospital->phone }}</td>
@@ -81,6 +96,62 @@
         </div>
     </div>
 
+    <div class="specimen_type_modal" id="viewRequestAdminModal">
+        <div class="specimen_type_modal-content">
+                <div class="specimen_type_modal-header">
+                    <h3>Hospital Request</h3>
+                </div>
+                <form method="POST" id="update_request_admin" action="{{route('update.request.admin')}}" style="display: contents;">
+                    @csrf
+                    <input type="hidden" name="hospital_id" id="hospital_id">
+                    <div class="specimen_type_modal-body">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Message</label>
+                                    <textarea id="hospital_name" maxlength="200" name="message" placeholder="Message" autocomplete="off" readonly></textarea>
+                                </div>
+                            </div>
+
+                    </div>
+                    <div class="specimen_type_modal-footer">
+                        <button class="btn-modal btn-modal-cancel" type="button" onclick="closeModalAdmin()">Cancel</button>
+                        <button class="btn-modal btn-modal-assign" id="btnAddMessage" type="submit">Mark As Complete</button>
+                    </div>
+                </form>
+        </div>
+    </div>
     {{ $hospitals->links() }}
+
+@endsection
+
+@section('scripts')
+<script>
+     var token = '{{ session("web_token") }}';
+    $('.request_button').click(function(){
+        var hospital_id = $(this).parents('tr').attr('data-id');
+        $.ajax({
+            url: '/api/v1/hospitals/'+hospital_id,
+            type: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Accept': 'application/json'
+            },
+            contentType: 'application/json',
+            success: function (result) {
+                if(result.data.message){
+                    $('#hospital_name').val(result.data.message);
+                }
+            },
+            error: function (result) {
+            }
+        });
+        $('form#update_request_admin #hospital_id').val(hospital_id);
+        document.getElementById('viewRequestAdminModal').classList.add('show');
+    });
+    function closeModalAdmin(){
+        document.getElementById('viewRequestAdminModal').classList.remove('show');
+    }
+
+</script>
 
 @endsection

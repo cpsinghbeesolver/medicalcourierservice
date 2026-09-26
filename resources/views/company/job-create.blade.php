@@ -459,7 +459,7 @@
 @section('scripts')
 <script>
     // const token = localStorage.getItem('api_token');
-    const token = '{{ session("web_token") }}';
+    var token = '{{ session("web_token") }}';
     let itemIndex = 1;
     let availableDrivers = [];
     let autocompleteInstances = [];

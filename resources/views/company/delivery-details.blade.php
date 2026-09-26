@@ -430,6 +430,9 @@
     .signature_image{
         width: 250px;
     }
+    .photo_proof{
+        width: 89px;
+    }
 </style>
 @endsection
 
@@ -641,7 +644,7 @@
                         ${item.photo_proof ? `
                         <div class="info-row">
                             <div class="info-label">Photo Proof:</div>
-                            <div class="info-value"><img class="signature_image" src="${item.photo_proof}" /></div>
+                            <div class="info-value"><img class="photo_proof" src="/storage/${item.photo_proof}" /></div>
                         </div>
                         ` : ''}
                         ${item.barcode ? `
@@ -692,6 +695,7 @@
     }
 
     function displayDelivery(delivery) {
+        // console.log(delivery);
         const card = document.getElementById('deliveryCard');
         const pickup = delivery.pickup || {};
         const dropoff = delivery.delivery || {};
@@ -738,7 +742,13 @@
                     <div class="info-row">
                         <div class="info-label">Status:</div>
                         <div class="info-value">
-                            <span class="badge ${delivery.status || 'pending'}">${formatValue(delivery.status ? delivery.status.replace('_', ' ') : 'N/A')}</span>
+                            <span class="badge ${delivery.is_expired ? 'cancelled' : (delivery.status || 'pending')}">
+                                ${formatValue(
+                                    delivery.is_expired
+                                        ? 'Expired'
+                                        : (delivery.status ? delivery.status.replace('_', ' ') : 'N/A')
+                                )}
+                            </span>
                         </div>
                     </div>
                     <div class="info-row">

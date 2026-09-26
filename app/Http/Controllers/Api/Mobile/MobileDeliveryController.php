@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use App\Jobs\SendFirebaseNotificationJob;
 use App\Events\DeliveryStatusUpdated;
+use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 
 class MobileDeliveryController extends Controller
@@ -1097,10 +1098,15 @@ class MobileDeliveryController extends Controller
                                        ->first();
                     // print_r($item);die;
                     if ($item) {
+                        $path = '';
+                        if($request->has('photo_proof')){
+                            $photo_proof = $request->file('photo_proof')->store('photo_proof', 'public');
+                            $path = Storage::url($photo_proof);
+                        }
                         $item->barcode = $scannedItem['barcode'];
                         //$item->recipient_name = $scannedItem['recipient_name'];
                         $item->signature_image = $scannedItem['signature_image'];
-                        $item->photo_proof = $scannedItem['photo_proof'];
+                        $item->photo_proof = $path;
                         $item->notes = $scannedItem['notes'];
                         //$item->scanned_at = $scannedItem['scanned_at'];
                         $item->status = 'collected';
@@ -1227,8 +1233,6 @@ class MobileDeliveryController extends Controller
         $user = $request->user();
         $driverProfile = $user->driverProfile;
 
-        $request->latitude = 30.7525;
-        $request->longitude = 76.8101;
         if (!$driverProfile) {
             return $this->errorResponse('Driver profile not found', 404);
         }
@@ -1283,10 +1287,18 @@ class MobileDeliveryController extends Controller
                                 'message' => "Barcode mismatch for item name: {$item->item_name}"
                             ], 400);
                         }
+                        
+                        $path = '';
+                        if($request->has('photo_proof')){
+                            $photo_proof = $request->file('photo_proof')->store('photo_proof', 'public');
+                            $path = Storage::url($photo_proof);
+                            $item->photo_proof = $path;
+                        }
+
                         $item->barcode = $scannedItem['barcode'];
                         //$item->recipient_name = $scannedItem['recipient_name'];
                         $item->signature_image = $scannedItem['signature_image'];
-                        $item->photo_proof = $scannedItem['photo_proof'];
+                        
                         $item->notes = $scannedItem['notes'];
                         //$item->scanned_at = $scannedItem['scanned_at'];
                         $item->status = 'collected';

@@ -1324,7 +1324,7 @@ color: #000000;
     border-bottom: 1px solid #e8e8e8;
 }
 
-#addHospitalModal .form-row {
+#addHospitalModal .form-row, #addRequestAdminModal .form-row, #update_request_admin .form-row{
     display: block !important;
 }
 

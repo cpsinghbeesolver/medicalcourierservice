@@ -33,4 +33,15 @@ class Hospital extends Model
     {
         return $this->belongsTo(User::class, 'created_by');
     }
+
+    public function requests()
+    {
+        return $this->hasMany(HospitalRequest::class, 'hospital_id', 'id');
+    }    
+
+    public function pendingRequests()
+        {
+            return $this->hasMany(HospitalRequest::class, 'hospital_id')
+                ->where('status', 'pending');
+        }
 }

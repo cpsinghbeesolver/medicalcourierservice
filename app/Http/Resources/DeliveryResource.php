@@ -18,6 +18,7 @@ class DeliveryResource extends JsonResource
             'id' => $this->id,
             'delivery_number' => $this->delivery_number,
             'status' => $this->status,
+            'is_expired' => $this->is_expired,
             'priority' => $this->priority,
             'pickup' => [
                 'name' => $this->pickup_name,

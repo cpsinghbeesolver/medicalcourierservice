@@ -131,5 +131,6 @@ Route::prefix('v1')->middleware('auth:sanctum')->group(function () {
     //Hopital
     Route::post('/add-hospital', [HospitalController::class, 'store']);
     Route::get('/search-hospitals', [HospitalController::class, 'show']);
+    Route::get('/hospitals/{id}', [HospitalController::class, 'edit'])->name('get-hospitals');
     
 });

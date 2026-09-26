@@ -113,6 +113,10 @@ class Delivery extends Model
         'accepted_by_driver_at' => 'datetime',
     ];
 
+    protected $appends = [
+        'is_expired',
+    ];
+
     protected static function boot()
     {
         parent::boot();
@@ -217,5 +221,16 @@ class Delivery extends Model
                 )->utc();
             }
         }
+    }
+
+    protected function getIsExpiredAttribute(): bool
+    {
+        return (
+            $this->scheduled_time_window_start &&
+            $this->scheduled_time_window_start->lt(now())
+        ) || (
+            $this->scheduled_time_window_end &&
+            $this->scheduled_time_window_end->lt(now())
+        );
     }
 }

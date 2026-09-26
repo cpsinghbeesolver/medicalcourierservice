@@ -17,19 +17,35 @@ class HospitalController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Hospital::latest();
+        $query = Hospital::query()
+        ->orderByRaw("
+            CASE
+                WHEN EXISTS (
+                    SELECT 1
+                    FROM hospital_requests
+                    WHERE hospital_requests.status = 'pending'
+                    AND hospital_requests.hospital_id = hospitals.id
+                )
+                THEN 0
+                ELSE 1
+            END
+        ")
+        ->latest();
+        $hospitals = $query->paginate(10)->withQueryString();
+        // dd($hospitals);
 
         if ($search = $request->input('search')) {
-            $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('hospital_id', 'like', "%{$search}%")
-                  ->orWhere('registration_number', 'like', "%{$search}%")
-                  ->orWhere('city', 'like', "%{$search}%");
-            });
+        $query->where(function ($q) use ($search) {
+            $q->where('name', 'like', "%{$search}%")
+                ->orWhere('hospital_id', 'like', "%{$search}%")
+                ->orWhere('registration_number', 'like', "%{$search}%")
+                ->orWhere('city', 'like', "%{$search}%");
+        });
         }
 
-        $hospitals = $query->paginate(10)->withQueryString();
 
+        $hospitals = $query->paginate(10)->withQueryString();
+    
         return view('admin.hospitals.hospitals', compact('hospitals'));
     }
 

@@ -362,10 +362,10 @@
                     <span style="font-size: 13px; font-weight: 600; color: #2c3e50;" id="pendingDeliveries">0</span>
                 </div>
                 <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                    <span style="font-size: 12px; color: #7f8c8d;">In Progress:</span>
+                    <span style="font-size: 12px; color: #7f8c8d;">In Transit:</span>
                     <span style="font-size: 13px; font-weight: 600; color: #10B981;" id="inProgressCount">0</span>
                 </div>
-                <div style="display: flex; justify-content: space-between;">
+                <div style="display: none; justify-content: space-between;">
                     <span style="font-size: 12px; color: #7f8c8d;">Completed:</span>
                     <span style="font-size: 13px; font-weight: 600; color: #6B7280;" id="completedCount">0</span>
                 </div>
@@ -517,7 +517,22 @@
                 if($('.driver-info-card').hasClass('show')){
                     $('.driver-status').addClass('off_duty');
                     $('#driverStatus').html('<span class="status-indicator"></span><span id="driverStatusText">OFF DUTY</span>');
+                    var value = $('#driverSelect option[value="'+e.driver_id+'"]').text();
+                    value = value.replace("Available", "Off duty");
+                    $('#driverSelect option[value="'+e.driver_id+'"]').text(''+value+'');
+                    // $('#driverSelect').trigger('change.select2');
+                    $('#driverSelect').select2('close');
+                    $('#driverSelect').trigger('change');
+                    $('.select2-results__options #select2-driverSelect-result-dorl-'+e.driver_id).html(''+value+'');
+                    $('#select2-driverSelect-container').html(''+value+'');
                 }
+                const channelName = 'driver-locations.' + window.authUserId+'.'+e.driver_id;
+                window.Echo.leave(channelName);
+                const selectedDriver = window.live_drivers_locations.find(
+                    item => item.driver_id == e.driver_id
+                );
+                listenSocket(e.driver_id);
+                // changeLocation(selectedDriver);
             });
     }
 
@@ -739,7 +754,7 @@
     }
 
     // Handle driver selection
-    document.getElementById('driverSelect').addEventListener('change', async (e) => {
+    $('#driverSelect').on('change', async function (e) {
         //await initMap();
         const driverId = e.target.value;
         clearAllMarkers();
@@ -958,7 +973,7 @@
             }
 
             // Load driver deliveries
-            const deliveriesResponse = await fetch(`/api/v1/deliveries?driver_id=${driverId}&per_page=50`, {
+            const deliveriesResponse = await fetch(`/api/v1/deliveries?type=maps&driver_id=${driverId}&per_page=50`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Accept': 'application/json'
@@ -1024,11 +1039,11 @@
 
         // Filter deliveries into categories
         const inProgressDeliveries = deliveries.filter(d =>
-            ['in_transit', 'picked_up'].includes(d.status)
+            ['in_transit'].includes(d.status)
         );
 
         const pendingDeliveries = deliveries.filter(d =>
-            ['pending', 'assigned'].includes(d.status)
+            ['pending', 'assigned','picked_up','accepted'].includes(d.status)
         );
 
         const completedDeliveries = deliveries.filter(d =>
@@ -1052,20 +1067,24 @@
                 const statusColor = delivery.status === 'in_transit' ? '#3B82F6' : '#10B981';
                 return `
                 <div class="delivery-list-item live" data-delivery-id="${delivery.id}" onclick="focusDelivery(${delivery.id})">
-                    <div class="delivery-number">${delivery.delivery_number}</div>
+                    <div class="delivery-number">
+                        ${delivery.delivery_number}
+                    </div>
                     <div class="delivery-route">
                         <i class="fas fa-circle" style="color: #10B981;"></i>
-                        ${truncateText(delivery.pickup.address, 40)}
-                       
+                        ${truncateText(delivery.pickup.address, 30)}
+                        <i class="fas fa-arrow-right"></i>
+                        <i class="fas fa-circle" style="color: #EF4444;"></i>
+                        ${truncateText(
+                            delivery.items[0].hospital?.address ??
+                            delivery.items[0].dropoff_address ??
+                            '',
+                            20
+                        )}
                     </div>
-                    <div class="delivery-number"></div>
-                    <div class="scheduled">Scheduled at: </div>
-                    <div class="date_time">${datTimeFormat(delivery.scheduled_time_window_start)}</div>
-                    <div class="scheduled">Target Date Time: </div>
-                    <div class="date_time">${datTimeFormat(delivery.scheduled_time_window_end)}</div>
                     <div class="live-badge" style="background: ${statusColor};">
                         <span class="pulse"></span>
-                        ${statusText}
+                        ${delivery.status}
                     </div>
                 </div>
             `}).join('');
@@ -1079,21 +1098,26 @@
             pendingList.innerHTML = pendingDeliveries.map(delivery => {
                 const statusText = delivery.status === 'assigned' ? 'Assigned' : 'Pending';
                 const statusColor = delivery.status === 'assigned' ? '#F59E0B' : '#94A3B8';
+                console.log(delivery);
                 return `
                 <div class="delivery-list-item" data-delivery-id="${delivery.id}" onclick="focusDelivery(${delivery.id})" style="border-color: ${statusColor};">
-                    <div class="delivery-number">${delivery.delivery_number}</div>
+                    <div class="delivery-number">
+                        ${delivery.delivery_number}
+                    </div>
                     <div class="delivery-route">
                         <i class="fas fa-circle" style="color: ${statusColor};"></i>
-                        ${truncateText(delivery.pickup.address, 40)}
+                        ${truncateText(delivery.pickup.address, 20)}
+                        <i class="fas fa-arrow-right"></i>
+                        <i class="fas fa-circle" style="color: ${statusColor};"></i>
+                        ${truncateText(
+                            delivery.items[0].hospital?.address ??
+                            delivery.items[0].dropoff_address ??
+                            '',
+                            20
+                        )}
                     </div>
-                    <div class="delivery-number"></div>
-                    <div class="scheduled">Scheduled at: </div>
-                    <div class="date_time">${datTimeFormat(delivery.scheduled_time_window_start)}</div>
-                    <div class="scheduled">Target Date Time: </div>
-                    <div class="date_time">${datTimeFormat(delivery.scheduled_time_window_end)}</div>
-                    
                     <div style="display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; background: ${statusColor}; color: white; border-radius: 12px; font-size: 11px; font-weight: 600; margin-top: 5px;">
-                        ${statusText}
+                        ${delivery.status}
                     </div>
                 </div>
             `}).join('');
@@ -1106,17 +1130,21 @@
             completedSection.style.display = 'block';
             completedList.innerHTML = completedDeliveries.map(delivery => `
                 <div class="delivery-list-item" data-delivery-id="${delivery.id}" onclick="focusDelivery(${delivery.id})">
-                    <div class="delivery-number">${delivery.delivery_number}</div>
+                    <div class="delivery-number">
+                        ${delivery.delivery_number}
+                    </div>
                     <div class="delivery-route">
                         <i class="fas fa-circle" style="color: #6B7280;"></i>
-                        ${truncateText(delivery.pickup.address, 40)}
+                        ${truncateText(delivery.pickup.address, 30)}
+                        <i class="fas fa-arrow-right"></i>
+                        <i class="fas fa-circle" style="color: #6B7280;"></i>
+                        ${truncateText(
+                            delivery.items[0].hospital?.address ??
+                            delivery.items[0].dropoff_address ??
+                            '',
+                            20
+                        )}
                     </div>
-                    <div class="delivery-number"></div>
-                    <div class="scheduled">Scheduled at: </div>
-                    <div class="date_time">${datTimeFormat(delivery.scheduled_time_window_start)}</div>
-                    <div class="scheduled">Target Date Time: </div>
-                    <div class="date_time">${datTimeFormat(delivery.scheduled_time_window_end)}</div>
-                    
                     <div style="display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; background: #6B7280; color: white; border-radius: 12px; font-size: 11px; font-weight: 600; margin-top: 5px;">
                         <i class="fas fa-check"></i> Completed
                     </div>
@@ -1153,6 +1181,22 @@
             : text;
     }
 
-    
+    var current_company_id = '{{ auth()->id() }}';
+    document.addEventListener('DOMContentLoaded', () => {
+        window.Echo.private('deliveries')
+            .listen('DeliveryStatusUpdated', (e) => {
+                console.log('DeliveryStatusUpdated', e);
+                $('#pendingDeliveriesList .delivery-list-item').each(function(){
+                    if($(this).attr('data-delivery-id') == e.delivery_id){
+                        var current_value = $('#driverSelect').val();
+                        $('#driverSelect').val('').trigger('change');
+                        $('#driverSelect').val(current_value).trigger('change');
+                    }
+                });
+            });
+    });
+    $(document).ready(function() {
+      $('#driverSelect').select2();
+    });
 </script>
 @endsection
