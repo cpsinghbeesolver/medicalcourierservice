@@ -1099,7 +1099,7 @@ class MobileDeliveryController extends Controller
                     // print_r($item);die;
                     if ($item) {
                         $path = '';
-                        if($request->has('photo_proof')){
+                        if($request->has('photo_proof') && $request->file('photo_proof')->isValid()){
                             $photo_proof = $request->file('photo_proof')->store('photo_proof', 'public');
                             $path = Storage::url($photo_proof);
                         }
@@ -1289,7 +1289,7 @@ class MobileDeliveryController extends Controller
                         }
                         
                         $path = '';
-                        if($request->has('photo_proof')){
+                        if($request->has('photo_proof') && $request->file('photo_proof')->isValid()){
                             $photo_proof = $request->file('photo_proof')->store('photo_proof', 'public');
                             $path = Storage::url($photo_proof);
                             $item->photo_proof = $path;

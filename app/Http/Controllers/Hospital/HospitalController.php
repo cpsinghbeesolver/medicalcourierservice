@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Mail\HospitalRequestMail;
 
 class HospitalController extends Controller
 {
@@ -293,11 +294,22 @@ class HospitalController extends Controller
 
     public function requestAdmin(Request $request){
         if($request->has('hospital_id') && $request->has('message')){
-            HospitalRequest::create([
+            $hospital = Hospital::find($request->hospital_id);
+            $hospitalRequest = HospitalRequest::create([
                 'hospital_id' => $request->hospital_id,
                 'message' => $request->message,
                 'status' => 'pending',
             ]);
+
+            //Send email to admin
+            // $hospital = Hospital::find($request->hospital_id);
+            // $hospital->message = $request->message;
+            $adminEmail = config('mail.admin_email', config('mail.from.address'));
+            $adminEmail = 'cpsingh.beesolver@gmail.com';
+            Mail::to($adminEmail)->send(
+                new HospitalRequestMail($hospitalRequest)
+            );
+
             return back()->with('success', 'Hospital request submitted successfully.');
         }
     }

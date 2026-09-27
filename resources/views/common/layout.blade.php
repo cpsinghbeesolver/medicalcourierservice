@@ -1120,7 +1120,6 @@
                 });
 
                 results.on('click', '.hospital-autocomplete-option', function () {
-                    alert('fdd');
                     const hospital = $(this).data('hospital');
                     input.val(hospital.name);
                     input.siblings('.hospital-id').val(hospital.id);

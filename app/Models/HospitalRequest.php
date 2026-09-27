@@ -18,6 +18,6 @@ class HospitalRequest extends Model
 
     public function hospital(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'hospital_id');
+        return $this->belongsTo(Hospital::class, 'hospital_id');
     }
 }
