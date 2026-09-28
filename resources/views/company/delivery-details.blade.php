@@ -635,22 +635,44 @@
                         
                         ${item.signature_image ? `
                         <div class="info-row">
-                            <div class="info-label">Signature Image:</div>
+                            <div class="info-label">Pickup Signature Image:</div>
                             <div class="info-value"><img class="signature_image" src="${item.signature_image}" /></div>
                         </div>
-                        
-                        
+                        ` : ''}
+                        ${item.delivery_signature_image ? `
+                        <div class="info-row">
+                            <div class="info-label">Delivery Signature Image:</div>
+                            <div class="info-value"><img class="signature_image" src="${item.delivery_signature_image}" /></div>
+                        </div>
                         ` : ''}
                         ${item.photo_proof ? `
                         <div class="info-row">
-                            <div class="info-label">Photo Proof:</div>
-                            <div class="info-value"><img class="photo_proof" src="/storage/${item.photo_proof}" /></div>
+                            <div class="info-label">Pickup Photo Proof:</div>
+                            <div class="info-value"><img class="photo_proof" src="${item.photo_proof}" /></div>
+                        </div>
+                        ` : ''}
+                        ${item.delivery_photo_proof ? `
+                        <div class="info-row">
+                            <div class="info-label">Delivery Photo Proof:</div>
+                            <div class="info-value"><img class="photo_proof" src="${item.delivery_photo_proof}" /></div>
                         </div>
                         ` : ''}
                         ${item.barcode ? `
                             <div class="info-row">
                                 <div class="info-label">Barcode:</div>
                                 <div class="info-value">${item.barcode}</div>
+                            </div>
+                        ` : ''}
+                        ${item.notes ? `
+                            <div class="info-row">
+                                <div class="info-label">Pickup Notes:</div>
+                                <div class="info-value">${item.notes}</div>
+                            </div>
+                        ` : ''}
+                        ${item.delivery_notes ? `
+                            <div class="info-row">
+                                <div class="info-label">Delivery Notes:</div>
+                                <div class="info-value">${item.delivery_notes}</div>
                             </div>
                         ` : ''}
                     </div>

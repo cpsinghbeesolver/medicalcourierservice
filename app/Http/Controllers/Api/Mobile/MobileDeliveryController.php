@@ -1014,6 +1014,7 @@ class MobileDeliveryController extends Controller
      */
     public function confirmPickup(Request $request, $id)
     {
+        // print_r($request->all()); return;
         $user = $request->user();
 
         $delivery = Delivery::where('id', $id)
@@ -1091,23 +1092,29 @@ class MobileDeliveryController extends Controller
             ]);
             // Update barcodes for scanned items
             if ($request->has('items') && is_array($request->items)) {
-                
+                // print_r($request->items);return;
                 foreach ($request->items as $scannedItem) {
+                    // print_r($scannedItem);return;
                     $item = DeliveryItem::where('id', $scannedItem['item_id'])
                                        ->where('delivery_id', $delivery->id)
                                        ->first();
                     // print_r($item);die;
                     if ($item) {
-                        $path = '';
-                        if($request->has('photo_proof') && $request->file('photo_proof')->isValid()){
-                            $photo_proof = $request->file('photo_proof')->store('photo_proof', 'public');
-                            $path = Storage::url($photo_proof);
+                        if(isset($scannedItem['photo_proof'])){
+                            // print_r($request->has('photo_proof'));return;
+                            $photo_proof = $scannedItem['photo_proof']->store('photo_proof', 'public');
+                            $item->photo_proof = Storage::url($photo_proof);
                         }
-                        $item->barcode = $scannedItem['barcode'];
+                        if (isset($scannedItem['barcode'])) {
+                            $item->barcode = $scannedItem['barcode'];
+                        }
                         //$item->recipient_name = $scannedItem['recipient_name'];
-                        $item->signature_image = $scannedItem['signature_image'];
-                        $item->photo_proof = $path;
-                        $item->notes = $scannedItem['notes'];
+                        if (isset($scannedItem['signature_image'])) {
+                            $item->signature_image = $scannedItem['signature_image'];
+                        }
+                        if (isset($scannedItem['notes'])) {
+                            $item->notes = $scannedItem['notes'];
+                        }
                         //$item->scanned_at = $scannedItem['scanned_at'];
                         $item->status = 'collected';
                         $item->save();
@@ -1281,7 +1288,7 @@ class MobileDeliveryController extends Controller
                                        ->first();
                     // print_r($item);die;
                     if ($item) {
-                        if($scannedItem['barcode'] != '' && $scannedItem['barcode'] != $item->barcode){
+                        if(isset($scannedItem['barcode']) && $scannedItem['barcode'] != '' && $scannedItem['barcode'] != $item->barcode){
                             return response()->json([
                                 'success' => false,
                                 'message' => "Barcode mismatch for item name: {$item->item_name}"
@@ -1289,17 +1296,20 @@ class MobileDeliveryController extends Controller
                         }
                         
                         $path = '';
-                        if($request->has('photo_proof') && $request->file('photo_proof')->isValid()){
-                            $photo_proof = $request->file('photo_proof')->store('photo_proof', 'public');
-                            $path = Storage::url($photo_proof);
-                            $item->photo_proof = $path;
+                        if(isset($scannedItem['photo_proof'])){
+                            $photo_proof = $scannedItem['photo_proof']->store('photo_proof', 'public');
+                            $item->delivery_photo_proof = Storage::url($photo_proof);
                         }
-
-                        $item->barcode = $scannedItem['barcode'];
+                        if(isset($scannedItem['barcode'])){
+                            $item->barcode = $scannedItem['barcode'];
+                        }
                         //$item->recipient_name = $scannedItem['recipient_name'];
-                        $item->signature_image = $scannedItem['signature_image'];
-                        
-                        $item->notes = $scannedItem['notes'];
+                        if(isset($scannedItem['signature_image'])){
+                            $item->delivery_signature_image = $scannedItem['signature_image'];
+                        }
+                        if(isset($scannedItem['notes'])){
+                            $item->delivery_notes = $scannedItem['notes'];
+                        }
                         //$item->scanned_at = $scannedItem['scanned_at'];
                         $item->status = 'collected';
                         $item->save();

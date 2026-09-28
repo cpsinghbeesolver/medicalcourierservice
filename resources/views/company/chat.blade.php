@@ -38,6 +38,43 @@
         font-size: 13px;
     }
 
+    .mobile-chat-back {
+    display: none;
+
+    width: 35px;
+    height: 35px;
+
+    margin-right: 8px;
+
+    border: none;
+    background: transparent;
+
+    color: #30485c;
+
+    font-size: 24px;
+
+    cursor: pointer;
+}
+
+@media (max-width: 750px) {
+
+    .mobile-chat-back {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .chat-header {
+        justify-content: flex-start;
+    }
+
+    .chat-user {
+        flex: 1;
+        min-width: 0;
+    }
+}
+
+
 
     /* =========================================
     NEW CHAT BUTTON
@@ -886,63 +923,94 @@
 
     @media (max-width: 750px) {
 
-        .chat-page {
-            padding: 20px 15px;
-        }
-
-        .chat-page-header {
-            margin-bottom: 15px;
-        }
-
-        .chat-page-header h1 {
-            font-size: 23px;
-        }
-
-        .chat-page-header p {
-            display: none;
-        }
-
-        .new-chat-btn {
-            height: 38px;
-        }
-
-        .chat-container {
-            height: calc(100vh - 150px);
-            min-height: 500px;
-        }
-
-        .conversation-panel {
-            width: 100%;
-
-            min-width: 100%;
-        }
-
-        .chat-window {
-            display: none;
-        }
-
-        .conversation-panel.mobile-hidden {
-            display: none;
-        }
-
-        .chat-window.mobile-show {
-            display: flex;
-            width: 100%;
-        }
-
-        .message-row {
-            max-width: 90%;
-        }
-
-        .messages-area {
-            padding: 20px 15px;
-        }
-
-        .chat-header {
-            padding: 0 15px;
-        }
-
+    .chat-page {
+        padding: 15px;
+        min-height: calc(100vh - 80px);
     }
+
+    .chat-page-header {
+        margin-bottom: 15px;
+    }
+
+    .chat-page-header h1 {
+        font-size: 23px;
+    }
+
+    .chat-page-header p {
+        display: none;
+    }
+
+    .new-chat-btn {
+        height: 38px;
+    }
+
+    .chat-container {
+        height: calc(100vh - 145px);
+        min-height: 500px;
+        position: relative;
+    }
+
+    /* Conversation list screen */
+    .conversation-panel {
+        width: 100%;
+        min-width: 100%;
+        height: 100%;
+        display: flex;
+    }
+
+    /* Hide conversation list when chat is opened */
+    .conversation-panel.mobile-hidden {
+        display: none;
+    }
+
+    /* Chat window is hidden by default on mobile */
+    .chat-window {
+        display: none;
+        width: 100%;
+        height: 100%;
+        min-width: 100%;
+    }
+
+    /* Show chat window after selecting conversation */
+    .chat-window.mobile-show {
+        display: flex;
+    }
+
+    .chat-header {
+        height: 65px;
+        min-height: 65px;
+        padding: 0 15px;
+    }
+
+    .chat-user h3 {
+        font-size: 14px;
+    }
+
+    .messages-area {
+        padding: 15px;
+    }
+
+    .message-row {
+        max-width: 90%;
+    }
+
+    .message-bubble {
+        max-width: 100%;
+    }
+
+    .message-composer {
+        padding: 10px;
+    }
+
+    .message-input-wrapper {
+        min-width: 0;
+    }
+
+    .send-btn {
+        flex-shrink: 0;
+    }
+}
+
 
 </style>
 @endsection
@@ -958,7 +1026,7 @@
 
         <button class="new-chat-btn" onclick="openNewChat()">
             <span>+</span>
-            New Chat
+            New Chatsss
         </button>
     </div>
 
@@ -1023,6 +1091,14 @@
 
             {{-- Chat Header --}}
             <div class="chat-header">
+                 <button
+                    type="button"
+                    class="mobile-chat-back"
+                    onclick="closeMobileChat()"
+                    aria-label="Back to conversations"
+                >
+                    ←
+                </button>
 
                 <div class="chat-user">
 
@@ -1217,78 +1293,118 @@
     ========================================= */
 
     function openConversation(e) {
-        
-        $(e).addClass('active').siblings().removeClass('active');
 
-        var name = $(e).data('name');
-        var initials = name.substring(0, 2).toUpperCase();
-        document
-            .getElementById('chatUserName')
-            .textContent = name;
-        $('.chat-user .avatar-blue').html(initials);
+    const $conversation = $(e);
 
-        // Remove unread badge
-        // const badge =
-        //     event.currentTarget.querySelector('.unread-count');
+    // Active conversation
+    $conversation
+        .addClass('active')
+        .siblings()
+        .removeClass('active');
 
-        // if (badge) {
+    // Get conversation data
+    const name = $conversation.data('name');
+    const conversation_id = $conversation.data('id');
 
-        //     badge.remove();
+    // Set chat user name
+    $('#chatUserName').text(name);
 
-        //     event.currentTarget.dataset.unread = 'false';
+    // Set initials
+    const initials = name
+        .split(' ')
+        .map(word => word.charAt(0))
+        .join('')
+        .substring(0, 2)
+        .toUpperCase();
 
-        // }
-        var conversation_id = $(e).data('id');
-        $.ajax({
-            url: `/api/mobile/v1/chat/conversations/${conversation_id}/messages`,
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${web_token}`,
-                'Accept': 'application/json'
-            },
-            data: {
-                receiver_id: $(e).data('id')
-            },
-            success: function(response) {
-                //console.log(response);
-                $('#messagesArea').html(response.html);
-                const messagesArea =
-                    document.getElementById('messagesArea');
-                // document.getElementById('messagesArea')?.scrollTo({
-                //     top: document.getElementById('messagesArea').scrollHeight + 500,
-                //     behavior: 'smooth'
-                // });
-                scrollMessagesToBottom();
-                convertChatDateTime();             
-            }
-        }); 
+    $('.chat-user .avatar-blue').html(initials);
 
-        function scrollMessagesToBottom() {
-            const messagesArea = document.getElementById('messagesArea');
+    /*
+    |--------------------------------------------------------------------------
+    | MOBILE / TABLET
+    |--------------------------------------------------------------------------
+    |
+    | Hide conversation list
+    | Show chat window
+    |
+    */
 
-            if (!messagesArea) return;
+    if (window.innerWidth <= 750) {
 
-            requestAnimationFrame(() => {
-                messagesArea.scrollTop = messagesArea.scrollHeight;
+        $('.conversation-panel').addClass('mobile-hidden');
 
-                setTimeout(() => {
-                    messagesArea.scrollTop = messagesArea.scrollHeight;
-                }, 100);
-            });
-        }
-        
-        $.ajax({
-            url: `/api/mobile/v1/chat/conversations/${conversation_id}/read`,
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${web_token}`,
-                'Accept': 'application/json'
-            },
-            success: function(response) {        
-            }
-        }); 
-        
+        $('.chat-window').addClass('mobile-show');
+
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Load messages
+    |--------------------------------------------------------------------------
+    */
+
+    $.ajax({
+        url: `/api/mobile/v1/chat/conversations/${conversation_id}/messages`,
+        method: 'GET',
+
+        headers: {
+            'Authorization': `Bearer ${web_token}`,
+            'Accept': 'application/json'
+        },
+
+        data: {
+            receiver_id: conversation_id
+        },
+
+        success: function(response) {
+
+            $('#messagesArea').html(response.html);
+
+            scrollMessagesToBottom();
+
+            convertChatDateTime();
+        },
+
+        error: function(xhr) {
+
+            console.error(
+                'Unable to load chat messages:',
+                xhr.responseText
+            );
+
+        }
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Mark conversation as read
+    |--------------------------------------------------------------------------
+    */
+
+    $.ajax({
+        url: `/api/mobile/v1/chat/conversations/${conversation_id}/read`,
+        method: 'POST',
+
+        headers: {
+            'Authorization': `Bearer ${web_token}`,
+            'Accept': 'application/json'
+        },
+
+        success: function(response) {
+
+        },
+
+        error: function(xhr) {
+
+            console.error(
+                'Unable to mark conversation as read:',
+                xhr.responseText
+            );
+
+        }
+    });
+}
+
 
 
     /* =========================================
@@ -1518,7 +1634,7 @@
 
     }
     var web_token = "{{ session('web_token') }}";
-    function getConversations() {
+    function getConversations(callback) {
         // This function can be used to fetch conversations from the server
         // using AJAX or any other method. For now, it just logs a message.
         console.log('Fetching conversations...');
@@ -1589,6 +1705,14 @@
             success: function(response) {        
             }
         }); 
+    }
+
+    function closeMobileChat() {
+
+        $('.chat-window').removeClass('mobile-show');
+
+        $('.conversation-panel').removeClass('mobile-hidden');
+
     }
     $('.search-drivers').on('input', function() {
         var query = $(this).val().toLowerCase();

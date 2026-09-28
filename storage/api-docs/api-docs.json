@@ -873,37 +873,69 @@
       "post": {
         "tags": ["Mobile - Deliveries"],
         "summary": "Confirm pickup with signature and item barcodes",
-        "description": "Confirms package pickup with recipient signature, optional photo proof, and barcode scanning for multiple items",
-        "security": [{ "sanctum": [] }],
+        "description": "Confirms package pickup with recipient signature, optional photo proof, and barcode scanning for multiple items.",
+        "security": [
+          {
+            "sanctum": []
+          }
+        ],
         "parameters": [
-          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" }, "description": "Delivery ID" }
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Delivery ID",
+            "schema": {
+              "type": "integer",
+              "example": 123
+            }
+          }
         ],
         "requestBody": {
           "required": true,
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "type": "object",
-                "required": ["recipient_name", "signature_image"],
+                "required": [
+                  "recipient_name"
+                ],
                 "properties": {
-                  "recipient_name": { "type": "string", "example": "John Doe" },
-                  "latitude": { "type": "number", "format": "float", "example": 40.7580 },
-                  "longitude": { "type": "number", "format": "float", "example": -73.9855 },              
-                  "items": {
-                    "type": "array",
-                    "description": "Array of items with barcodes for scanning",
-                    "items": {
-                      "type": "object",
-                      "required": ["item_id", "barcode"],
-                      "properties": {
-                        "item_id": { "type": "integer", "example": 3 },
-                        "barcode": { "type": "string", "example": "BAR123456" },
-                        "photo_proof": { "type": "string", "description": "Base64 encoded photo" },
-                        "signature_image": { "type": "string", "description": "Base64 encoded signature image" },
-                        "scanned_at": { "type": "string", "format": "date-time", "example": "2026-03-30T10:30:00Z" },
-                        "notes": { "type": "string", "example": "Package in good condition" }
-                      }
-                    }
+                  "latitude": {
+                    "type": "number",
+                    "format": "float",
+                    "example": 30.7059637
+                  },
+                  "longitude": {
+                    "type": "number",
+                    "format": "float",
+                    "example": 76.6925331
+                  },
+                  "items[0][item_id]": {
+                    "type": "integer",
+                    "example": 280
+                  },
+                  "items[0][barcode]": {
+                    "type": "string",
+                    "example": "BAR123456"
+                  },
+                  "items[0][photo_proof]": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Photo proof image file."
+                  },
+                  "items[0][signature_image]": {
+                    "type": "string",
+                    "description": "Base64 encoded signature image."
+                  },
+                  "items[0][scanned_at]": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2026-03-30T10:30:00Z"
+                  },
+                  "items[0][notes]": {
+                    "type": "string",
+                    "example": "Package in good condition"
                   }
                 }
               }
@@ -918,15 +950,25 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "success": { "type": "boolean", "example": true },
-                    "message": { "type": "string" },
-                    "data": { "type": "object" }
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Pickup confirmed successfully."
+                    },
+                    "data": {
+                      "type": "object"
+                    }
                   }
                 }
               }
             }
           },
-          "422": { "description": "Validation error" }
+          "422": {
+            "description": "Validation error"
+          }
         }
       }
     },

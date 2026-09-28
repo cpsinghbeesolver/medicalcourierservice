@@ -36,8 +36,12 @@ class DeliveryItemResource extends JsonResource
             'dropoff_phone' => $this->dropoff_phone,
             'dropoff_contact_person' => $this->dropoff_contact_person,
             'signature_image' => $this->signature_image,
+            'delivery_signature_image' => $this->delivery_signature_image,
             'photo_proof' => $this->photo_proof,
-            'hospital' => $this->hospital
+            'delivery_photo_proof' => $this->delivery_photo_proof,
+            'hospital' => $this->hospital,
+            'notes' => $this->notes,
+            'delivery_notes' => $this->delivery_notes
         ];
     }
 }

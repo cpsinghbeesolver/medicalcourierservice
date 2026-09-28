@@ -112,3 +112,38 @@ $(document).ready(function() {
     
     
 });
+
+/* ==== Responsive sidebar drawer (self-injecting; no layout edits required) ==== */
+document.addEventListener('DOMContentLoaded', function () {
+    var sidebar = document.querySelector('.sidebar');
+    var header = document.querySelector('.top-header');
+    if (!sidebar || !header || document.getElementById('sidebarToggle')) return;
+    var body = document.body;
+
+    var backdrop = document.createElement('div');
+    backdrop.className = 'sidebar-backdrop';
+    backdrop.id = 'sidebarBackdrop';
+    sidebar.parentNode.insertBefore(backdrop, sidebar);
+
+    var toggle = document.createElement('button');
+    toggle.type = 'button';
+    toggle.className = 'sidebar-toggle';
+    toggle.id = 'sidebarToggle';
+    toggle.setAttribute('aria-label', 'Toggle navigation menu');
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.innerHTML = '<i class="fas fa-bars"></i>';
+    header.insertBefore(toggle, header.firstChild);
+
+    function setOpen(open) {
+        body.classList.toggle('sidebar-open', open);
+        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+    toggle.addEventListener('click', function (e) { e.stopPropagation(); setOpen(!body.classList.contains('sidebar-open')); });
+    backdrop.addEventListener('click', function () { setOpen(false); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setOpen(false); });
+    sidebar.addEventListener('click', function (e) {
+        var a = e.target.closest('a');
+        if (a && !a.classList.contains('submenu-toggle')) setOpen(false);
+    });
+    window.addEventListener('resize', function () { if (window.innerWidth >= 992) setOpen(false); });
+});

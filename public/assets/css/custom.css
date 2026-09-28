@@ -1,5 +1,4 @@
-
- * {
+* {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -874,9 +873,10 @@ color: #000000;
         padding: 60px;
         color: #7f8c8d;
         position: fixed;
-        top: 40%;
-        left: 47%;
-        z-index: 999;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 10000;
     }
 
 
@@ -1831,3 +1831,182 @@ color: #000000;
     .add-more-container label {
         float: left;
     }
+
+/* ==== RESPONSIVE LAYER (merged) ==== */
+/* ==========================================================================
+   RESPONSIVE LAYER  (loaded AFTER custom.css and page <style> blocks)
+   Purely additive: desktop (>=1200px) look is unchanged.
+   Breakpoints:  >=1200 desktop | 992-1199 small desktop / tablet landscape
+                 768-991 tablet portrait | 576-767 large phone | <=575 phone
+   ========================================================================== */
+
+html { -webkit-text-size-adjust: 100%; }
+img, video, canvas, svg { max-width: 100%; }
+
+/* Let flex children shrink so wide tables scroll inside their card instead of
+   pushing the whole page sideways. */
+.main-content { min-width: 0; }
+.content { min-width: 0; }
+.table-container,
+.table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.data-table { min-width: 640px; }
+
+/* Hamburger + backdrop are hidden on desktop */
+.sidebar-toggle { display: none; }
+.sidebar-backdrop { display: none; }
+
+/* ---------- Small desktop / tablet landscape (992 - 1199) ---------- */
+@media (max-width: 1199.98px) {
+    .sidebar { width: 232px; }
+    .main-content { margin-left: 232px; }
+    .sidebar-menu a { padding: 11px 16px; font-size: 13.5px; }
+    .top-header { padding: 12px 20px; }
+    .content { padding: 22px 20px; }
+    .header-search { flex-basis: 260px; width: 260px; }
+    .btn-create-driver, .btn-create-driver-active, .btn-create-job { padding: 9px 14px; font-size: 13px; }
+    .form-container { padding: 28px; }
+    .profile-container { padding: 24px; }
+    .data-table th, .data-table td { padding: 12px 14px; }
+}
+
+/* ---------- Tablet & below: sidebar becomes an off-canvas drawer ---------- */
+@media (max-width: 991.98px) {
+    .sidebar {
+        width: 280px;
+        max-width: 85vw;
+        transform: translateX(-100%);
+        transition: transform .28s ease;
+        z-index: 1050;
+        box-shadow: none;
+        -webkit-overflow-scrolling: touch;
+    }
+    body.sidebar-open .sidebar { transform: translateX(0); box-shadow: 4px 0 24px rgba(0,0,0,.18); }
+    body.sidebar-open { overflow: hidden; }
+
+    .sidebar-backdrop {
+        display: block;
+        position: fixed; inset: 0;
+        background: rgba(0,0,0,.45);
+        z-index: 1040;
+        opacity: 0; visibility: hidden;
+        transition: opacity .28s ease, visibility .28s ease;
+    }
+    body.sidebar-open .sidebar-backdrop { opacity: 1; visibility: visible; }
+
+    .main-content { margin-left: 0; width: 100%; }
+
+    /* Header: switch from floats to a wrapping flex row */
+    .top-header {
+        display: flex; flex-wrap: wrap; align-items: center;
+        gap: 10px 12px; padding: 10px 16px;
+        box-shadow: 0 1px 4px rgba(0,0,0,.06);
+    }
+    .sidebar-toggle {
+        display: inline-flex; align-items: center; justify-content: center;
+        flex: 0 0 auto; width: 42px; height: 42px;
+        border: 1px solid #d9d9d9; border-radius: 8px;
+        background: #fff; color: #2c3e50; font-size: 18px; cursor: pointer;
+    }
+    .sidebar-toggle:hover { background: #f8f9fa; }
+    .header-search { float: none; flex: 1 1 180px; width: auto; min-width: 0; }
+    .header-actions { float: none; margin-left: auto; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+
+    /* Dropdowns sit under the header, inside the viewport */
+    .notification-dropdown {
+        right: 16px !important; left: auto;
+        top: 100% !important; margin-top: 6px;
+        width: 340px; max-width: calc(100vw - 32px);
+    }
+    .user-dropdown { right: 0; max-width: calc(100vw - 24px); }
+
+    .content { padding: 20px 16px; }
+    .page-title { font-size: 24px; margin-bottom: 20px; }
+
+    /* Forms & detail grids: 3 cols -> 2 cols */
+    .form-row,
+    .form-row.specimen-row { grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-row.one-col { max-width: 100%; }
+    .info-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .form-container { padding: 22px; }
+    .profile-container { padding: 20px; }
+    .profile-section { padding: 18px; }
+
+    .filters-bar { padding: 16px; }
+    .filter-group { min-width: 200px; }
+    .data-card-header { padding: 16px 18px; flex-wrap: wrap; gap: 10px; }
+    .section-header { flex-wrap: wrap; gap: 10px; }
+    .profile-actions, .form-actions { flex-wrap: wrap; gap: 10px; }
+
+    /* Live map: stack sidebar above map */
+    .maps-container { flex-direction: column; height: auto; }
+    .maps-sidebar { width: 100%; max-height: 320px; }
+    .maps-main { height: 65vh; min-height: 380px; flex: none; }
+
+    /* Dashboard two-column blocks already collapse at 1024; make sure charts fit */
+    .dashboard-grid, .chart-container { max-width: 100%; }
+
+    /* Chat: use dynamic viewport height so mobile browser bars don't clip it */
+    .chat-page { padding-left: 16px; padding-right: 16px; }
+}
+
+/* ---------- Large phones (<=767) ---------- */
+@media (max-width: 767.98px) {
+    .top-header { padding: 8px 12px; }
+    .header-actions { width: 100%; margin-left: 0; }
+    .top-header .sidebar-toggle + .header-search { flex: 1 1 0; }
+    .btn-create-driver, .btn-create-driver-active, .btn-create-job {
+        padding: 8px 12px; font-size: 12.5px; flex: 1 1 auto; justify-content: center;
+    }
+    .divider { display: none; }
+    .content { padding: 16px 12px; }
+    .page-title { font-size: 21px; margin-bottom: 16px; }
+
+    .dialog-box { padding: 22px; width: 92%; }
+    .dialog-actions { flex-wrap: wrap; }
+    .modal-content, .specimen_type_modal-content { width: 94%; max-height: 92vh; }
+    .modal-dialog { margin: 10px auto; }
+
+    .filters-bar { flex-direction: column; align-items: stretch; }
+    .filter-group { min-width: 0; width: 100%; flex: none; }
+    .data-card-header { padding: 14px; }
+    .data-table th, .data-table td { padding: 10px 12px; font-size: 13px; white-space: nowrap; }
+    .action-buttons { flex-wrap: wrap; }
+
+    .stats-grid { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; }
+    .delivery-times, .item-details { grid-template-columns: 1fr; gap: 12px; }
+
+    /* Pagination */
+    nav[role="navigation"] { flex-wrap: wrap; justify-content: center; gap: 8px; }
+}
+
+/* ---------- Phones (<=575) ---------- */
+@media (max-width: 575.98px) {
+    .form-row,
+    .form-row.two-cols,
+    .form-row.specimen-row,
+    .info-grid,
+    .info-grid.two-cols { grid-template-columns: 1fr; gap: 14px; }
+    .form-container, .profile-container { padding: 16px; border-radius: 10px; }
+    .profile-section { padding: 14px; }
+    .form-section { margin-bottom: 26px; padding-bottom: 20px; }
+
+    .notification-dropdown { right: 8px !important; left: 8px; width: auto; max-width: none; }
+    .btn-create-driver, .btn-create-driver-active, .btn-create-job { width: 100%; flex-basis: 100%; }
+    .header-actions { gap: 8px; }
+
+    .dialog-actions .dialog-btn { flex: 1 1 auto; }
+    .temp-radio-group, .checkbox-group { flex-wrap: wrap; }
+    .item-card { padding: 14px; }
+    .file-attachment { flex-wrap: wrap; }
+    .btn-modal, .btn-submit, .btn-cancel, .btn-edit { min-height: 40px; }
+
+    /* Avoid iOS zoom-on-focus */
+    input, select, textarea { font-size: 16px; }
+    .select2-container { width: 100% !important; }
+}
+
+/* Touch devices: comfortable tap targets */
+@media (pointer: coarse) {
+    .sidebar-menu a { min-height: 44px; }
+    .btn-action, .btn-delete { min-height: 36px; }
+}

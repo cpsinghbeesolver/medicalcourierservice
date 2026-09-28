@@ -746,10 +746,10 @@
         var deliveryLat = parseFloat(mapElement.dataset.deliveryLat);
         var deliveryLng = parseFloat(mapElement.dataset.deliveryLng);
         var deliveryStatus = mapElement.dataset.status;
-        const pickupAddress = mapElement.dataset.pickupAddress;
-        const deliveryAddress = mapElement.dataset.deliveryAddress;
-        const deliveryId = mapElement.dataset.deliveryId;
-        const driverId = document.getElementById('driverName').value;
+        var pickupAddress = mapElement.dataset.pickupAddress;
+        var deliveryAddress = mapElement.dataset.deliveryAddress;
+        var deliveryId = mapElement.dataset.deliveryId;
+        var driverId = document.getElementById('driverName').value;
         // alert(pickupLat + ' ' + pickupLng + ' ' + deliveryLat + ' ' + deliveryLng);
         // Check if coordinates are valid
         if (deliveryStatus != 'delivered') {
@@ -787,22 +787,6 @@
                 const firstCord = cords.at(0);
                 pickupLat = firstCord.lat;
                 pickupLng = firstCord.lng;
-
-                //Get address from lat long
-                const geocoder = new google.maps.Geocoder();
-                geocoder.geocode(
-                    {
-                        location: {
-                            lat: pickupLat,
-                            lng: pickupLng
-                        }
-                    },
-                    (results, status) => {
-                        if (status === 'OK' && results[0]) {
-                            alert(results[0].formatted_address);
-                        }
-                    }
-                );
 
                 const lastCord = cords.at(-1);
                 deliveryLat = lastCord.lat;
@@ -883,40 +867,84 @@
                     }
                 });
 
-                // Pickup Info Window
-                const pickupInfoWindow = new google.maps.InfoWindow({
-                    content: `
-                <div style="padding: 10px; max-width: 250px;">
-                    <h4 style="margin: 0 0 8px 0; color: #10B981; font-size: 14px; font-weight: 600;">
-                        <i class="fas fa-map-marker-alt"></i> Pickup Location
-                    </h4>
-                    <p style="margin: 0; font-size: 13px; color: #2c3e50;">${pickupAddress}</p>
-                </div>
-            `
+                //Get address from lat long
+                const geocoder = new google.maps.Geocoder();
+
+                const getAddress = (lat, lng) => {
+                    return new Promise((resolve) => {
+                        geocoder.geocode(
+                            {
+                                location: {
+                                    lat: Number(lat),
+                                    lng: Number(lng)
+                                }
+                            },
+                            (results, status) => {
+                                if (status === 'OK' && results[0]) {
+                                    resolve(results[0].formatted_address);
+                                } else {
+                                    console.error('Geocoding failed:', status);
+                                    resolve('Address not available');
+                                }
+                            }
+                        );
+                    });
+                };
+
+                Promise.all([
+                    getAddress(pickupLat, pickupLng),
+                    getAddress(deliveryLat, deliveryLng)
+                ]).then(([actualPickupAddress, actualDeliveryAddress]) => {
+
+                    pickupAddress = actualPickupAddress;
+                    deliveryAddress = actualDeliveryAddress;
+
+                    console.log('Pickup Address:', pickupAddress);
+                    console.log('Delivery Address:', deliveryAddress);
+
+                    // Pickup Info Window
+                    const pickupInfoWindow = new google.maps.InfoWindow({
+                        content: `
+                            <div style="padding: 10px; max-width: 250px;">
+                                <h4 style="margin: 0 0 8px 0; color: #10B981; font-size: 14px; font-weight: 600;">
+                                    <i class="fas fa-map-marker-alt"></i> Pickup Location
+                                </h4>
+                                <p style="margin: 0; font-size: 13px; color: #2c3e50;">
+                                    ${pickupAddress}
+                                </p>
+                            </div>
+                        `
+                    });
+
+                    // Delivery Info Window
+                    const deliveryInfoWindow = new google.maps.InfoWindow({
+                        content: `
+                            <div style="padding: 10px; max-width: 250px;">
+                                <h4 style="margin: 0 0 8px 0; color: #EF4444; font-size: 14px; font-weight: 600;">
+                                    <i class="fas fa-flag-checkered"></i> Delivery Location
+                                </h4>
+                                <p style="margin: 0; font-size: 13px; color: #2c3e50;">
+                                    ${deliveryAddress}
+                                </p>
+                            </div>
+                        `
+                    });
+
+                    // Pickup marker click
+                    pickupMarker.addListener('click', () => {
+                        deliveryInfoWindow.close();
+                        pickupInfoWindow.open(map, pickupMarker);
+                    });
+
+                    // Delivery marker click
+                    deliveryMarker.addListener('click', () => {
+                        pickupInfoWindow.close();
+                        deliveryInfoWindow.open(map, deliveryMarker);
+                    });
+
                 });
 
-                // Delivery Info Window
-                const deliveryInfoWindow = new google.maps.InfoWindow({
-                    content: `
-                <div style="padding: 10px; max-width: 250px;">
-                    <h4 style="margin: 0 0 8px 0; color: #EF4444; font-size: 14px; font-weight: 600;">
-                        <i class="fas fa-flag-checkered"></i> Delivery Location
-                    </h4>
-                    <p style="margin: 0; font-size: 13px; color: #2c3e50;">${deliveryAddress}</p>
-                </div>
-            `
-                });
-
-                // Add click listeners for markers
-                pickupMarker.addListener('click', () => {
-                    deliveryInfoWindow.close();
-                    pickupInfoWindow.open(map, pickupMarker);
-                });
-
-                deliveryMarker.addListener('click', () => {
-                    pickupInfoWindow.close();
-                    deliveryInfoWindow.open(map, deliveryMarker);
-                });
+                
 
                 // Draw route line between pickup and delivery (Uber-style)
                 // const routePath = new google.maps.Polyline({

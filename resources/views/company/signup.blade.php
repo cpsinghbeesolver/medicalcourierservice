@@ -142,7 +142,7 @@
             margin-bottom: 8px;
         }
 
-        .form-group input, .form-group textarea{
+        .form-group input, .form-group textarea, .form-group select{
             width: 100%;
             padding: 12px 0;
             border: none;
@@ -339,6 +339,16 @@
                     <div class="form-group">
                         <label for="company_url">Company Url</label>
                         <input type="url" id="company_url" name="company_url" value="{{old('company_url')}}" required placeholder="https://example.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="plan_id">Plan</label>
+                        <select id="plan_id" name="plan_id">
+                            @foreach($plans as $plan)
+                                <option value="{{ $plan->id }}">
+                                    {{ $plan->display_name }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="mobile_no">Mobile No.</label>

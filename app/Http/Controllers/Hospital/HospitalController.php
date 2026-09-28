@@ -302,10 +302,8 @@ class HospitalController extends Controller
             ]);
 
             //Send email to admin
-            // $hospital = Hospital::find($request->hospital_id);
-            // $hospital->message = $request->message;
             $adminEmail = config('mail.admin_email', config('mail.from.address'));
-            $adminEmail = 'cpsingh.beesolver@gmail.com';
+            // $adminEmail = 'cpsingh.beesolver@gmail.com';
             Mail::to($adminEmail)->send(
                 new HospitalRequestMail($hospitalRequest)
             );

@@ -572,3 +572,5 @@ footer {
 		width: 160px;
 	}
 }
+/* Responsive safety */
+img { max-width: 100%; }

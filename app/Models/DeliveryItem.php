@@ -19,8 +19,11 @@ class DeliveryItem extends Model
         'description',
         'handling_instructions',
         'photo_proof',
+        'delivery_photo_proof',
         'signature_image',
+        'delivery_signature_image',
         'notes',
+        'delivery_notes',
         'dropoff_name',
         'dropoff_address',
         'dropoff_city',
@@ -59,7 +62,10 @@ class DeliveryItem extends Model
         'status',
         'photo_proof',
         'signature_image',
+        'delivery_photo_proof',
+        'delivery_signature_image',
         'notes',
+        'delivery_notes',
         'hospital_id'
     ];
 

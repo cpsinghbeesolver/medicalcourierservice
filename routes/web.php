@@ -60,12 +60,14 @@ Route::get('/admin', function () {
 })->name('login');
 
 //sign up
-Route::get('/company/signup', function () {
-    if (Auth::check()) {
-        return redirect('/company/dashboard');
-    }
-    return view('company/signup');
-})->name('company-signup');
+// Route::get('/company/signup', function () {
+//     if (Auth::check()) {
+//         return redirect('/company/dashboard');
+//     }
+//     return view('company/signup');
+// })->name('company-signup');
+Route::get('/company/signup', [CompanyAuthController::class, 'signupPage'])->name('signup-page');
+
 
 Route::get('/company/login', function () {
     if (Auth::check()) {

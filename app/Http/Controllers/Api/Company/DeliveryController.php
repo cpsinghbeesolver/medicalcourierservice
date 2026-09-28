@@ -752,7 +752,7 @@ class DeliveryController extends Controller
                     );
                 }
             }
-
+            event(new NewDeliveryAdded($delivery->id,$driver->id));
             DB::commit();
 
             return $this->successResponse(

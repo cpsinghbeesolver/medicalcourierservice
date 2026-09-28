@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Tenant;
+use App\Models\SubscriptionPlansReference;
 use App\Mail\CompanySignupMail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
@@ -123,5 +124,11 @@ class CompanyAuthController extends Controller
             
         }
         return redirect()->route('signup')->with('success', 'Signup successful. Please check email for login instructions.');
+    }
+
+    public function signupPage()
+    {
+        $plans = SubscriptionPlansReference::all();
+        return view('company/signup', compact('plans'));
     }
 }
