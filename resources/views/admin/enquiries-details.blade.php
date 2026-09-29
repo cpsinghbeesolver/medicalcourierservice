@@ -52,11 +52,11 @@
                 <button class="btn-cancel" onclick="window.location.href='/admin/dashboard/enquiries'">Cancel</button>
                 @if($submission->status === 'converted')
                     <a class="btn-edit disabled" style="pointer-events: none; opacity: 0.6;">
-                        Accepted as Admin
+                        Accepted as Company
                     </a>
                 @else
                     <a class="btn-edit" onclick="confirmGenerate('{{ route('dashboard.generate-credentials', $submission->id) }}')">
-                        Accept as Admin
+                        Accept as Company
                     </a>
                 @endif
                 <!-- <a class="btn-edit" onclick="confirmGenerate('{{ route('dashboard.generate-credentials', $submission->id) }}')">Accept as Admin</a> -->

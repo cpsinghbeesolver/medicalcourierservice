@@ -526,6 +526,7 @@
                                 ? delivery.driver.name
                                 : 'N/A'}        
                         </span>
+                        <input type="hidden" class="driver_id" value="${delivery.driver.id}" />
                     </div>
                 </div>
             </div>
@@ -611,7 +612,8 @@
                                     data-delivery-address="${item.hospital
                                         ? (item.hospital.address || '')
                                         : (item.dropoff_address || '')}"
-                                    data-status="${delivery.status || ''}"    
+                                    data-status="${delivery.status || ''}" 
+                                    data-driver-id="${delivery.driver.id || ''}"   
                                         >
                                 </div>
                             </div>
@@ -749,7 +751,7 @@
         var pickupAddress = mapElement.dataset.pickupAddress;
         var deliveryAddress = mapElement.dataset.deliveryAddress;
         var deliveryId = mapElement.dataset.deliveryId;
-        var driverId = document.getElementById('driverName').value;
+        var driverId = mapElement.dataset.driverId;
         // alert(pickupLat + ' ' + pickupLng + ' ' + deliveryLat + ' ' + deliveryLng);
         // Check if coordinates are valid
         if (deliveryStatus != 'delivered') {
@@ -1116,6 +1118,7 @@
             $('#dateTime').val('');
             $('#resultsSection').hide();
             $('#resultsContent').html('');
+            $('#driverName').val(null).trigger('change');
         }
     });
     

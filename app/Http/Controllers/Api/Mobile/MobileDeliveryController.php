@@ -525,6 +525,14 @@ class MobileDeliveryController extends Controller
                 'message' => 'Delivery not found or not assigned to you'
             ], 404);
         }
+
+        if ($delivery->status == 'cancelled') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Delivery has been cancelled'
+            ], 400);
+        }
+        
         if ($delivery->status !== 'assigned') {
             return response()->json([
                 'success' => false,
@@ -798,6 +806,13 @@ class MobileDeliveryController extends Controller
                 'message' => 'Delivery cannot be started from current status: ' . $delivery->status
             ], 400);
         }
+
+        if ($delivery->status == 'cancelled') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Delivery has been cancelled'
+            ], 400);
+        }
         $driverProfile->update([
             'availability_status' => 'busy',
         ]);
@@ -1049,6 +1064,13 @@ class MobileDeliveryController extends Controller
             ], 400);
         }
 
+        if ($delivery->status == 'cancelled') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Delivery has been cancelled'
+            ], 400);
+        }
+
         $validator = Validator::make($request->all(), [
             //'recipient_name' => 'required|string|max:255',
             'latitude' => 'nullable|numeric|between:-90,90',
@@ -1072,7 +1094,7 @@ class MobileDeliveryController extends Controller
         $check = Delivery::where('driver_id',auth()->id())
         ->whereIn('status', ['picked_up', 'in_transit'])
         ->first();
-        if($check){
+        if($check && !$check->is_expired){
             $status = str_replace('_', '-', $check->status);
             return $this->errorResponse("You already have a {$status} job", 200);
         }
@@ -1255,6 +1277,13 @@ class MobileDeliveryController extends Controller
             ], 404);
         }
 
+        if ($delivery->status == 'cancelled') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Delivery has been cancelled'
+            ], 400);
+        }
+        
         $validator = Validator::make($request->all(), [
             //'recipient_name' => 'required|string|max:255',
             'latitude' => 'nullable|numeric|between:-90,90',

@@ -897,9 +897,6 @@
             "multipart/form-data": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "recipient_name"
-                ],
                 "properties": {
                   "latitude": {
                     "type": "number",

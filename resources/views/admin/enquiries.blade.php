@@ -9,10 +9,28 @@
 @section('content')
 <!-- Filters -->
 <div class="filters-bar">
-    <div class="filter-group">
-        <label>Search Enquiry</label>
-        <input type="text" id="searchInput" placeholder="Search by name, email, vehicle..." onkeyup="filterDrivers()">
-    </adiv>
+    <form method="GET" action="{{ route('dashboard.enquiries') }}" style="display:flex; gap:15px; width:100%; align-items:flex-end;">
+        <div class="filter-group">
+            <label>Status</label>
+            <select name="status">
+                <option value="">All Status</option>
+                <option value="pending" @selected(request('status') === 'pending')>Pending</option>
+                <option value="contacted" @selected(request('status') === 'contacted')>Contacted</option>
+                <option value="converted" @selected(request('status') === 'converted')>Converted</option>
+                <option value="declined" @selected(request('status') === 'declined')>Declined</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label>Search Enquiry</label>
+            <input type="text" name="search" placeholder="Search by name, email, phone..." value="{{ request('search') }}">
+        </div>
+        <div>
+            <button type="submit" class="btn-action">Search</button>
+        </div>
+        <div>
+            <button type="button" onclick="resetPage()" class="btn-action">Reset</button>
+        </div>
+    </form>
 </div>
 
 <!-- Data Table -->
@@ -85,3 +103,9 @@
 </div>
 {{ $submissions->links() }}
 @endsection
+<script>
+function resetPage() {
+    window.history.replaceState({}, document.title, window.location.pathname);
+    window.location.reload();
+}
+</script>

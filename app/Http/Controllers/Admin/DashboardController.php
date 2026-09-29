@@ -21,9 +21,25 @@ class DashboardController extends Controller
         return view('admin.dashboard');
     }
     //create a function to return submissions to the dashboard view
-    public function enquiries()
+    public function enquiries(Request $request)
     {
-        $submissions = WaitlistSubmission::latest()->paginate(10);
+        $status = $request->input('status');
+        $search = trim((string) $request->input('search'));
+
+        $submissions = WaitlistSubmission::query()
+            ->when($status, fn ($query) => $query->where('status', $status))
+            ->when($search, function ($query) use ($search) {
+                $query->where(function ($query) use ($search) {
+                    $query->where('name', 'like', "%{$search}%")
+                        ->orWhere('company_name', 'like', "%{$search}%")
+                        ->orWhere('phone', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%");
+                });
+            })
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
+
         return view('admin.enquiries', compact('submissions'));
     }
 
@@ -40,23 +56,25 @@ class DashboardController extends Controller
         if (User::where('email', $submission->email)->exists()) {
             return redirect()->route('dashboard.enquiries')->with('error', 'User with this email already exists.');
         }
-        // Here you would implement the logic to create a new user based on the submission details
-        // For example:
-        $password = Str::random(12); // Generate a random password
+        
+        // Generate a random password
+        $password = str_shuffle(
+            Str::random(11) . rand(0, 9)
+        ); 
         
         //Create Tenant for the user
-        $tenant = Tenant::create([
-            'name' => $submission->company_name,
-            'subdomain' => '',
-        ]);
+        // $tenant = Tenant::create([
+        //     'name' => $submission->company_name,
+        //     'subdomain' => '',
+        // ]);
 
         $user = User::create([
             'name' => $submission->name,
             'email' => $submission->email,
             'phone' => $submission->phone,
-            'tenant_id' => $tenant->id,
+            // 'tenant_id' => $tenant->id,
             'password' => bcrypt($password), // Use the generated password
-            'role_id' => 3, // Assuming 3 is the role ID for admin
+            'role_id' => 2, // Assuming 3 is the role ID for admin
         ]);
 
         // After creating the user, you might want to updates the submission status or add notes

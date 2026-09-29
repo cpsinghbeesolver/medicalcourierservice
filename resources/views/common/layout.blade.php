@@ -252,18 +252,6 @@
             <ul class="sidebar-menu">
 
 
-                @if(auth()->user()->isAdmin())
-                    <li><a href="/admin/dashboard" class="{{ (request()->is('admin/dashboard') && !request()->is('admin/dashboard/*')) ? 'active' : '' }}">
-                        <i class="fas fa-th-large"></i> Dashboard
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/admin/dashboard/enquiries" class="{{ request()->is('admin/dashboard/enquiries*') ? 'active' : '' }}">
-                            <i class="fas fa-briefcase"></i> Enquiries
-                        </a>
-                    </li>
-
-                @endif
 
                 @if(auth()->user()->isDispatcher())
                     <li><a href="/company/dashboard" class="{{ (request()->is('company/dashboard') && !request()->is('company/dashboard/*')) ? 'active' : '' }}">
@@ -320,9 +308,10 @@
                     <li><a href="/admin/dashboard/users" class="{{ request()->is('admin/dashboard/users*') ? 'active' : '' }}">
                         <i class="fas fa-users"></i> User Management
                     </a></li> -->
-                    <li><a href="/dashboard/hospitals" class="{{ request()->is('dashboard/hospitals*') ? 'active' : '' }}">
-                        <i class="fas fa-hospital"></i> Hospital Management
-                    </a></li>
+                    <li><a href="/admin/dashboard" class="{{ (request()->is('admin/dashboard') && !request()->is('admin/dashboard/*')) ? 'active' : '' }}">
+                        <i class="fas fa-th-large"></i> Dashboard
+                        </a>
+                    </li>
                     <li>
                         <a href="/dashboard/companies" class="{{ request()->is('dashboard/companies*') ? 'active' : '' }}">
                             <i class="fas fa-building"></i> Company Management
@@ -331,6 +320,15 @@
                     <li><a href="/company/dashboard/drivers" class="{{ request()->is('company/dashboard/drivers') || (request()->is('company/dashboard/drivers/*') || request()->is('company/dashboard/drivers/create')) ? 'active' : '' }}">
                         <i class="fas fa-user-tie"></i> Driver Management
                     </a></li>
+                    
+                    <li><a href="/dashboard/hospitals" class="{{ request()->is('dashboard/hospitals*') ? 'active' : '' }}">
+                        <i class="fas fa-hospital"></i> Hospital Management
+                    </a></li>
+                    <li>
+                        <a href="/admin/dashboard/enquiries" class="{{ request()->is('admin/dashboard/enquiries*') ? 'active' : '' }}">
+                            <i class="fas fa-briefcase"></i> Enquiries
+                        </a>
+                    </li>
                 @endif
 
             </ul>

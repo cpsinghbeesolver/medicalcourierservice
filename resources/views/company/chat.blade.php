@@ -1026,7 +1026,7 @@
 
         <button class="new-chat-btn" onclick="openNewChat()">
             <span>+</span>
-            New Chatsss
+            New Chat
         </button>
     </div>
 
@@ -1787,7 +1787,19 @@
         }, 3000);
         // hide_load_spinner('content','Loading conversations...','class');
     });
+    function scrollMessagesToBottom() {
+        const messagesArea = document.getElementById('messagesArea');
 
+        if (!messagesArea) return;
+
+        requestAnimationFrame(() => {
+            messagesArea.scrollTop = messagesArea.scrollHeight;
+
+            setTimeout(() => {
+                messagesArea.scrollTop = messagesArea.scrollHeight;
+            }, 100);
+        });
+    }
     
 </script>
 @endsection

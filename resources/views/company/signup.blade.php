@@ -340,7 +340,7 @@
                         <label for="company_url">Company Url</label>
                         <input type="url" id="company_url" name="company_url" value="{{old('company_url')}}" required placeholder="https://example.com">
                     </div>
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label for="plan_id">Plan</label>
                         <select id="plan_id" name="plan_id">
                             @foreach($plans as $plan)
@@ -349,7 +349,7 @@
                                 </option>
                             @endforeach
                         </select>
-                    </div>
+                    </div> -->
                     <div class="form-group">
                         <label for="mobile_no">Mobile No.</label>
                         <input type="text" id="mobile_no" class="numbers-only" name="mobile_no" value="{{old('mobile_no')}}" required placeholder="Enter mobile number">

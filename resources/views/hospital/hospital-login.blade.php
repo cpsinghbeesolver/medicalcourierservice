@@ -262,8 +262,10 @@
             padding: 60px;
             color: #7f8c8d;
             position: fixed;
-            top: 40%;
+            top: 50%;
             left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10000;
         }
 
         @media (max-width: 968px) {

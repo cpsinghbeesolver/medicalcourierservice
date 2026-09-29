@@ -529,7 +529,7 @@ font-weight: 500;
 
 .filter-group input {
 width: 100%;
-padding: 10px 14px;
+padding: 8px 14px;
 border: 1px solid #e0e0e0;
 border-radius: 8px;
 font-size: 14px;
@@ -1854,6 +1854,10 @@ img, video, canvas, svg { max-width: 100%; }
 /* Hamburger + backdrop are hidden on desktop */
 .sidebar-toggle { display: none; }
 .sidebar-backdrop { display: none; }
+.search_button{
+    margin-top: 22px;
+    height: 43px;
+}
 
 /* ---------- Small desktop / tablet landscape (992 - 1199) ---------- */
 @media (max-width: 1199.98px) {
@@ -1990,7 +1994,14 @@ img, video, canvas, svg { max-width: 100%; }
     .profile-section { padding: 14px; }
     .form-section { margin-bottom: 26px; padding-bottom: 20px; }
 
-    .notification-dropdown { right: 8px !important; left: 8px; width: auto; max-width: none; }
+    .notification-dropdown {
+        position: fixed;
+        top: 200px !important;
+        right: 8px !important;
+        left: auto !important;
+        width: min(320px, calc(100vw - 16px));
+        max-width: none;
+    }
     .btn-create-driver, .btn-create-driver-active, .btn-create-job { width: 100%; flex-basis: 100%; }
     .header-actions { gap: 8px; }
 

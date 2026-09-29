@@ -372,7 +372,7 @@
                         <label for="new_password" class="form-label">New Password *</label>
                         <input type="password" class="form-control" id="new_password" name="password" placeholder="New password" required>
                         <span class="password-toggle" onclick="togglePassword('new_password')">
-                            <span id="new_password-icon">👁️</span>
+                            <span id="new_password-icon"></span>
                         </span>
                         <div class="invalid-feedback" id="new_password-error"></div>
                     </div>
@@ -381,7 +381,7 @@
                         <label for="new_password_confirmation" class="form-label">Confirm New Password *</label>
                         <input type="password" class="form-control" id="new_password_confirmation" name="password_confirmation" placeholder="Confirm new password" required>
                         <span class="password-toggle" onclick="togglePassword('new_password_confirmation')">
-                            <span id="new_password_confirmation-icon">👁️</span>
+                            <span id="new_password_confirmation-icon"></span>
                         </span>
                         <div class="invalid-feedback" id="new_password_confirmation-error"></div>
                     </div>

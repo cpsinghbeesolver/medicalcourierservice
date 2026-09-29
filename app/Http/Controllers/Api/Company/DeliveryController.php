@@ -94,7 +94,7 @@ class DeliveryController extends Controller
                     ]);
                 },
                 'vehicleRequirement'
-            ]);
+            ])->where('created_by', auth()->id());
             // $query = Delivery::with(['driver', 'creator', 'items'])->where('created_by', Auth::id());
         }
         if(Auth::user()->isAdmin()){
@@ -1374,8 +1374,8 @@ class DeliveryController extends Controller
             return $this->errorResponse('Delivery not found', 200);
         }
 
-        if ($delivery->status === 'delivered') {
-            return $this->errorResponse('Cannot cancel delivered delivery', 400);
+        if ($delivery->status === 'delivered' || $delivery->status === 'in_transit') {
+            return $this->errorResponse('Cannot cancel '.$delivery->status.' delivery', 400);
         }
 
         $delivery->update([
