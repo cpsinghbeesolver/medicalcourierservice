@@ -514,7 +514,7 @@
                     }else{
                         response.data.forEach(function(user) {
                             if(user.type === 'Driver') {
-                                resultsHtml += '<div class="search-item"><a href="/company/dashboard/drivers/' + user.id + '"><span>' + user.title + '</span></a><a href="/company/dashboard/drivers/' + user.id + '"><span class="small">'+ user.type +'</span></a></div>';
+                                resultsHtml += '<div class="search-item"><a href="/company/dashboard/drivers/' + user.id + '"><span>' + user.title + '</span><span class="small">'+ user.type +'</span></a></div>';
                             }else{
                                 resultsHtml += '<div class="search-item"><a href="/company/dashboard/deliveries/' + user.id + '"><span>' + user.title + '</span></a><a href="/company/dashboard/deliveries/' + user.id + '"><span class="small">'+ user.type +'</span></a></div>';
                             }

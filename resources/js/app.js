@@ -1,3 +1,7 @@
 import './bootstrap';
 import { generateFCMToken } from './firebase';
-generateFCMToken();
+
+const fcmToken = localStorage.getItem('fcm_token');
+if (!fcmToken || fcmToken.trim() === '') {
+    generateFCMToken();
+}

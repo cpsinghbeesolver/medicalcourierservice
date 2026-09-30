@@ -1294,6 +1294,7 @@ color: #000000;
     color: #2c3e50;
     font-size: 12px;
     font-style: italic;
+    float: right;
 }
 
 .search-item {
@@ -1316,6 +1317,7 @@ color: #000000;
     color: #2c3e50;
     text-decoration: none;
     font-size: 14px;
+    width: 100%;
 }
 
 .form-section {

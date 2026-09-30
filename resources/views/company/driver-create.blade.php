@@ -437,8 +437,8 @@
                 </div>
             </div>
 
-            <div class="form-row" style="margin-top: 20px;">
-                <div class="form-group">
+            <div class="form-row two-cols" style="margin-top: 20px;">
+                <!-- <div class="form-group">
                     <label>Background Check Status</label>
                     <select id="background_check_status" name="background_check_status">
                         <option value="">Select status</option>
@@ -446,7 +446,7 @@
                         <option value="approved">Approved</option>
                         <option value="failed">Failed</option>
                     </select>
-                </div>
+                </div> -->
                 <div class="form-group">
                     <label>Drug Screen Expiry</label>
                     <div class="calendar-input-wrapper">

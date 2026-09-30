@@ -494,8 +494,8 @@
                 </div>
             </div>
 
-            <div class="form-row" style="margin-top: 20px;">
-                <div class="form-group">
+            <div class="form-row two-cols" style="margin-top: 20px;">
+                <!-- <div class="form-group">
                     <label>Background Check Status</label>
                     <select id="background_check_status" name="background_check_status">
                         <option value="">Select status</option>
@@ -503,7 +503,7 @@
                         <option value="approved" {{ old('background_check_status', $profile->background_check_status) == 'approved' ? 'selected' : '' }}>Approved</option>
                         <option value="failed" {{ old('background_check_status', $profile->background_check_status) == 'failed' ? 'selected' : '' }}>Failed</option>
                     </select>
-                </div>
+                </div> -->
                 <div class="form-group">
                     <label>Drug Screen Expiry</label>
                     <div class="calendar-input-wrapper">
