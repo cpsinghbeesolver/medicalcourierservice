@@ -78,6 +78,7 @@ class DeliveryResource extends JsonResource
             'requires_recepient_id_scan' => (bool) $this->requires_recepient_id_scan,
             'special_instructions' => $this->special_instructions,
             'notes' => $this->notes,
+            'temperature_notes' => $this->temperature_notes,
             'distance_km' => $this->distance_km,
             'estimated_duration_minutes' => $this->estimated_duration_minutes,
             'driver' => $this->whenLoaded('driver', function () {

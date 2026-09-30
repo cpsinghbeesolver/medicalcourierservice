@@ -1928,7 +1928,7 @@ class MobileDeliveryController extends Controller
 
         $delivery->temperature_reading = $request->reading;
         $delivery->temperature_type = $request->temp_type;
-        $delivery->notes = $request->notes;
+        $delivery->temperature_notes = $request->notes;
         $delivery->save();
         return response()->json([
             'success' => true,

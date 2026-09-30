@@ -866,12 +866,20 @@
                         <div class="info-label">Type:</div>
                         <div class="info-value">${formatValue(delivery.temperature_type)}</div>
                     </div>
+                    <div class="info-row">
+                        <div class="info-label">Temprature Notes:</div>
+                        <div class="info-value">${formatValue(delivery.temperature_notes)}</div>
+                    </div>
                 </div>
             </div>
 
             <div class="info-grid">
                 <div class="info-section full-width">
                     <h4>Delivery Notes & Instructions</h4>
+                    <div class="info-row">
+                        <div class="info-label">Notes:</div>
+                        <div class="info-value">${formatValue(delivery.notes)}</div>
+                    </div>
                     <div class="info-row">
                         <div class="info-label">Special Instructions:</div>
                         <div class="info-value">${formatValue(delivery.special_instructions)}</div>

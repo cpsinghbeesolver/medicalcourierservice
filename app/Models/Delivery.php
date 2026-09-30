@@ -33,6 +33,7 @@ class Delivery extends Model
         'delivery_contact_person',
         'special_instructions',
         'notes',
+        'temperature_notes',
         'temperature_requirement',
         'temperature_reading'
     ];
@@ -73,6 +74,7 @@ class Delivery extends Model
         'urgency_level',
         'special_instructions',
         'notes',
+        'temperature_notes',
         'distance_km',
         'estimated_duration_minutes',
         'required_vehicle_type',
