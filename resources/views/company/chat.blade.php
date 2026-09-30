@@ -369,6 +369,7 @@
         align-items: start;
         margin-top: 6px;
         flex-direction: column;
+        overflow-x: hidden;
     }
 
     .last-message {

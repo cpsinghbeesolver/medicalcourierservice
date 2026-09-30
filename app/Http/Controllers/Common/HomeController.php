@@ -41,11 +41,11 @@ class HomeController extends Controller
         ]);
         $user = User::where('id', $id)->firstOrFail();
         if (!$user) {
-            return redirect()->route('login')->with('error', 'User with this email does not exist.');
+            return redirect()->route('company-login')->with('error', 'User with this email does not exist.');
         }
         $user->password = bcrypt($request->password);
         $user->save();
 
-        return redirect()->route('login')->with('success', 'Password set successfully. Please login to your account.');
+        return redirect()->route('company-login')->with('success', 'Password set successfully. Please login to your account.');
     }
 }

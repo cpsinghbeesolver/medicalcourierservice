@@ -167,7 +167,7 @@
 
         <div class="content">
             <p style="font-size: 16px; color: #495057; margin-bottom: 25px;">
-                Welcome to {{env('APP_NAME')}}! We are excited to have you on board. Your account has been successfully created, and we have generated your login credentials.
+                Welcome to {{ config('app.name') }}! We are excited to have you on board. Your account has been successfully created, and we have generated your login credentials.
             </p>
             <!-- <div class="message-box">
                 <p><strong>Password:</strong></p>
@@ -180,7 +180,7 @@
 
         <div class="footer">
             <p>Do not reply to this email</p>
-            <p>© {{ date('Y') }} Relia Track. All rights reserved.</p>
+            <p>© {{ date('Y') }} {{ config('app.name') }}. All rights reserved.</p>
         </div>
     </div>
 </body>
