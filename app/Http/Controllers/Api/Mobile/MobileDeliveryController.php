@@ -304,7 +304,12 @@ class MobileDeliveryController extends Controller
         }
 
         $delivery = $query->find($id);
-
+        if (!$delivery) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Delivery not found or access denied'
+            ], 404);
+        }
         $isexpired = false;
         if (
             $delivery->status === 'assigned' &&
@@ -318,12 +323,7 @@ class MobileDeliveryController extends Controller
         ) {
             $isexpired = true;
         }
-        if (!$delivery) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Delivery not found or access denied'
-            ], 404);
-        }
+        
         // return $delivery->items->toArray();
         // echo '<pre>';print_r($delivery->toArray());die;
         return response()->json([
@@ -507,6 +507,12 @@ class MobileDeliveryController extends Controller
                            ->with('items.specimenType','items.tempratureRequirement','items.hospital')
                            ->with('vehicleRequirement')
                            ->first();
+        if (!$delivery) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Delivery not found or not assigned to you'
+            ], 404);
+        }
 
         if (
             $delivery->scheduled_time_window_start &&
@@ -519,12 +525,7 @@ class MobileDeliveryController extends Controller
             ], 400);
         }
 
-        if (!$delivery) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Delivery not found or not assigned to you'
-            ], 404);
-        }
+        
 
         if ($delivery->status == 'cancelled') {
             return response()->json([
@@ -772,6 +773,12 @@ class MobileDeliveryController extends Controller
                            ->with('items.specimenType','items.tempratureRequirement','items.hospital')
                            ->with('vehicleRequirement')
                            ->first();
+        if (!$delivery) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Delivery not found or not assigned to you'
+            ], 404);
+        }
 
         if (
             $delivery->scheduled_time_window_start &&
@@ -793,12 +800,7 @@ class MobileDeliveryController extends Controller
             ], 400);
         }
 
-        if (!$delivery) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Delivery not found or not assigned to you'
-            ], 404);
-        }
+        
 
         if ($delivery->status !== 'picked_up') {
             return response()->json([

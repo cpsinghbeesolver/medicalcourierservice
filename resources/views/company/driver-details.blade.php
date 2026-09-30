@@ -84,6 +84,8 @@
         font-size: 15px;
         color: #2c3e50;
         line-height: 1.5;
+          overflow-wrap: anywhere;
+    word-break: break-word;
     }
 
     .file-link {

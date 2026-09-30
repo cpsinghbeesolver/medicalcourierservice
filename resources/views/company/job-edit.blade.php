@@ -906,7 +906,7 @@
             }
             const submitBtn = document.getElementById('submitBtn');
             submitBtn.disabled = true;
-            submitBtn.textContent = 'Dispatching...';
+            submitBtn.textContent = 'Updating...';
 
             const formData = new FormData(e.target);
 
