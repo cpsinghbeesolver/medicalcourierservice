@@ -1297,6 +1297,10 @@ color: #000000;
     float: right;
 }
 
+.scheduled{
+    font-size: 14px;
+}
+
 .search-item {
     display: flex;
     justify-content: space-between;

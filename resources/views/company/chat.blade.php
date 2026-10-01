@@ -607,6 +607,10 @@
         line-height: 1.5;
 
         max-width: 500px;
+        
+        overflow: hidden;
+        
+        text-overflow: ellipsis;
     }
 
     .received .message-bubble {
@@ -970,6 +974,7 @@
         width: 100%;
         height: 100%;
         min-width: 100%;
+        overflow-x: scroll;
     }
 
     /* Show chat window after selecting conversation */

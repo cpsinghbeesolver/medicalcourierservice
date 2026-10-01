@@ -1283,6 +1283,14 @@
                 element.textContent = formatDate(element.dataset.datetime);
             });
         }
+
+        function formatStatus(status){
+            const formattedStatus = status
+            .replace(/_/g, ' ')
+            .replace(/\b\w/g, char => char.toUpperCase());
+
+            return formattedStatus;
+        }
         setTimeout(() => {
             convertChatDateTime();
         }, 3000);

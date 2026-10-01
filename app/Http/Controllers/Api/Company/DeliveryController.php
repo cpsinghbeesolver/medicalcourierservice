@@ -84,17 +84,33 @@ class DeliveryController extends Controller
             $query = Delivery::with(['driver', 'creator', 'items','vehicleRequirement']);    
         } else {
             // dd('here');
-            $query = Delivery::with([
-                'driver',
-                'creator',
-                'items' => function ($query) {
-                    $query->with([
-                        'specimenType:id,name',
-                        'hospital:id,name,address,city',
-                    ]);
-                },
-                'vehicleRequirement'
-            ])->where('created_by', auth()->id());
+            
+
+            if($request->has('page') && $request->page == 'hospital'){
+                $query = Delivery::with([
+                    'driver',
+                    'creator',
+                    'items' => function ($query) {
+                        $query->with([
+                            'specimenType:id,name',
+                            'hospital:id,name,address,city',
+                        ]);
+                    },
+                    'vehicleRequirement'
+                ]);
+            }else{
+                $query = Delivery::with([
+                    'driver',
+                    'creator',
+                    'items' => function ($query) {
+                        $query->with([
+                            'specimenType:id,name',
+                            'hospital:id,name,address,city',
+                        ]);
+                    },
+                    'vehicleRequirement'
+                ])->where('created_by', auth()->id());
+            }
             // $query = Delivery::with(['driver', 'creator', 'items'])->where('created_by', Auth::id());
         }
         if(Auth::user()->isAdmin()){
