@@ -12,10 +12,21 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('vehicle_requirements', function (Blueprint $table) {
+            $table->dropUnique(['name']);
+        });
+        Schema::table('vehicle_requirements', function (Blueprint $table) {
             $table->longText('name')->change();
+        });
+
+        Schema::table('temperature_requirements', function (Blueprint $table) {
+            $table->dropUnique(['name']);
         });
         Schema::table('temperature_requirements', function (Blueprint $table) {
             $table->longText('name')->change();
+        });
+
+        Schema::table('specimen_types', function (Blueprint $table) {
+            $table->dropUnique(['name']);
         });
         Schema::table('specimen_types', function (Blueprint $table) {
             $table->longText('name')->change();

@@ -671,7 +671,10 @@
         if (result.success) {
             $('select[name="items[' + item_no + '][specimen_type]"]').append('<option value="' + result.data.id + '" selected>' + result.data.name + '</option>');
             closeModal();
-        } 
+        }else{
+            showDialog(result.message, 'error');
+            return false;
+        }
     }
 
     //Add Temperature Requirement
@@ -717,6 +720,9 @@
         if (result.success) {
             $('select[name="items[' + item_no + '][temperature_requirement]"]').append('<option value="' + result.data.id + '" selected>' + result.data.name + '</option>');
             closeModalTemperatureRequirement();
+        }else{
+            showDialog(result.message, 'error');
+            return false;
         } 
     }
 
@@ -751,6 +757,9 @@
         if (result.success) {
             $('select[name="required_vehicle_type"]').append('<option value="' + result.data.id + '" selected>' + result.data.name + '</option>');
             closeModalVehicleRequirement();
+        }else{
+            showDialog(result.message, 'error');
+            return false;
         } 
     }
     

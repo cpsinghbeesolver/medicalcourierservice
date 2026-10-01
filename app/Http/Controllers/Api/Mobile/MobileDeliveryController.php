@@ -310,10 +310,9 @@ class MobileDeliveryController extends Controller
                 'message' => 'Delivery not found or access denied'
             ], 404);
         }
-        
         $isexpired = false;
         if (
-            in_array($delivery->status, ['assigned', 'pickup_up']) &&
+            $delivery->status === 'assigned' &&
             (
                 ($delivery->scheduled_time_window_start &&
                     Carbon::parse($delivery->scheduled_time_window_start)->lt(now()))
@@ -781,15 +780,6 @@ class MobileDeliveryController extends Controller
             ], 404);
         }
 
-        if (
-            $delivery->scheduled_time_window_start &&
-            Carbon::parse($delivery->scheduled_time_window_start)->lt(now())
-        ) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Delivery Expired'
-            ], 400);
-        }
 
         if (
             $delivery->scheduled_time_window_end &&
@@ -1808,9 +1798,8 @@ class MobileDeliveryController extends Controller
 
         $transformedDeliveries = $deliveries->map(function($delivery) {
             $isexpired = false;
-
             if (
-                in_array($delivery->status, ['assigned', 'pickup_up']) &&
+                $delivery->status === 'assigned' &&
                 (
                     ($delivery->scheduled_time_window_start &&
                         Carbon::parse($delivery->scheduled_time_window_start)->lt(now()))

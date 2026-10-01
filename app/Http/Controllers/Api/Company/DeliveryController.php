@@ -766,9 +766,10 @@ class DeliveryController extends Controller
                             'delivery_id' => (string) $delivery->id,
                         ]
                     );
+                    event(new NewDeliveryAdded($delivery->id,$driver->id));
                 }
             }
-            event(new NewDeliveryAdded($delivery->id,$driver->id));
+            
             DB::commit();
 
             return $this->successResponse(
@@ -1653,17 +1654,47 @@ class DeliveryController extends Controller
     }
 
     function addSpecimenType(StoreSpecimenTempVehicleRequest $request){
+        $name = trim($request->name);
+
+        $exists = SpecimenType::get()
+            ->contains(function ($requirement) use ($name) {
+                return strtolower(trim($requirement->name)) === strtolower($name);
+            });
+
+        if ($exists) {
+            return $this->errorResponse('Specimen type already exists');
+        }
+
         $data = SpecimenType::create($request->validated());
         $data->refresh();
         return $this->successResponse($data, 'Specimen type created successfully');
     }
 
     function addTemperatureRequirement(StoreSpecimenTempVehicleRequest $request){
+        $name = trim($request->name);
+        $exists = TemperatureRequirement::get()
+            ->contains(function ($requirement) use ($name) {
+                return strtolower(trim($requirement->name)) === strtolower($name);
+            });
+
+        if ($exists) {
+            return $this->errorResponse('Temperature type already exists');
+        }
+
         $data = TemperatureRequirement::create($request->validated());
         $data->refresh();
         return $this->successResponse($data, 'Temperature requirement created successfully');
     }
     function addVehicleRequirement(StoreSpecimenTempVehicleRequest $request){
+        $name = trim($request->name);
+        $exists = VehicleRequirement::get()
+            ->contains(function ($requirement) use ($name) {
+                return strtolower(trim($requirement->name)) === strtolower($name);
+            });
+
+        if ($exists) {
+            return $this->errorResponse('Vehicle requirement already exists');
+        }
         $data = VehicleRequirement::create($request->validated());
         $data->refresh();
         return $this->successResponse($data, 'Vehicle requirement created successfully');

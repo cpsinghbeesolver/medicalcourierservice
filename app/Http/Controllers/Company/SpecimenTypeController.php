@@ -42,7 +42,7 @@ class SpecimenTypeController extends Controller
             return back()
                 ->withInput()
                 ->withErrors([
-                    'name' => 'This temperature requirement already exists.',
+                    'name' => 'This Speciment Type already exists.',
                 ]);
         }
         SpecimenType::create($request->validated());
