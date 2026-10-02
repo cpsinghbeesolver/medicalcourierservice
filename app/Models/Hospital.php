@@ -36,12 +36,12 @@ class Hospital extends Model
 
     public function requests()
     {
-        return $this->hasMany(HospitalRequest::class, 'hospital_id', 'id');
+        return $this->hasOne(HospitalRequest::class, 'hospital_id', 'id');
     }    
 
     public function pendingRequests()
         {
-            return $this->hasMany(HospitalRequest::class, 'hospital_id')
+            return $this->hasOne(HospitalRequest::class, 'hospital_id')
                 ->where('status', 'pending');
         }
 }

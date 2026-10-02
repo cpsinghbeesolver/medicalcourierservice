@@ -42,7 +42,7 @@ class VehicleRequirementController extends Controller
             return back()
                 ->withInput()
                 ->withErrors([
-                    'name' => 'This temperature requirement already exists.',
+                    'name' => 'This Vehicle requirement already exists.',
                 ]);
         }
         VehicleRequirement::create($request->validated());

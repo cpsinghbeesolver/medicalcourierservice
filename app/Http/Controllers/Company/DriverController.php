@@ -307,4 +307,19 @@ class DriverController extends Controller
 
         return back()->with('success', 'Driver Profile updated successfully!');
     }
+
+    public function deleteDriver($id=''){
+        $driver = User::where('id',$id)->where('role_id',4)->first();
+        if(!$driver){
+            return redirect()->back()->withInput()->with('error', 'Driver not found');
+        }else{
+            $driver_profile = DriverProfile::where('user_id',$id)->first();
+            if(!$driver_profile){
+                return redirect()->back()->withInput()->with('error', 'Driver not found');
+            }
+            $driver->delete();
+            $driver_profile->delete();
+            return redirect()->back()->withInput()->with('success', 'Driver Deleted');
+        }
+    }
 }

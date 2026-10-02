@@ -621,12 +621,15 @@ color: #2c3e50;
 }
 
 .data-table tbody tr {
-cursor: pointer;
 transition: background 0.2s;
 }
 
 .data-table tbody tr:hover {
 background: #fafafa;
+}
+
+.request_admin{
+    cursor:pointer;
 }
 
 .badge {

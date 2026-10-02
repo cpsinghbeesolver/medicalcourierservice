@@ -43,16 +43,16 @@
                     @forelse ($hospitals as $hospital)
                         @php
                             $pending_id = '';
-                            if($hospital->pendingRequests->isNotEmpty()){
+                            if(!empty($hospital->pendingRequests)){
                                 $pendingRequests = $hospital->pendingRequests->toArray();
-                                $pending_id = $pendingRequests[0]['id'];
+                                $pending_id = $pendingRequests['id'];
                             }   
                         @endphp
-                        <tr data-id="{{ $pending_id }}" class="{{ $hospital->pendingRequests->isNotEmpty() ? 'table-warning' : '' }}">
+                        <tr data-id="{{ $pending_id }}" class="{{ !empty($hospital->pendingRequests) ? 'table-warning' : '' }}">
                             <td>
                                 {{ $hospital->name }}
 
-                                @if ($hospital->pendingRequests->isNotEmpty())
+                                @if (!empty($hospital->pendingRequests))
                                     <span class="badge bg-warning text-dark ms-2 request_button">
                                         Request
                                     </span>

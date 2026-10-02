@@ -331,6 +331,7 @@
         status: '',
         search: ''
     };
+    const roleId = @json(auth()->user()?->role_id);
 
     async function loadDrivers(page = 1) {
         try {
@@ -400,9 +401,37 @@
                     <button class="btn-action" onclick="viewDriver(${driver.id})">
                         <i class="fas fa-eye"></i> View
                     </button>
-                    <button class="btn-action edit" type="button" data-action="edit" onclick="editDriver(${driver.id})">
-                        <i class="fas fa-edit"></i> Edit
-                    </button>
+                    ${
+                        roleId != 1
+                            ? `
+                        <button class="btn-action edit" type="button" data-action="edit" onclick="editDriver(${driver.id})">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                    `
+                            : ''
+                    }
+                    ${
+                        roleId == 1 && driver.user?.id
+                            ? `
+                                <form
+                                    action="/dashboard/delete-driver/${driver.user.id}"
+                                    method="POST"
+                                    style="display:inline;"
+                                    onsubmit="return confirm('Delete this Driver? This removes the account but keeps historical records.');"
+                                >
+                                    <input
+                                        type="hidden"
+                                        name="_token"
+                                        value="{{ csrf_token() }}"
+                                    >
+
+                                    <button type="submit" class="btn-action btn-delete">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </button>
+                                </form>
+                            `
+                            : ''
+                    }
                 </td>
             </tr>
         `).join('');

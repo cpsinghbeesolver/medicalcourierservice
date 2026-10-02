@@ -81,7 +81,17 @@ class DeliveryController extends Controller
     {   
         //check if user is superadmin
         if(Auth::user()->role_id == 1){
-            $query = Delivery::with(['driver', 'creator', 'items','vehicleRequirement']);    
+            $query = Delivery::with([
+                    'driver',
+                    'creator',
+                    'items' => function ($query) {
+                        $query->with([
+                            'specimenType:id,name',
+                            'hospital:id,name,address,city',
+                        ]);
+                    },
+                    'vehicleRequirement'
+                ]);  
         } else {
             // dd('here');
             
@@ -113,9 +123,9 @@ class DeliveryController extends Controller
             }
             // $query = Delivery::with(['driver', 'creator', 'items'])->where('created_by', Auth::id());
         }
-        if(Auth::user()->isAdmin()){
-            $query->where('created_by', Auth::id());
-        }
+        // if(Auth::user()->isAdmin()){
+        //     $query->where('created_by', Auth::id());
+        // }
         
         //only non-expired jobs
         if($request->has('type') && $request->type == 'maps'){
@@ -1698,5 +1708,29 @@ class DeliveryController extends Controller
         $data = VehicleRequirement::create($request->validated());
         $data->refresh();
         return $this->successResponse($data, 'Vehicle requirement created successfully');
+    }
+
+    function deliveryData(){
+        $user = auth()->user();
+        if($user->role_id == 1){
+            $deliveryCounts = Delivery::query()
+            ->select('status')
+            ->selectRaw('COUNT(*) as total')
+            ->groupBy('status')
+            ->pluck('total', 'status');
+        }else{
+            $deliveryCounts = Delivery::query()
+            ->where('created_by', $user->id)
+            ->select('status')
+            ->selectRaw('COUNT(*) as total')
+            ->groupBy('status')
+            ->pluck('total', 'status');
+            
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => $deliveryCounts,
+        ]);
     }
 }

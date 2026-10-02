@@ -284,11 +284,12 @@ class HospitalController extends Controller
 
     public function list()
     {
-        $hospitals = Hospital::query()
+        $hospitals = Hospital::
+            with('requests')
             ->select('id', 'name', 'address','contact_person','phone')
             ->where('created_by', auth()->id())
             ->latest()->paginate(15);
-        // dd($hospitals);
+        // dd($hospitals->toArray());
         return view('company.hospitals',compact('hospitals'));
     }
 
@@ -322,10 +323,7 @@ class HospitalController extends Controller
                 ], 404);
             }
 
-            $hospitalRequest->update([
-                'status' => 'completed',
-            ]);
-
+            $hospitalRequest->delete();
             return back()->with('success', 'Hospital request marked as completed.');
         }
     }

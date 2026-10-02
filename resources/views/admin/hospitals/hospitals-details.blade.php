@@ -54,41 +54,6 @@
             </div>
         </div>
 
-        <div class="data-card">
-            <div class="data-card-header">
-                <h3>Delivery Items</h3>
-            </div>
-            <div class="table-container">
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Item</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse ($hospital->items as $item)
-                            <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>{{ $item->name ?? $item->id }}</td>
-                                <td>
-                                    <span class="badge {{ strtolower($item->status ?? '') }}">
-                                        {{ $item->status ?? '-' }}
-                                    </span>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="3" style="text-align:center; color:#7f8c8d; padding:30px;">
-                                    No delivery items linked to this hospital.
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-        </div>
 
     </div>
 

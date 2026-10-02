@@ -10,7 +10,7 @@
 
         <div class="form-group">
             <label>Hospital Email <span class="astrik">*</span></label>
-            <input type="text" name="email" value="{{ old('email', $hospital->email ?? '') }}">
+            <input type="text" name="email" value="{{ old('email', $hospital->createdByUser->email ?? '') }}" @readonly(!empty($hospital->createdByUser?->email))>
             @error('email') <div class="just-validate-error-label" style="color:#e74c3c;">{{ $message }}</div> @enderror
         </div>
 
@@ -84,13 +84,13 @@
     <div class="form-row two-cols">
         <div class="form-group">
             <label>Latitude</label>
-            <input type="text" name="latitude" value="{{ old('latitude', $hospital->latitude ?? '') }}">
+            <input type="text" name="latitude" value="{{ old('latitude', $hospital->latitude ?? '') }}" readonly>
             @error('latitude') <div class="just-validate-error-label" style="color:#e74c3c;">{{ $message }}</div> @enderror
         </div>
 
         <div class="form-group">
             <label>Longitude</label>
-            <input type="text" name="longitude" value="{{ old('longitude', $hospital->longitude ?? '') }}">
+            <input type="text" name="longitude" value="{{ old('longitude', $hospital->longitude ?? '') }}" readonly>
             @error('longitude') <div class="just-validate-error-label" style="color:#e74c3c;">{{ $message }}</div> @enderror
         </div>
     </div>

@@ -65,6 +65,7 @@ Route::prefix('v1')->middleware('auth:sanctum')->group(function () {
     // Delivery routes
     Route::get('/locations', [DeliveryController::class, 'getLocations']);
     Route::get('/deliveries', [DeliveryController::class, 'index']);
+    Route::get('/delivery-data', [DeliveryController::class, 'deliveryData']);
     // Route::post('/deliveries', [DeliveryController::class, 'store'])->middleware('subscription.limit:deliveries');
     Route::post('/deliveries', [DeliveryController::class, 'store']);
     Route::post('/edit-delivery/{id}', [DeliveryController::class, 'editDelivery']);
@@ -97,6 +98,7 @@ Route::prefix('v1')->middleware('auth:sanctum')->group(function () {
 
     // Driver Profile routes
     Route::apiResource('driver-profiles', DriverProfileController::class);
+    Route::get('driver-profiles-data', [DriverProfileController::class, 'driverProfileData']);
 
     // User management routes
     Route::get('/users', [UserController::class, 'index']);

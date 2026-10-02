@@ -44,6 +44,7 @@ class DriverProfileController extends Controller
 
         if($user->role_id == 1){
             $query = DriverProfile::with('user');
+            // dd($query->get());
         }else{
             $query = DriverProfile::with('user')->where('created_by', $request->user()->id);
         }
@@ -88,7 +89,7 @@ class DriverProfileController extends Controller
             $query->where('license_expiry_date', '<', now());
         }
         $query->orderBy('created_at', 'desc');
-
+        // dd($query->get());
         if ($request->has('type') && $request->type == 'job') {
             $profiles = $query->get();
             return $this->successResponse([
@@ -370,5 +371,24 @@ class DriverProfileController extends Controller
         $profile->delete();
 
         return $this->successResponse(null, 'Driver profile deleted successfully');
+    }
+
+    public function driverProfileData(){
+        $user = auth()->user();
+        if($user->role_id == 1){
+            $driverCounts = DriverProfile::selectRaw('availability_status, COUNT(*) as total')
+            ->groupBy('availability_status')
+            ->get();
+        }else{
+            $driverCounts = DriverProfile::selectRaw('availability_status, COUNT(*) as total')
+            ->groupBy('availability_status')
+            ->where('created_by', $user->id)
+            ->get();
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => $driverCounts,
+        ]);
     }
 }

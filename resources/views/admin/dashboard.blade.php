@@ -18,6 +18,8 @@
         padding: 25px;
         border-radius: 12px;
         border: 1px solid #e8e6d8;
+    }
+    .stat-card.clickable {
         cursor: pointer;
     }
 
@@ -127,19 +129,19 @@
         <h4>Total Active Jobs</h4>
         <div class="number" id="totalActiveJobs">0</div>
     </div> -->
-    <div class="stat-card" id="completedDeliveriesCard">
+    <div class="stat-card {{ auth()->user()->role_id != 1 ? 'clickable' : '' }}" id="completedDeliveriesCard">
         <h4>Completed Deliveries</h4>
         <div class="number" id="completedDeliveries">0</div>
     </div>
-    <div class="stat-card" id="pendingPickupsCard">
+    <div class="stat-card {{ auth()->user()->role_id != 1 ? 'clickable' : '' }}" id="pendingPickupsCard">
         <h4>Pending Pickups</h4>
         <div class="number" id="pendingPickups">0</div>
     </div>
-    <div class="stat-card" id="availableDriversCard">
+    <div class="stat-card clickable" id="availableDriversCard">
         <h4>Available Drivers</h4>
         <div class="number" id="availableDrivers">0</div>
     </div>
-    <div class="stat-card" id="inTransitOrdersCard">
+    <div class="stat-card {{ auth()->user()->role_id != 1 ? 'clickable' : '' }}" id="inTransitOrdersCard">
         <h4>In-Transit Orders</h4>
         <div class="number" id="inTransitOrders">0</div>
     </div>
@@ -185,7 +187,7 @@
     async function fetchStatistics() {
         try {
             show_load_spinner();
-            const response = await fetch('/api/v1/deliveries', {
+            const response = await fetch('/api/v1/delivery-data', {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Accept': 'application/json'
@@ -195,14 +197,23 @@
             const data = await response.json();
 
             if (data.success && data.data) {
-                const deliveries = data.data.deliveries || [];
+                console.log(data.data);
+                // const deliveries = data.data.deliveries || [];
 
                 // Calculate statistics
-                const totalActive = deliveries.filter(d => !['delivered', 'cancelled'].includes(d.status)).length;
-                const completed = deliveries.filter(d => d.status === 'delivered').length;
-                const pending = deliveries.filter(d => d.status === 'pending').length;
-                const picked_up = deliveries.filter(d => d.status === 'picked_up').length;
-                const inTransit = deliveries.filter(d => ['in_transit', 'picked_up'].includes(d.status)).length;
+                // const totalActive = deliveries.filter(d => !['delivered', 'cancelled'].includes(d.status)).length;
+                // const completed = deliveries.filter(d => d.status === 'delivered').length;
+                // const pending = deliveries.filter(d => d.status === 'pending').length;
+                // const picked_up = deliveries.filter(d => d.status === 'picked_up').length;
+                // const inTransit = deliveries.filter(d => ['in_transit', 'picked_up'].includes(d.status)).length;
+
+                // const totalActive = data.data.delivered;
+                const completed = data.data.delivered || 0;
+                const pending = data.data.pending || 0;
+                const picked_up = data.data.picked_up || 0;
+                const inTransit = data.data.in_transit || 0;
+                const assigned = data.data.assigned || 0;
+
 
                 //document.getElementById('totalActiveJobs').textContent = totalActive;
                 document.getElementById('completedDeliveries').textContent = completed;
@@ -210,7 +221,7 @@
                 document.getElementById('inTransitOrders').textContent = inTransit;
 
                 // Update donut chart stats
-                const assigned = deliveries.filter(d => d.status === 'assigned').length;
+                // const assigned = deliveries.filter(d => d.status === 'assigned').length;
                 document.getElementById('deliveredCount').textContent = completed;
                 document.getElementById('assignedCount').textContent = assigned;
 
@@ -228,7 +239,7 @@
     // Fetch driver statistics
     async function fetchDriverStatistics() {
         try {
-            const response = await fetch('/api/v1/driver-profiles', {
+            const response = await fetch('/api/v1/driver-profiles-data', {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Accept': 'application/json'
@@ -239,15 +250,21 @@
 
             if (data.success && data.data) {
                 let drivers = [];
-
-                if (Array.isArray(data.data.profiles)) {
-                    drivers = data.data.profiles;
-                } else if (Array.isArray(data.data)) {
-                    drivers = data.data;
+                if (data.data) {
+                    $.each(data.data, function (key, value) {
+                        if(value.availability_status == 'available'){
+                            document.getElementById('availableDrivers').textContent = value.total;
+                        }   
+                    });
                 }
-                // console.log('Drivers:', data.data);
-                const available = drivers.filter(d => d.availability_status === 'available').length;
-                document.getElementById('availableDrivers').textContent = available;
+                // if (Array.isArray(data.data.profiles)) {
+                //     drivers = data.data.profiles;
+                // } else if (Array.isArray(data.data)) {
+                //     drivers = data.data;
+                // }
+                // // console.log('Drivers:', data.data);
+                // const available = drivers.filter(d => d.availability_status === 'available').length;
+                // document.getElementById('availableDrivers').textContent = available;
             }
         } catch (error) {
             console.error('Error fetching driver statistics:', error);
@@ -454,21 +471,24 @@
     fetchStatistics();
     fetchDriverStatistics();
     //redirect to jobs page when total active jobs card is clicked
-    $('#totalActiveJobsCard').click(function() {
-        window.location.href = '/company/dashboard/deliveries';
-    });
-    $('#completedDeliveriesCard').click(function() {
-        window.location.href = '/company/dashboard/deliveries?status=delivered';
-    });
-    $('#pendingPickupsCard').click(function() {
-        window.location.href = '/company/dashboard/deliveries?status=picked_up';
-    });
-    $('#inTransitOrdersCard').click(function() {
-        window.location.href = '/company/dashboard/deliveries?status=in_transit';
-    });
+    const roleId = @json(auth()->user()->role_id);
+    if(roleId != '1'){
+        $('#totalActiveJobsCard').click(function() {
+            window.location.href = '/company/dashboard/deliveries';
+        });
+        $('#completedDeliveriesCard').click(function() {
+            window.location.href = '/company/dashboard/deliveries?status=delivered';
+        });
+        $('#pendingPickupsCard').click(function() {
+            window.location.href = '/company/dashboard/deliveries?status=picked_up';
+        });
+        $('#inTransitOrdersCard').click(function() {
+            window.location.href = '/company/dashboard/deliveries?status=in_transit';
+        });
+        
+    }
     $('#availableDriversCard').click(function() {
-        window.location.href = '/company/dashboard/drivers?status=available';
-    });
-         
+            window.location.href = '/company/dashboard/drivers?status=available';
+        });
 </script>
 @endsection

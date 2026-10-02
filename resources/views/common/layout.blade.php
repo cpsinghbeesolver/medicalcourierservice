@@ -233,7 +233,6 @@
 </head>
 <body>
     <div class="layout">
-        {{auth()->user()->isAdmin();}}
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-logo">
@@ -317,7 +316,7 @@
                             <i class="fas fa-building"></i> Company Management
                         </a>
                     </li>
-                    <li><a href="/company/dashboard/drivers" class="{{ request()->is('company/dashboard/drivers') || (request()->is('company/dashboard/drivers/*') || request()->is('company/dashboard/drivers/create')) ? 'active' : '' }}">
+                    <li><a href="/dashboard/drivers" class="{{ request()->is('dashboard/drivers*') ? 'active' : '' }}">
                         <i class="fas fa-user-tie"></i> Driver Management
                     </a></li>
                     

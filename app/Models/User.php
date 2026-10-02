@@ -15,12 +15,13 @@ use Illuminate\Support\Str;
 use App\Models\Notifications;
 use App\Models\DeliveryItem;
 use App\Models\Delivery;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     //use HasFactory, Notifiable, HasApiTokens, BelongsToTenant, EncryptsPhiData;
-    use HasFactory, Notifiable, HasApiTokens,EncryptsPhiData;
+    use HasFactory, Notifiable, HasApiTokens,EncryptsPhiData, SoftDeletes;
     /**
      * PHI fields that should be encrypted at rest (HIPAA compliance)
      */

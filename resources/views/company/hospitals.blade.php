@@ -65,7 +65,7 @@
                             <td>{{ $hospital->address }}</td>
                             <td>{{ $hospital->contact_person }}</td>
                             <td>{{ $hospital->phone }}</td>
-                            <td><span title="Request Admin to change" class="badge available request_admin">Request</span></td>
+                            <td><span title="Request Admin to change" class="badge available {{ empty($hospital->requests) ? 'request_admin' : '' }}">{{ !empty($hospital->requests) ? 'Pending Aprroval' : 'Request' }}</span></td>
                         </tr>
                     @endforeach
                 @else

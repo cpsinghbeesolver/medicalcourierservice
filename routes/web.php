@@ -261,7 +261,7 @@ Route::prefix('admin')->middleware('admin.auth','no.cache')->group(function () {
     });
 });
 
-Route::prefix('dashboard')->name('dashboard.')->group(function () {
+Route::prefix('dashboard')->name('dashboard.')->middleware(['admin.auth', 'can:view-enquiries','no.cache'])->group(function () {    
     Route::get('hospitals', [AdminHospitalController::class, 'index'])->name('hospitals');
     Route::get('hospitals/create', [AdminHospitalController::class, 'create'])->name('hospitals.create');
     Route::post('hospitals', [AdminHospitalController::class, 'store'])->name('hospitals.store');
@@ -283,7 +283,11 @@ Route::prefix('dashboard')->name('dashboard.')->group(function () {
     Route::put('companies/{id}', [AdminCompanyController::class, 'update'])->name('companies.update');
 
     Route::delete('companies/{id}', [AdminCompanyController::class, 'destroy'])->name('companies.destroy');
-
+    Route::get('/drivers', function () {
+        return view('company.drivers');
+    });
+    
+    Route::post('/delete-driver/{id}', [DriverController::class, 'deleteDriver']);
 });
 
 Route::prefix('company')->middleware('custom.auth','no.cache')->group(function () {

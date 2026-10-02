@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Hospital;
 use App\Models\User;
+use App\Mail\HospitalCreated;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
@@ -17,7 +19,8 @@ class HospitalController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Hospital::query()
+        $query = Hospital::
+        with('pendingRequests')
         ->orderByRaw("
             CASE
                 WHEN EXISTS (
@@ -32,7 +35,7 @@ class HospitalController extends Controller
         ")
         ->latest();
         $hospitals = $query->paginate(10)->withQueryString();
-        // dd($hospitals);
+        // dd($hospitals->toArray());
 
         if ($search = $request->input('search')) {
         $query->where(function ($q) use ($search) {
@@ -66,9 +69,13 @@ class HospitalController extends Controller
     {
         return [
             'name' => 'required|string|max:255',
-            'registration_number' => 'required|string|max:255|unique:hospitals,registration_number' . ($id ? ",{$id}" : ''),
-            'phone' => 'required|string|max:20|unique:hospitals,phone',
-            'email' => 'required|email',
+            'registration_number' =>
+            'required|string|max:255|unique:hospitals,registration_number' .
+                ($id ? ",{$id}" : ''),
+            'phone' =>
+                'required|string|max:20|unique:hospitals,phone' .
+                ($id ? ",{$id}" : ''),
+            'email' => 'required|email|unique:users,email',
             'address' => 'required|string|max:500',
             'city' => 'string|max:100',
             'state' => 'string|max:100',
@@ -198,7 +205,7 @@ class HospitalController extends Controller
      */
     public function edit($id)
     {
-        $hospital = Hospital::findOrFail($id);
+        $hospital =  Hospital::with('createdByUser')->findOrFail($id);
         return view('admin.hospitals.hospitals-edit', compact('hospital'));
     }
 
@@ -208,7 +215,7 @@ class HospitalController extends Controller
     public function update(Request $request, $id)
     {
         $hospital = Hospital::findOrFail($id);
-
+        // dd($request->all());
         $validator = Validator::make($request->all(), $this->rules($hospital->id));
 
         if ($validator->fails()) {

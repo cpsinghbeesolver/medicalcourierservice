@@ -81,7 +81,7 @@
                                     <button class="btn-action btn-edit" onclick="window.location.href='{{ route('dashboard.enquiries-details', $submission->id) }}'">
                                         <i class="fas fa-eye"></i> View
                                     </button>
-                                    @if($submission->status != 'converted')
+                                    @if($submission->status == 'pending')
                                     <button class="btn-action btn-delete" onclick="confirmDecline('{{ route('dashboard.reject-enquiry', $submission->id) }}')" title="Decline Enquiry">
                                         <i class="fas fa-times"></i> Decline
                                     </button>

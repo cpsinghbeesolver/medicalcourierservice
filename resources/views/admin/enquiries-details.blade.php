@@ -50,7 +50,7 @@
             <!-- Actions -->
             <div class="profile-actions">
                 <button class="btn-cancel" onclick="window.location.href='/admin/dashboard/enquiries'">Cancel</button>
-                @if($submission->status === 'converted')
+                @if($submission->status === 'converted' || $submission->status === 'contacted')
                     <a class="btn-edit disabled" style="pointer-events: none; opacity: 0.6;">
                         Accepted as Company
                     </a>

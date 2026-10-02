@@ -123,7 +123,9 @@
 @endsection
 
 @section('content')
-<a href="/company/dashboard/drivers" class="back-button">
+
+<a href="{{ auth()->user()->role_id == 1 ? '/dashboard/drivers' : '/company/dashboard/drivers' }}"
+   class="back-button">
     <i class="fas fa-arrow-left"></i> Back to Driver Details
 </a>
 <div class="profile-container" id="driverCard">
