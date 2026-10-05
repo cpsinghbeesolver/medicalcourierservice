@@ -230,7 +230,7 @@
             </div>
 
             <div class="action-buttons">
-                <a href="mailto:{{ $submission->email }}?subject=Re: Your Inquiry to {{env('APP_NAME')}}&body=Hi {{ $submission->name }},%0D%0A%0D%0AThank you for contacting {{env('APP_NAME')}}." class="btn btn-success">
+                <a href="mailto:{{ $submission->email }}?subject=Re: Your Inquiry to {{config('app.name')}}&body=Hi {{ $submission->name }},%0D%0A%0D%0AThank you for contacting {{config('app.name')}}." class="btn btn-success">
                     Reply via Email
                 </a>
                 <a href="{{ config('app.url') }}/dashboard/contacts" class="btn btn-primary">
@@ -275,9 +275,9 @@
         </div>
 
         <!--div class="footer">
-            <p>This is an automated notification from {{env('APP_NAME')}}</p>
+            <p>This is an automated notification from {{config('app.name')}}</p>
             <p>Do not reply to this email - respond directly to {{ $submission->email }}</p>
-            <p>© {{ date('Y') }} {{env('APP_NAME')}}. All rights reserved.</p>
+            <p>© {{ date('Y') }} {{config('app.name')}}. All rights reserved.</p>
         </div-->
     </div>
 </body>

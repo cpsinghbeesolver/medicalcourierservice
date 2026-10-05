@@ -162,16 +162,16 @@
                 <p style="margin: 5px 0 0;">If you have any questions or concerns about your account security, please contact our support team at <a href="mailto:support@reliatrack.com" style="color: #007bff;">support@reliatrack.com</a></p>
             </div>
 
-            <p style="margin-top: 30px;">Thank you for using {{ env('APP_NAME') }}!</p>
+            <p style="margin-top: 30px;">Thank you for using {{ config('app.name') }}!</p>
 
             <p style="margin-top: 20px;"><strong>Best regards,</strong>
         </div>
 
         <div class="footer">
-            <p><strong>{{ env('APP_NAME') }}</strong></p>
+            <p><strong>{{ config('app.name') }}</strong></p>
             <p>HIPAA-Compliant Chain of Custody Platform</p>
             <p style="font-size: 12px; color: #999; margin-top: 15px;">
-                © {{ date('Y') }} {{ env('APP_NAME') }}. All rights reserved.
+                © {{ date('Y') }} {{ config('app.name') }}. All rights reserved.
             </p>
         </div>
     </div>

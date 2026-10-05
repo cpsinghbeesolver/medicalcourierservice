@@ -33,7 +33,8 @@ class VehicleRequirementController extends Controller
     {
         $name = trim($request->name);
 
-        $exists = VehicleRequirement::get()
+        $exists = VehicleRequirement::where('company_id', auth()->id())
+            ->get()
             ->contains(function ($requirement) use ($name) {
                 return strtolower(trim($requirement->name)) === strtolower($name);
             });

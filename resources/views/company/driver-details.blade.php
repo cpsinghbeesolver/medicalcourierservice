@@ -171,6 +171,7 @@
 
     function displayDriver(driver) {
         const card = document.getElementById('driverCard');
+        const roleId = @json(auth()->user()->role_id);
 
         card.innerHTML = `
             <h2 class="profile-title">Driver Profile</h2>
@@ -341,10 +342,14 @@
                     </div>
                 </div>
             </div>
-
-            <div class="profile-actions">
-                <button class="btn-edit" onclick="window.location.href='/company/dashboard/drivers/${driverId}/edit'">Edit</button>
-            </div>
+            ${roleId != 1 ? `
+                <div class="profile-actions">
+                    <button class="btn-edit"
+                        onclick="window.location.href='/company/dashboard/drivers/${driverId}/edit'">
+                        Edit
+                    </button>
+                </div>
+            ` : ''}
         `;
     }
 

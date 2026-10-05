@@ -35,7 +35,7 @@ class DriverCreated extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Congratulation for Registration to '.env('APP_NAME').' 🎉',
+            subject: 'Congratulation for Registration to '. config('app.name') .' 🎉',
         );
     }
 

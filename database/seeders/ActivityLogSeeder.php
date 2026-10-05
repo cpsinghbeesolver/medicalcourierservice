@@ -86,6 +86,7 @@ class ActivityLogSeeder extends Seeder
             // Assigned
             if ($delivery->driver_id) {
                 $driver = User::find($delivery->driver_id);
+                if($driver){
                 ActivityLog::create([
                     'user_id' => $delivery->created_by,
                     'action' => 'assigned',
@@ -110,6 +111,7 @@ class ActivityLogSeeder extends Seeder
                     'created_at' => $delivery->created_at->addMinutes(rand(35, 60)),
                 ]);
                 $activityCount++;
+                }
             }
 
             // Status changes

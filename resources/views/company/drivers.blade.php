@@ -342,7 +342,7 @@
             });
             const urlParams = new URLSearchParams(window.location.search);
             const get_status = urlParams.get('status');
-            if(get_status){
+            if(get_status && page == 'load'){
                 $('#filterAvailibityStatus').val(get_status);
                 params.set('availability_status', get_status);
             }
@@ -534,7 +534,7 @@
         window.location.href = `/company/dashboard/drivers/${id}/edit`;
     }
 
-    loadDrivers();
+    loadDrivers('load');
 
     var current_company_id = '{{ auth()->id() }}';
     document.addEventListener('DOMContentLoaded', () => {

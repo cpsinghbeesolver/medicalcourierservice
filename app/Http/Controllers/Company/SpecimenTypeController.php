@@ -33,7 +33,8 @@ class SpecimenTypeController extends Controller
     {
         $name = trim($request->name);
 
-        $exists = SpecimenType::get()
+        $exists = SpecimenType::where('company_id', auth()->id())->
+            get()
             ->contains(function ($requirement) use ($name) {
                 return strtolower(trim($requirement->name)) === strtolower($name);
             });
@@ -42,7 +43,7 @@ class SpecimenTypeController extends Controller
             return back()
                 ->withInput()
                 ->withErrors([
-                    'name' => 'This Speciment Type already exists.',
+                    'name' => 'This Specimen Type already exists.',
                 ]);
         }
         SpecimenType::create($request->validated());

@@ -125,8 +125,7 @@ class MobileDeliveryController extends Controller
         ->where('status', 'assigned')
         ->where('created_by', $driverProfile->created_by)
         ->where(function ($q) {
-            $q->where('scheduled_time_window_start', '>', now())
-            ->orWhere('scheduled_time_window_end', '>', now());
+            $q->where('scheduled_time_window_start', '>', now());
         });
         
         if ($user->role === 'driver') {
@@ -781,15 +780,15 @@ class MobileDeliveryController extends Controller
         }
 
 
-        if (
-            $delivery->scheduled_time_window_end &&
-            Carbon::parse($delivery->scheduled_time_window_end)->lt(now())
-        ) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Delivery Expired'
-            ], 400);
-        }
+        // if (
+        //     $delivery->scheduled_time_window_end &&
+        //     Carbon::parse($delivery->scheduled_time_window_end)->lt(now())
+        // ) {
+        //     return response()->json([
+        //         'success' => false,
+        //         'message' => 'Delivery Expired'
+        //     ], 400);
+        // }
 
         
 
@@ -1681,10 +1680,10 @@ class MobileDeliveryController extends Controller
         ])
         ->where('driver_id', $user->id)
         ->where('created_by', $driverProfile->created_by)
-        ->where(function ($q) {
-            $q->where('scheduled_time_window_start', '>', now())
-            ->orWhere('scheduled_time_window_end', '>', now());
-        })
+        // ->where(function ($q) {
+        //     $q->where('scheduled_time_window_start', '>', now())
+        //     ->orWhere('scheduled_time_window_end', '>', now());
+        // })
         ->whereIn('status', ['in_transit', 'accepted', 'picked_up'])
         ->withCount('items')
         ->orderBy('pickup_scheduled_time')

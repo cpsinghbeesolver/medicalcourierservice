@@ -29,7 +29,7 @@ class WaitlistAutoResponder extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Welcome to '.env('APP_NAME').' Waitlist! 🎉',
+            subject: 'Welcome to '.config('app.name').' Waitlist! 🎉',
         );
     }
 

@@ -29,7 +29,7 @@ class ContactAutoResponder extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Thank You for Contacting '.env('APP_NAME').'! 📧',
+            subject: 'Thank You for Contacting '.config('app.name').'! 📧',
         );
     }
 

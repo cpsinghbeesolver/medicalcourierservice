@@ -50,7 +50,7 @@
                </div-->
             </div>
             <div class="d-flex flex-wrap flex-md-nowrap justify-content-between align-items-center bootom-footer pb-3">
-               <p>Copyright © 2026 {{env('APP_NAME')}}</p>
+               <p>Copyright © 2026 {{config('app.name')}}</p>
                <div class="d-flex justify-content-end terms-footer">
                   <ul class="list-unstyled d-flex gap-4 mb-0">
                         <!-- <li><a id="terms_of_use" href="{{ route('terms-of-use') }}">Terms of Use</a></li> -->

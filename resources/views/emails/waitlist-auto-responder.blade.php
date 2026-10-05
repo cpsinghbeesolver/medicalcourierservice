@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to {{env('APP_NAME')}} Waitlist</title>
+    <title>Welcome to {{config('app.name')}} Waitlist</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -121,14 +121,14 @@
 <body>
     <div class="email-container">
         <div class="header">
-            <h1>🎉 Welcome to {{env('APP_NAME')}}!</h1>
+            <h1>🎉 Welcome to {{config('app.name')}}!</h1>
             <p>Thank you for joining our waitlist</p>
         </div>
 
         <div class="content">
             <h2>Hi {{ $name }}! 👋</h2>
 
-            <p>Thank you for your interest in <strong>{{env('APP_NAME')}}</strong> - the HIPAA-compliant chain of custody platform designed specifically for medical and courier services.</p>
+            <p>Thank you for your interest in <strong>{{config('app.name')}}</strong> - the HIPAA-compliant chain of custody platform designed specifically for medical and courier services.</p>
 
             <!--div class="highlight-box">
                 <p><strong>🎁 Exclusive Waitlist Benefit:</strong></p>
@@ -139,7 +139,7 @@
                 <p><strong>Your Message:</strong></p>
                 <p style="margin-top: 10px;">"{{ $messageText }}"</p>
             </div>
-            <p>We've received your message and our team will review it carefully. We'll reach out to discuss how {{env('APP_NAME')}} can meet your specific needs.</p>
+            <p>We've received your message and our team will review it carefully. We'll reach out to discuss how {{config('app.name')}} can meet your specific needs.</p>
 
             @if($company_name)
             <p>We're excited to help <strong>{{ $company_name }}</strong> streamline your medical delivery operations with our secure, compliant platform.</p>
@@ -170,16 +170,16 @@
             <p style="margin-top: 30px;">We'll keep you updated on our launch progress and notify you as soon as we're ready to onboard you.</p>
 
             <p><strong>Questions?</strong> Feel free to reply to this email - we're here to help!</p>
-            <p style="margin-top: 20px;"><strong>Best regards,</strong><br>The {{env('APP_NAME')}} Team</p>
+            <p style="margin-top: 20px;"><strong>Best regards,</strong><br>The {{config('app.name')}} Team</p>
         </div>
 
         <!-- <div class="footer">
             <p><strong>Regards</strong></p>
-            <p><strong>{{env('APP_NAME')}}</strong></p>
+            <p><strong>{{config('app.name')}}</strong></p>
             <p>HIPAA-Compliant Chain of Custody Platform</p>
             <p style="margin-top: 15px;">This email was sent because you joined our waitlist at reliatrack.com</p>
             <p style="font-size: 12px; color: #999; margin-top: 15px;">
-                © {{ date('Y') }} {{env('APP_NAME')}} Track. All rights reserved.
+                © {{ date('Y') }} {{config('app.name')}} Track. All rights reserved.
             </p>
         </div> -->
     </div>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thank You for Contacting {{env('APP_NAME')}}</title>
+    <title>Thank You for Contacting {{config('app.name')}}</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -125,7 +125,7 @@
         <div class="content">
             <h2>Hi {{ $name }}! 👋</h2>
 
-            <p>Thank you for contacting <strong>{{env('APP_NAME')}}</strong>. We've received your inquiry and our team is reviewing it right now.</p>
+            <p>Thank you for contacting <strong>{{config('app.name')}}</strong>. We've received your inquiry and our team is reviewing it right now.</p>
 
             <div class="response-time">
                 <p style="margin: 0;"><strong>⏱️ Expected Response Time:</strong></p>
@@ -156,7 +156,7 @@
                 <p>Here are some resources that might interest you:</p>
                 <ul style="color: #555;">
                     <li><strong>HIPAA Compliance:</strong> Learn about our security features</li>
-                    <li><strong>Feature Overview:</strong> Explore what {{env('APP_NAME')}} can do</li>
+                    <li><strong>Feature Overview:</strong> Explore what {{config('app.name')}} can do</li>
                     <li><strong>Pricing Plans:</strong> Find the perfect plan for your needs</li>
                     <li><strong>Case Studies:</strong> See how others are using our platform</li>
                 </ul>
@@ -175,17 +175,17 @@
                 <p>⏰ <strong>Hours:</strong> Monday - Friday, 9 AM - 6 PM EST</p>
             </div>
 
-            <p style="margin-top: 30px;">We appreciate your interest in {{env('APP_NAME')}}and look forward to speaking with you soon!</p-->
+            <p style="margin-top: 30px;">We appreciate your interest in {{config('app.name')}}and look forward to speaking with you soon!</p-->
 
-            <p style="margin-top: 20px;"><strong>Best regards,</strong><br>The {{env('APP_NAME')}} Team</p>
+            <p style="margin-top: 20px;"><strong>Best regards,</strong><br>The {{config('app.name')}} Team</p>
         </div>
 
         <!--div class="footer">
-            <p><strong>{{env('APP_NAME')}}</strong></p>
+            <p><strong>{{config('app.name')}}</strong></p>
             <p>HIPAA-Compliant Chain of Custody Platform</p>
             <p style="margin-top: 15px;">This is an automated response confirming we received your message.</p>
             <p style="font-size: 12px; color: #999; margin-top: 15px;">
-                © {{ date('Y') }} {{env('APP_NAME')}}. All rights reserved.
+                © {{ date('Y') }} {{config('app.name')}}. All rights reserved.
             </p>
         </div-->
     </div>

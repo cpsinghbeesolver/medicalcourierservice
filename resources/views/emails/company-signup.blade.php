@@ -167,7 +167,7 @@
 
         <div class="content">
             <p style="font-size: 16px; color: #495057; margin-bottom: 25px;">
-                Thank you for joining {{env('APP_NAME')}}!. Your company has been successfully registered, and we're excited to help you streamline your medical delivery operations with our platform.
+                Thank you for joining {{config('app.name')}}!. Your company has been successfully registered, and we're excited to help you streamline your medical delivery operations with our platform.
             </p>
             <div class="message-box">
                 <b style="margin-top: 10px;"><a href="{{ route('company-login') }}" target="_blank">Click here to login</a></b>
@@ -176,7 +176,7 @@
 
         <div class="footer">
             <p>Do not reply to this email</p>
-            <p>© {{ date('Y') }} {{ env('APP_NAME') }}. All rights reserved.</p>
+            <p>© {{ date('Y') }} {{ config('app.name') }}. All rights reserved.</p>
         </div>
     </div>
 </body>

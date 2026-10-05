@@ -651,7 +651,7 @@
         });
         if(already_exists){
             $('#specimenTypeModal').removeClass('show');
-            showDialog('Speciment Type already exists', 'error');
+            showDialog('Specimen Type already exists', 'error');
             return false;
         }
         

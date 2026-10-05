@@ -33,7 +33,8 @@ class TemperatureRequirementController extends Controller
     {
         $name = trim($request->name);
 
-        $exists = TemperatureRequirement::get()
+        $exists = TemperatureRequirement::where('company_id', auth()->id())->
+            get()
             ->contains(function ($requirement) use ($name) {
                 return strtolower(trim($requirement->name)) === strtolower($name);
             });

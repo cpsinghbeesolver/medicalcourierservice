@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ env('APP_NAME') }} - Login</title>
+    <title>{{ config('app.name') }} - Login</title>
     <link rel="icon" type="image/png" href="/assets/img/fav.png">
     <!-- <script src="https://cdn.jsdelivr.net/npm/just-validate@latest/dist/just-validate.production.min.js"></script> -->
     <script src="{{ asset('assets/js/just-validate.production.min.js') }}"></script>

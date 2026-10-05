@@ -180,7 +180,7 @@
                 <a href="{{ config('app.url') }}/dashboard/waitlist" class="btn btn-primary">
                     View in Dashboard
                 </a>
-                <a href="mailto:{{ $submission->email }}?subject=Welcome to {{env('APP_NAME')}} Waitlist" class="btn btn-success">
+                <a href="mailto:{{ $submission->email }}?subject=Welcome to {{config('app.name')}} Waitlist" class="btn btn-success">
                     Send Email
                 </a>
             </div-->
@@ -208,8 +208,8 @@
         </div>
 
         <div class="footer">
-            <!--p>This is an automated notification from {{env('APP_NAME')}}</p>
-            <p>© {{ date('Y') }} {{env('APP_NAME')}}. All rights reserved.</p-->
+            <!--p>This is an automated notification from {{config('app.name')}}</p>
+            <p>© {{ date('Y') }} {{config('app.name')}}. All rights reserved.</p-->
         </div>
     </div>
 </body>

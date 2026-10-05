@@ -1666,7 +1666,8 @@ class DeliveryController extends Controller
     function addSpecimenType(StoreSpecimenTempVehicleRequest $request){
         $name = trim($request->name);
 
-        $exists = SpecimenType::get()
+        $exists = SpecimenType::where('company_id', auth()->id())
+            ->get()
             ->contains(function ($requirement) use ($name) {
                 return strtolower(trim($requirement->name)) === strtolower($name);
             });
@@ -1682,7 +1683,8 @@ class DeliveryController extends Controller
 
     function addTemperatureRequirement(StoreSpecimenTempVehicleRequest $request){
         $name = trim($request->name);
-        $exists = TemperatureRequirement::get()
+        $exists = TemperatureRequirement::where('company_id', auth()->id())
+            ->get()
             ->contains(function ($requirement) use ($name) {
                 return strtolower(trim($requirement->name)) === strtolower($name);
             });
@@ -1697,7 +1699,8 @@ class DeliveryController extends Controller
     }
     function addVehicleRequirement(StoreSpecimenTempVehicleRequest $request){
         $name = trim($request->name);
-        $exists = VehicleRequirement::get()
+        $exists = VehicleRequirement::where('company_id', auth()->id())
+            ->get()
             ->contains(function ($requirement) use ($name) {
                 return strtolower(trim($requirement->name)) === strtolower($name);
             });

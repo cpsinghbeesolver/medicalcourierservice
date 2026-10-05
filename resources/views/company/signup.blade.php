@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ env('APP_NAME') }} - Login</title>
+    <title>{{ config('app.name') }} - Login</title>
     <link rel="icon" type="image/png" href="/assets/img/fav.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="{{ asset('assets/js/just-validate.production.min.js') }}"></script>
@@ -299,7 +299,7 @@
             <div class="login-container">
                 <div class="logo">
                     <div class="logo-icon">
-                        <img src="/images/logo_new.png" alt="{{env('APP_NAME')}}">
+                        <img src="/images/logo_new.png" alt="{{config('app.name')}}">
                     </div>
                 </div>
 
