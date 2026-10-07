@@ -440,7 +440,7 @@
 
             const resultsSection = document.getElementById('resultsSection');
             const resultsContent = document.getElementById('resultsContent');
-
+            console.log(data);
             if (data.success && data.data && data.data.deliveries) {
                 const deliveries = data.data.deliveries;
 
