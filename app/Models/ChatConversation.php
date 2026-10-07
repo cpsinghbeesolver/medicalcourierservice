@@ -24,7 +24,7 @@ class ChatConversation extends Model
 
     public function driver()
     {
-        return $this->belongsTo(User::class, 'driver_id');
+        return $this->belongsTo(User::class, 'driver_id')->withTrashed();
     }
 
     public function messages()

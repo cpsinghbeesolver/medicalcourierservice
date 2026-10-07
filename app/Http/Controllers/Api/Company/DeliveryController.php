@@ -82,7 +82,9 @@ class DeliveryController extends Controller
         //check if user is superadmin
         if(Auth::user()->role_id == 1){
             $query = Delivery::with([
-                    'driver',
+                    'driver' => function ($query) {
+                        $query->withTrashed();
+                    },
                     'creator',
                     'items' => function ($query) {
                         $query->with([
