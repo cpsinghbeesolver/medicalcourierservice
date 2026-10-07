@@ -51,6 +51,10 @@ Route::get('/cookie-policy', function () {
     return view('cookie-policy');
 })->name('cookie-policy');
 
+Route::get('/contact', function () {
+    return view('contact');
+})->name('contact');
+
 // Login page
 Route::get('/admin', function () {
     if (Auth::check()) {

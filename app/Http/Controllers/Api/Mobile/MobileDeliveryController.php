@@ -559,18 +559,20 @@ class MobileDeliveryController extends Controller
         $company = User::find($delivery->created_by);
         $title = "Job has been accepted by {$user->name}";
         $body = "A job has been accepted by {$user->name}. Please review the details.";
-        SendFirebaseNotificationJob::dispatch(
-            $company->device_token,
-            $title,
-            $body,
-            'web',
-            $delivery->created_by,
-            [
-                'type' => 'general',
-                'user_id' => (string) $company->id,
-                'delivery_id' => (string) $delivery->id
-            ]
-        );
+        if($company->device_token){
+            SendFirebaseNotificationJob::dispatch(
+                $company->device_token,
+                $title,
+                $body,
+                'web',
+                $delivery->created_by,
+                [
+                    'type' => 'general',
+                    'user_id' => (string) $company->id,
+                    'delivery_id' => (string) $delivery->id
+                ]
+            );
+        }
         
         //Dispatch Event
         event(new DeliveryStatusUpdated($delivery));
@@ -842,18 +844,20 @@ class MobileDeliveryController extends Controller
         $company = User::find($delivery->created_by);
         $title = "Job has been started by {$user->name}";
         $body = "A job has been started by {$user->name}. Please review the details.";
-        SendFirebaseNotificationJob::dispatch(
-            $company->device_token,
-            $title,
-            $body,
-            'web',
-            $delivery->created_by,
-            [
-                'type' => 'general',
-                'user_id' => (string) $company->id,
-                'delivery_id' => (string) $delivery->id
-            ]
-        );
+        if($company->device_token){
+            SendFirebaseNotificationJob::dispatch(
+                $company->device_token,
+                $title,
+                $body,
+                'web',
+                $delivery->created_by,
+                [
+                    'type' => 'general',
+                    'user_id' => (string) $company->id,
+                    'delivery_id' => (string) $delivery->id
+                ]
+            );
+        }
         event(new DeliveryStatusUpdated($delivery));
         return response()->json([
             'success' => true,
@@ -1176,18 +1180,20 @@ class MobileDeliveryController extends Controller
             $company = User::find($delivery->created_by);
             $title = "Job has been picked up by {$user->name}";
             $body = "A job has been picked up by {$user->name}. Please review the details.";
-            SendFirebaseNotificationJob::dispatch(
-                $company->device_token,
-                $title,
-                $body,
-                'web',
-                $delivery->created_by,
-                [
-                    'type' => 'general',
-                    'user_id' => (string) $company->id,
-                    'delivery_id' => (string) $delivery->id
-                ]
-            );
+            if($company->device_token){
+                SendFirebaseNotificationJob::dispatch(
+                    $company->device_token,
+                    $title,
+                    $body,
+                    'web',
+                    $delivery->created_by,
+                    [
+                        'type' => 'general',
+                        'user_id' => (string) $company->id,
+                        'delivery_id' => (string) $delivery->id
+                    ]
+                );
+            }
             event(new DeliveryStatusUpdated($delivery));
 
             return response()->json([
@@ -1393,18 +1399,20 @@ class MobileDeliveryController extends Controller
             $company = User::find($delivery->created_by);
             $title = "Job has been delivered by {$user->name}";
             $body = "A job has been delivered by {$user->name}. Please review the details.";
-            SendFirebaseNotificationJob::dispatch(
-                $company->device_token,
-                $title,
-                $body,
-                'web',
-                $delivery->created_by,
-                [
-                    'type' => 'general',
-                    'user_id' => (string) $company->id,
-                    'delivery_id' => (string) $delivery->id
-                ]
-            );
+            if($company->device_token){
+                SendFirebaseNotificationJob::dispatch(
+                    $company->device_token,
+                    $title,
+                    $body,
+                    'web',
+                    $delivery->created_by,
+                    [
+                        'type' => 'general',
+                        'user_id' => (string) $company->id,
+                        'delivery_id' => (string) $delivery->id
+                    ]
+                );
+            }
 
             event(new DeliveryStatusUpdated($delivery));
 
@@ -1573,18 +1581,20 @@ class MobileDeliveryController extends Controller
                 $company = User::find($delivery->created_by);
                 $title = "Job has been accepted by {$user->name}";
                 $body = "A job has been accepted by {$user->name}. Please review the details.";
-                SendFirebaseNotificationJob::dispatch(
-                    $company->device_token,
-                    $title,
-                    $body,
-                    'web',
-                    $delivery->created_by,
-                    [
-                        'type' => 'general',
-                        'user_id' => (string) $company->id,
-                        'delivery_id' => (string) $delivery->id
-                    ]
-                );
+                if($company->device_token){
+                    SendFirebaseNotificationJob::dispatch(
+                        $company->device_token,
+                        $title,
+                        $body,
+                        'web',
+                        $delivery->created_by,
+                        [
+                            'type' => 'general',
+                            'user_id' => (string) $company->id,
+                            'delivery_id' => (string) $delivery->id
+                        ]
+                    );
+                }
 
                 event(new DeliveryStatusUpdated($delivery));
                 

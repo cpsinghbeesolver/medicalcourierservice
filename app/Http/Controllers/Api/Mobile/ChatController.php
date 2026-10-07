@@ -210,44 +210,46 @@ class ChatController extends Controller
         $company = User::find($conversation->company_id);
         if($request->user()->role_id == '2'){
             //Send Notification to driver
-            
-            $title = "New message from Company";
-            $body = "You have received a new message from Company. Please check it.";
-            SendFirebaseNotificationJob::dispatch(
-                $driver->device_token,
-                $title,
-                $body,
-                'mobile',
-                $conversation->driver_id,
-                [
-                    'type' => 'chat',
-                    'company_id' => (string) $conversation->company_id,
-                    'driver_id' => (string) $conversation->driver_id,
-                    'conversation_id' => (string) $conversation->driver_id,
-                    'delivery_id' => (string) $conversation->delivery_id
-                ]
-            );
+            if($driver->device_token){
+                $title = "New message from Company";
+                $body = "You have received a new message from Company. Please check it.";
+                SendFirebaseNotificationJob::dispatch(
+                    $driver->device_token,
+                    $title,
+                    $body,
+                    'mobile',
+                    $conversation->driver_id,
+                    [
+                        'type' => 'chat',
+                        'company_id' => (string) $conversation->company_id,
+                        'driver_id' => (string) $conversation->driver_id,
+                        'conversation_id' => (string) $conversation->driver_id,
+                        'delivery_id' => (string) $conversation->delivery_id
+                    ]
+                );
+            }
         }
 
         if($request->user()->role_id == '4'){
             //Send Notification to Company
-            
-            $title = "New message from ".$driver->name;
-            $body = "You have received a new message from ".$driver->name.". Please check it.";
-            SendFirebaseNotificationJob::dispatch(
-                $company->device_token,
-                $title,
-                $body,
-                'web',
-                $conversation->company_id,
-                [
-                    'type' => 'chat',
-                    'company_id' => (string) $conversation->company_id,
-                    'driver_id' => (string) $conversation->driver_id,
-                    'conversation_id' => (string) $conversation->driver_id,
-                    'delivery_id' => (string) $conversation->delivery_id
-                ]
-            );
+            if($company->device_token){
+                $title = "New message from ".$driver->name;
+                $body = "You have received a new message from ".$driver->name.". Please check it.";
+                SendFirebaseNotificationJob::dispatch(
+                    $company->device_token,
+                    $title,
+                    $body,
+                    'web',
+                    $conversation->company_id,
+                    [
+                        'type' => 'chat',
+                        'company_id' => (string) $conversation->company_id,
+                        'driver_id' => (string) $conversation->driver_id,
+                        'conversation_id' => (string) $conversation->driver_id,
+                        'delivery_id' => (string) $conversation->delivery_id
+                    ]
+                );
+            }
         }
 
         return response()->json([

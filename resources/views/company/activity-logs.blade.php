@@ -482,6 +482,9 @@
         return `
             <div class="section-line"></div>
             <div class="delivery-card">
+                <div>
+                    <b>${delivery.delivery_number}</b>
+                </div>
                 <div class="delivery-from">
                     <i class="fas fa-map-marker-alt"></i>
                     <div>

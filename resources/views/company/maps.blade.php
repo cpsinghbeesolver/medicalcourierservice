@@ -1079,9 +1079,9 @@
                     </div>
                     <div class="scheduled">
                         <b>Sheduled At:</b><br>
-                        ${formatDate(delivery.pickup.scheduled_time)}<br>
+                        ${datTimeFormat(delivery.pickup.scheduled_time)}<br>
                         <b>Target Date Time:</b><br>
-                        ${formatDate(delivery.delivery.scheduled_time)}<br>
+                        ${datTimeFormat(delivery.delivery.scheduled_time)}<br>
                     </div>
                     <div class="live-badge" style="background: ${statusColor};">
                         <span class="pulse"></span>
@@ -1119,9 +1119,9 @@
                     </div>
                     <div class="scheduled">
                         <b>Sheduled At:</b><br>
-                        ${formatDate(delivery.pickup.scheduled_time)}<br>
+                        ${datTimeFormat(delivery.pickup.scheduled_time)}<br>
                         <b>Target Date Time:</b><br>
-                        ${formatDate(delivery.delivery.scheduled_time)}<br>
+                        ${datTimeFormat(delivery.delivery.scheduled_time)}<br>
                     </div>
                     <div style="display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; background: ${statusColor}; color: white; border-radius: 12px; font-size: 11px; font-weight: 600; margin-top: 5px;">
                         ${formatStatus(delivery.status)}
@@ -1153,10 +1153,10 @@
                         )}
                     </div>
                     <div class="scheduled">
-                        <b>Sheduled At:</b><br>
-                        ${formatDate(delivery.pickup.scheduled_time)}<br>
-                        <b>Target Date Time:</b><br>
-                        ${formatDate(delivery.delivery.scheduled_time)}<br>
+                        <b>Scheduled At:</b><br>
+                        ${datTimeFormat(delivery.pickup.scheduled_time)}<br>
+                        <b>Delivery Date Time:</b><br>
+                        ${datTimeFormat(delivery.delivery.scheduled_time)}<br>
                     </div>
                     <div style="display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; background: #6B7280; color: white; border-radius: 12px; font-size: 11px; font-weight: 600; margin-top: 5px;">
                         <i class="fas fa-check"></i> Completed
